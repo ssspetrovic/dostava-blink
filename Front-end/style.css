@@ -1,20 +1,17 @@
 * {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Sora', sans-serif;
     /* background-color: #ffc044; */
 }
 
 body {
     margin: 0;
     padding: 0;
+    white-space: nowrap;
     background-image: url(images/pattern-background.png);
 }
 
 .navbar {
     display: flex;
-    flex: 1;
-    flex-grow: 0;
-    flex-shrink: 1;
-    flex-basis: auto;
     align-items: center;
     justify-content: space-between;
     background-color: #ffc044
@@ -63,6 +60,7 @@ body {
     padding: 0.5rem 0.9rem;
     margin-right: 0.7rem;
     box-shadow: 1px 2px 4px #444;
+    display: none;  /* otkomentarisati za drugo dugme */
 }
 
 .navbar .nav-links .log-in:hover {
@@ -70,7 +68,7 @@ body {
 }
 
 
-.navbar .nav-links .sign-in {
+.navbar .nav-links .zapocni {
     border: 1px solid #000;
     border-radius: 19px;
     padding: 0.5rem 0.7rem;
@@ -79,6 +77,12 @@ body {
     box-shadow: 1px 2px 4px #444;
 }
 
-.navbar .nav-links .sign-in:hover {
+.navbar .nav-links .zapocni:hover {
     background-color: #2c2e2d;
 }
+
+@media screen and (max-width: 600px) {
+
+}
+
+    
