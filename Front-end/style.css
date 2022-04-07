@@ -1,11 +1,12 @@
 * {
     font-family: 'Sora', sans-serif;
     /* background-color: #ffc044; */
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
-    margin: 0;
-    padding: 0;
     white-space: nowrap;
     background-image: url(images/background-pattern.png);
 }
@@ -96,5 +97,6 @@ body {
         margin-left: 5%;
     }
 }
+
 
     
