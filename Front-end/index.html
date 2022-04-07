@@ -11,43 +11,46 @@
     <title>Blink | Dostava hrane</title>
 </head>
 <body>
-    <div class="navbar">
-        <span class="menu">
-            <a href="#"><img src="images/hamburger-menu.png" alt="menu" class="menu-bar"></a>
-        </span>
-        <span class="header">
-            <h2>Blink</h2>
-        </span>
-        <span class="nav-links">
-            <ul>
-                <!-- <li><a href="#" class="log-in">Log in</a></li> -->
-                <button id="zapocni">Započni</button>
-            </ul>
-        </span>
-    </div>
-
-    <div class="pop-up">
-        <!-- <button><img src="" alt=""></button>  -->
-        <div class="form">
-            <div class="close-button">&times;</div>
-            <h2>Registruj se</h2>
-            <div class="form-element">
-                <label for="ime">Ime:</label>
-                <input type="text" placeholder="Unesite Vaše Ime">     
-            </div>
-            <div class="form-element">
-                <label for="email">Email:</label>
-                <input type="text" name="email" id="email" placeholder="Unesite Vaš email">  
-            </div>
-            <div class="form-element">
-                <label for="sifra">Šifra:</label>
-                <input type="password" placeholder="Unesite Vašu šifru">   
-            </div>
-            <div class="form-element">
-                <input type="submit" value="Prijava">
+    <div id="wrapper">
+        <div class="navbar">
+            <span class="menu">
+                <a href="#"><img src="images/hamburger-menu.png" alt="menu" class="menu-bar"></a>
+            </span>
+            <span class="header">
+                <h2>Blink</h2>
+            </span>
+            <span class="nav-links">
+                <ul>
+                    <!-- <li><a href="#" class="log-in">Log in</a></li> -->
+                    <button id="zapocni">Započni</button>
+                </ul>
+            </span>
+        </div>
+    
+        <div class="pop-up">
+            <!-- <button><img src="" alt=""></button>  -->
+            <div class="form">
+                <div id="close-button">&times;</div>
+                <h2>Registruj se</h2>
+                <div class="form-element">
+                    <label for="ime">Ime:</label>
+                    <input type="text" placeholder="Unesite Vaše Ime">     
+                </div>
+                <div class="form-element">
+                    <label for="email">Email:</label>
+                    <input type="text" name="email" id="email" placeholder="Unesite Vaš email">  
+                </div>
+                <div class="form-element">
+                    <label for="sifra">Šifra:</label>
+                    <input type="password" placeholder="Unesite Vašu šifru">   
+                </div>
+                <div class="form-element">
+                    <input type="submit" value="Prijava">
+                </div>
             </div>
         </div>
     </div>
+    
 
     <script src="script.js"></script>
 </body>
