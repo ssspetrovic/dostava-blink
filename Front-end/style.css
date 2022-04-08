@@ -87,6 +87,10 @@ body .darken {
     cursor: pointer;
 }
 
+#zapocni .button__disabled {
+    pointer-events: none;
+}
+
 .navbar .nav-links #zapocni:hover {
     background-color: #2c2e2d;
 }
