@@ -1,13 +1,12 @@
+const btn = document.querySelector('#zapocni');
+const close_btn = document.querySelector('#close-button')
+const popUp = document.querySelector('.pop-up');
 
-var button = document.getElementById('zapocni');
-var close_button = document.getElementById('close-button');
-var div = document.getElementsByClassName('pop-up');
-var background = document.getElementById
-
-button.addEventListener('click', () => {
-    div[0].style.display = "block";
+btn.addEventListener('click', () => {
+    popUp.classList.add('pop-up__toggle');
 });
 
-close_button.addEventListener('click', () => {
-    div[0].style.display = "none";
+close_btn.addEventListener('click', () => {
+    popUp.classList.remove('pop-up__toggle');
 });
+
