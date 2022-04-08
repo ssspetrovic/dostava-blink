@@ -10,7 +10,9 @@ public class Menadzer extends Korisnik implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne
+
+    @ManyToOne
+    @JoinColumn(name = "restoran_id")
     private Restoran restoran = new Restoran();
 
     public Restoran getRestoran() {

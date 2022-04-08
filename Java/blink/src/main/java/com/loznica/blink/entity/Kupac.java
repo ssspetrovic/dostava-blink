@@ -2,18 +2,29 @@ package com.loznica.blink.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+
 
 @Entity
 public class Kupac extends Korisnik implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column
+
+    @ManyToOne
+    @JoinColumn(name = "porudzbine_kupac_id")
     private Porudzbina porudzbineKupac = new Porudzbina();
     @Column
     private int bodovi;
-    @Column
+
+    @ManyToOne
+    @JoinColumn(name = "tk_id")
     private TipKupca tk = new TipKupca();
+
+    public TipKupca getTk() {
+        return tk;
+    }
+
+    public Porudzbina getPorudzbineKupac() {
+        return porudzbineKupac;
+    }
 }

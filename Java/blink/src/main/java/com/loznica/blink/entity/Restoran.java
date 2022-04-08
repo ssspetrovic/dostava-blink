@@ -2,6 +2,7 @@ package com.loznica.blink.entity;
 
 import java.util.ArrayList;
 import javax.persistence.*;
+import javax.print.DocFlavor;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -13,11 +14,15 @@ public class Restoran implements Serializable {
     private Long id;
     @Column
     private String naziv;
-    @Column
-    private String tipRestorana;
-    @OneToOne
+    @ElementCollection
+    private Set<String> tipRestorana = new HashSet<>();
+
+    @ManyToOne
+    @JoinColumn(name = "ponude_id")
     private Artikal ponude = new Artikal();
-    @OneToOne
+
+    @ManyToOne
+    @JoinColumn(name = "adresa_id")
     private Lokacija adresa = new Lokacija();
 
     public Lokacija getAdresa() {

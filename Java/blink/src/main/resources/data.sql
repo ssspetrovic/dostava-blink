@@ -1,6 +1,2 @@
-INSERT INTO TBL_KORISNICI (korisnickoIme, lozinka, email) VALUES
-    ('Janko', '12345', 'janko.janko@gmail.com'),
-    ('Marko', '54321', 'marko.marko@gmail.com'),
-    ('Darko', '55555', 'darko.darko@gmail.com'),
-    ('Stefan', '11111', 'stefan.stefan@gmail.com'),
-    ('Lazar', '99999', 'lazar.lazar@gmail.com');
+//INSERT INTO KORISNIK (korisnickoIme, lozinka, ime, prezime, pol, datumRodjenja, uloga) VALUES ('Jankos', '12345', 'Janko', 'Jankovic', 'Muski', '26.3.1999.', 1);
+//INSERT INTO KORISNIK (korisnickoIme) VALUES ('Stefex');

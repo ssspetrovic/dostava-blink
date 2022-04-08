@@ -12,9 +12,13 @@ public class Porudzbina implements Serializable {
     private Long id;
     @Column
     private Long uuid;
-    @OneToOne
+
+    @ManyToOne
+    @JoinColumn(name = "poruceni_artikli_id")
     private Artikal poruceniArtikli = new Artikal();
-    @OneToOne
+
+    @ManyToOne
+    @JoinColumn(name = "mesto_porudzbine_id")
     private Restoran mestoPorudzbine = new Restoran();
     @Column
     private String datumPorudzbine;
