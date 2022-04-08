@@ -14,12 +14,10 @@ public class Restoran implements Serializable {
     @Column
     private String naziv;
     @Column
-    private ArrayList<String> tipRestorana = new ArrayList<>();
-    @ManyToOne
-    @JoinColumn(name = "ponude_naziv")
+    private String tipRestorana;
+    @OneToOne
     private Artikal ponude = new Artikal();
-    @ManyToOne
-    @JoinColumn(name = "adresa_geografska_duzina")
+    @OneToOne
     private Lokacija adresa = new Lokacija();
 
     public Lokacija getAdresa() {

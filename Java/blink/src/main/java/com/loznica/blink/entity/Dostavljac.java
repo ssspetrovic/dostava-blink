@@ -10,9 +10,7 @@ public class Dostavljac extends Korisnik implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "porudzbine_dostavljac_uuid", nullable = false)
-
+    @OneToOne
     private Porudzbina porudzbineDostavljac = new Porudzbina();
     @Column
 

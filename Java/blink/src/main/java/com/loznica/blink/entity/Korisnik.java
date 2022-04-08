@@ -27,4 +27,32 @@ public class Korisnik implements Serializable {
     public String getKorisnickoIme() {
         return korisnickoIme;
     }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setKorisnickoIme(String korisnickoIme) {
+        this.korisnickoIme = korisnickoIme;
+    }
+
+    public void setLozinka(String lozinka) {
+        this.lozinka = lozinka;
+    }
+
+    public void setIme(String ime) {
+        this.ime = ime;
+    }
+
+    public void setPrezime(String prezime) {
+        this.prezime = prezime;
+    }
+
+    public void setPol(String pol) {
+        this.pol = pol;
+    }
+
+    public void setDatumRodjenja(String datumRodjenja) {
+        this.datumRodjenja = datumRodjenja;
+    }
 }

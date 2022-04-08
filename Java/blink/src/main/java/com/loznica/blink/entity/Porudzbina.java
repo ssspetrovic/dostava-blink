@@ -12,11 +12,9 @@ public class Porudzbina implements Serializable {
     private Long id;
     @Column
     private Long uuid;
-    @ManyToOne
-    @JoinColumn(name = "poruceni_artikli_naziv")
+    @OneToOne
     private Artikal poruceniArtikli = new Artikal();
-    @ManyToOne
-    @JoinColumn(name = "mesto_porudzbine_naziv")
+    @OneToOne
     private Restoran mestoPorudzbine = new Restoran();
     @Column
     private String datumPorudzbine;

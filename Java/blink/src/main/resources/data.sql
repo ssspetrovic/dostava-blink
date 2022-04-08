@@ -1,13 +1,6 @@
-DROP TABLE IF EXISTS TBL_KORISNICI;
-
-CREATE TABLE TBL_KORISNICI (
-                               id INT AUTO_INCREMENT PRIMARY KEY,
-                               korisnickoIme VARCHAR(250) NOT NULL,
-                               lozinka VARCHAR(250) NOT NULL,
-                               email VARCHAR(250) DEFAULT NULL
-);
-
 INSERT INTO TBL_KORISNICI (korisnickoIme, lozinka, email) VALUES
-    ('Rippah', 'rippah', 'd@gmail.com'),
-    ('Admin', 'admin', 'g@gmail.com'),
-    ('Pass', 'pass', 'p@gmail.com');
+    ('Janko', '12345', 'janko.janko@gmail.com'),
+    ('Marko', '54321', 'marko.marko@gmail.com'),
+    ('Darko', '55555', 'darko.darko@gmail.com'),
+    ('Stefan', '11111', 'stefan.stefan@gmail.com'),
+    ('Lazar', '99999', 'lazar.lazar@gmail.com');
