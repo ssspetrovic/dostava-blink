@@ -1,0 +1,106 @@
+package com.loznica.blink.entity;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Date;
+
+@Entity
+public class Korisnik implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String korisnickoIme;
+    private String lozinka;
+    private String ime;
+    private String pol;
+    private Date datumRodjenja;
+    public enum Uloga {ADMIN, MENADZER, DOSTAVLJAC, KUPAC};
+    public Uloga uloga;
+
+    public Korisnik() {
+    }
+
+    public Korisnik(String korisnickoIme) {
+        this.korisnickoIme = korisnickoIme;
+    }
+
+    public Korisnik(Long id, String korisnickoIme, String lozinka, String ime, String pol, Date datumRodjenja, Uloga uloga) {
+        this.id = id;
+        this.korisnickoIme = korisnickoIme;
+        this.lozinka = lozinka;
+        this.ime = ime;
+        this.pol = pol;
+        this.datumRodjenja = datumRodjenja;
+        this.uloga = uloga;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getKorisnickoIme() {
+        return korisnickoIme;
+    }
+
+    public void setKorisnickoIme(String korisnickoIme) {
+        this.korisnickoIme = korisnickoIme;
+    }
+
+    public String getLozinka() {
+        return lozinka;
+    }
+
+    public void setLozinka(String lozinka) {
+        this.lozinka = lozinka;
+    }
+
+    public String getIme() {
+        return ime;
+    }
+
+    public void setIme(String ime) {
+        this.ime = ime;
+    }
+
+    public String getPol() {
+        return pol;
+    }
+
+    public void setPol(String pol) {
+        this.pol = pol;
+    }
+
+    public Date getDatumRodjenja() {
+        return datumRodjenja;
+    }
+
+    public void setDatumRodjenja(Date datumRodjenja) {
+        this.datumRodjenja = datumRodjenja;
+    }
+
+    public Uloga getUloga() {
+        return uloga;
+    }
+
+    public void setUloga(Uloga uloga) {
+        this.uloga = uloga;
+    }
+
+    @Override
+    public String toString() {
+        return "Korisnik{" +
+                "id=" + id +
+                ", korisnickoIme='" + korisnickoIme + '\'' +
+                ", lozinka='" + lozinka + '\'' +
+                ", ime='" + ime + '\'' +
+                ", pol='" + pol + '\'' +
+                ", datumRodjenja=" + datumRodjenja +
+                ", uloga=" + uloga +
+                '}';
+    }
+}
