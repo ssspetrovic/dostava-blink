@@ -1,2 +1,0 @@
-//INSERT INTO KORISNIK (korisnickoIme, lozinka, ime, prezime, pol, datumRodjenja, uloga) VALUES ('Jankos', '12345', 'Janko', 'Jankovic', 'Muski', '26.3.1999.', 1);
-//INSERT INTO KORISNIK (korisnickoIme) VALUES ('Stefex');
