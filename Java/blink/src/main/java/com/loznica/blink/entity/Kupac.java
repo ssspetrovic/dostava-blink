@@ -16,6 +16,9 @@ public class Kupac extends Korisnik implements Serializable {
 
     private Integer brojBodova;
 
+    @OneToMany
+    private Set<Komentar> komentari = new HashSet<>();
+
     @ManyToOne
     private TipKupca tipKupca;
 
@@ -41,5 +44,21 @@ public class Kupac extends Korisnik implements Serializable {
         this.svePorudzbine = svePorudzbine;
         this.brojBodova = brojBodova;
         this.tipKupca = tipKupca;
+    }
+
+    public Set<Porudzbina> getSvePorudzbine() {
+        return svePorudzbine;
+    }
+
+    public void setSvePorudzbine(Set<Porudzbina> svePorudzbine) {
+        this.svePorudzbine = svePorudzbine;
+    }
+
+    public Set<Komentar> getKomentari() {
+        return komentari;
+    }
+
+    public void setKomentari(Set<Komentar> komentari) {
+        this.komentari = komentari;
     }
 }

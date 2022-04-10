@@ -16,6 +16,9 @@ public class Restoran implements Serializable {
     @OneToMany
     private Set<Artikal> artikli = new HashSet<>();
 
+    @OneToMany
+    private Set<Komentar> komentari = new HashSet<>();
+
     public Restoran() {
     }
 

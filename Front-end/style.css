@@ -9,7 +9,12 @@
 body {
     white-space: nowrap;
     /* background-image: url(images/background-pattern.png); */
-    
+    background-image: url(images/rachel-park-hrlvr2ZlUNk-unsplash.jpg);
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+        
 }
 
 .navbar {

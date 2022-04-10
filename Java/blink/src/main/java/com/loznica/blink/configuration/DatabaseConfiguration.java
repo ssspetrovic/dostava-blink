@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -46,7 +47,7 @@ public class DatabaseConfiguration {
 
         restoran.setArtikli(artikli);
 
-        Korisnik srdjan = new Korisnik("Srdjan");
+        Korisnik srdjan = new Korisnik(1L, "Srdjan", "123", "Srdjan", "M", new Date(), Korisnik.Uloga.ADMIN);
         Korisnik nikola = new Korisnik("Nikola");
         Korisnik maddy = new Korisnik("Madison Beer");
 
