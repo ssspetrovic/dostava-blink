@@ -9,7 +9,7 @@
 body {
     white-space: nowrap;
     /* background-image: url(images/background-pattern.png); */
-    background-image: url(images/rachel-park-hrlvr2ZlUNk-unsplash.jpg);
+    /* background-image: url(images/rachel-park-hrlvr2ZlUNk-unsplash.jpg); */
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -21,7 +21,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: #004953;
+    /* background-color: #fff; */
     /* background-color: #ffc044; */
     width: 100%;
     /* border-bottom: 2px solid #000; */
@@ -200,6 +200,17 @@ body {
     color: #1f9b3a;
 }
 
+.block {
+    float: left;
+    width: 33.3%;
+    border: 1px solid #ccc;
+    padding: 10px;
+    box-sizing: border-box; /* uracuna sve prilikom racunanja sirine */
+    border-radius: 10px;
+    text-align: center;
+}
+
+
 @media screen and (max-width: 600px) {
     .pop-up {
         font-size: 1rem;
@@ -231,4 +242,6 @@ body {
         margin-top: 15px;
         margin-bottom: 10px;
     }
+
+
 }

@@ -8,7 +8,7 @@ btn.addEventListener('click', () => {
     popUp.classList.add('pop-up__toggle');
     // document.body.style.background = 'linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(images/background-pattern.png)';
     document.body.style.backgroundColor = "#4c4c4c"
-    navbar.style.backgroundColor = '#4c3914';
+    // navbar.style.backgroundColor = '#4c3914';
     navbar.style.pointerEvents = 'none';
     navbar.style.pointerEvents = 'none';
     btn.style.color = '#4c4c4c';
