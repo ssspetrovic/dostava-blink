@@ -19,9 +19,7 @@ public class Komentar {
     public enum Ocena{JEDAN, DVA, TRI, CETIRI, PET};
     public Ocena ocena;
 
-    public Komentar(){
-
-    }
+    public Komentar() { super(); }
 
     public Komentar(Long id, Kupac kupacPorudzbine, Restoran ocenaRestorana, String tekstKomentara, Ocena ocena) {
         this.id = id;
@@ -70,7 +68,6 @@ public class Komentar {
     public void setOcena(Ocena ocena) {
         this.ocena = ocena;
     }
-
 
     @Override
     public String toString() {

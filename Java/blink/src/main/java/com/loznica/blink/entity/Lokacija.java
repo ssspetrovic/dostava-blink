@@ -15,9 +15,7 @@ public class Lokacija {
     private String geografskaSirina;
     private String lokacija;
 
-    public Lokacija(){
-
-    }
+    public Lokacija(){ super(); }
 
     public Lokacija(Long id, String geografskaDuzina, String geografskaSirina, String lokacija) {
         this.id = id;

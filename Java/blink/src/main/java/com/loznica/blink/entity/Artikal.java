@@ -23,15 +23,13 @@ public class Artikal implements Serializable {
     public Artikal() {
     }
 
-    public Artikal(String naziv ) {
-        this.naziv = naziv;
-    }
-
-    public Artikal(Long id, String naziv, double cena, String opis) {
+    public Artikal(Long id, String naziv, double cena, String opis, Restoran restoran, Porudzbina porudzbina) {
         this.id = id;
         this.naziv = naziv;
         this.cena = cena;
         this.opis = opis;
+        this.restoran = restoran;
+        this.porudzbina = porudzbina;
     }
 
     public Long getId() {
@@ -66,6 +64,22 @@ public class Artikal implements Serializable {
         this.opis = opis;
     }
 
+    public Restoran getRestoran() {
+        return restoran;
+    }
+
+    public void setRestoran(Restoran restoran) {
+        this.restoran = restoran;
+    }
+
+    public Porudzbina getPorudzbina() {
+        return porudzbina;
+    }
+
+    public void setPorudzbina(Porudzbina porudzbina) {
+        this.porudzbina = porudzbina;
+    }
+
     @Override
     public String toString() {
         return "Artikal{" +
@@ -73,6 +87,8 @@ public class Artikal implements Serializable {
                 ", naziv='" + naziv + '\'' +
                 ", cena=" + cena +
                 ", opis='" + opis + '\'' +
+                ", restoran=" + restoran +
+                ", porudzbina=" + porudzbina +
                 '}';
     }
 }

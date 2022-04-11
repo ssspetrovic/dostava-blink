@@ -6,6 +6,7 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 public class Porudzbina {
@@ -13,7 +14,7 @@ public class Porudzbina {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String uuid;
+    private UUID uuid;
 
     @OneToMany
     private Set<Artikal> poruceniArtikli = new HashSet<>();
@@ -34,7 +35,7 @@ public class Porudzbina {
         super();
     }
 
-    public Porudzbina(Long id, String uuid, Set<Artikal> poruceniArtikli, Dostavljac dostavljac, Restoran restoran, Date vremePorudzbine, double cena, String korisnickoIme, Status status) {
+    public Porudzbina(Long id, UUID uuid, Set<Artikal> poruceniArtikli, Dostavljac dostavljac, Restoran restoran, Date vremePorudzbine, double cena, String korisnickoIme, Status status) {
         this.id = id;
         this.uuid = uuid;
         this.poruceniArtikli = poruceniArtikli;
@@ -54,11 +55,11 @@ public class Porudzbina {
         this.id = id;
     }
 
-    public String getUuid() {
+    public UUID getUuid() {
         return uuid;
     }
 
-    public void setUuid(String uuid) {
+    public void setUuid(UUID uuid) {
         this.uuid = uuid;
     }
 
@@ -122,7 +123,7 @@ public class Porudzbina {
     public String toString() {
         return "Porudzbina{" +
                 "id=" + id +
-                ", uuid='" + uuid + '\'' +
+                ", uuid=" + uuid +
                 ", poruceniArtikli=" + poruceniArtikli +
                 ", dostavljac=" + dostavljac +
                 ", restoran=" + restoran +

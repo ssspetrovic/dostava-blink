@@ -26,23 +26,18 @@ public class Kupac extends Korisnik implements Serializable {
         super();
     }
 
-    public Kupac(Set<Porudzbina> svePorudzbine, Integer brojBodova, TipKupca tipKupca) {
+    public Kupac(Set<Porudzbina> svePorudzbine, Integer brojBodova, Set<Komentar> komentari, TipKupca tipKupca) {
         this.svePorudzbine = svePorudzbine;
         this.brojBodova = brojBodova;
+        this.komentari = komentari;
         this.tipKupca = tipKupca;
     }
 
-    public Kupac(String korisnickoIme, Set<Porudzbina> svePorudzbine, Integer brojBodova, TipKupca tipKupca) {
-        super(korisnickoIme);
+    public Kupac(Long id, String korisnickoIme, String lozinka, String ime, String prezime, Pol pol, Date datumRodjenja, Uloga uloga, Set<Porudzbina> svePorudzbine, Integer brojBodova, Set<Komentar> komentari, TipKupca tipKupca) {
+        super(id, korisnickoIme, lozinka, ime, prezime, pol, datumRodjenja, uloga);
         this.svePorudzbine = svePorudzbine;
         this.brojBodova = brojBodova;
-        this.tipKupca = tipKupca;
-    }
-
-    public Kupac(Long id, String korisnickoIme, String lozinka, String ime, String pol, Date datumRodjenja, Uloga uloga, Set<Porudzbina> svePorudzbine, Integer brojBodova, TipKupca tipKupca) {
-        super(id, korisnickoIme, lozinka, ime, pol, datumRodjenja, uloga);
-        this.svePorudzbine = svePorudzbine;
-        this.brojBodova = brojBodova;
+        this.komentari = komentari;
         this.tipKupca = tipKupca;
     }
 
@@ -54,11 +49,38 @@ public class Kupac extends Korisnik implements Serializable {
         this.svePorudzbine = svePorudzbine;
     }
 
+    public Integer getBrojBodova() {
+        return brojBodova;
+    }
+
+    public void setBrojBodova(Integer brojBodova) {
+        this.brojBodova = brojBodova;
+    }
+
     public Set<Komentar> getKomentari() {
         return komentari;
     }
 
     public void setKomentari(Set<Komentar> komentari) {
         this.komentari = komentari;
+    }
+
+    public TipKupca getTipKupca() {
+        return tipKupca;
+    }
+
+    public void setTipKupca(TipKupca tipKupca) {
+        this.tipKupca = tipKupca;
+    }
+
+    @Override
+    public String toString() {
+        return "Kupac{" +
+                "uloga=" + uloga +
+                ", svePorudzbine=" + svePorudzbine +
+                ", brojBodova=" + brojBodova +
+                ", komentari=" + komentari +
+                ", tipKupca=" + tipKupca +
+                '}';
     }
 }

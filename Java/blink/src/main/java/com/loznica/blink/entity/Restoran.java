@@ -19,11 +19,13 @@ public class Restoran implements Serializable {
     @OneToMany
     private Set<Komentar> komentari = new HashSet<>();
 
-    public Restoran() {
-    }
+    public Restoran() { super(); }
 
-    public Restoran(String naziv) {
+    public Restoran(long id, String naziv, Set<Artikal> artikli, Set<Komentar> komentari) {
+        this.id = id;
         this.naziv = naziv;
+        this.artikli = artikli;
+        this.komentari = komentari;
     }
 
     public long getId() {
@@ -50,12 +52,21 @@ public class Restoran implements Serializable {
         this.artikli = artikli;
     }
 
+    public Set<Komentar> getKomentari() {
+        return komentari;
+    }
+
+    public void setKomentari(Set<Komentar> komentari) {
+        this.komentari = komentari;
+    }
+
     @Override
     public String toString() {
         return "Restoran{" +
                 "id=" + id +
                 ", naziv='" + naziv + '\'' +
                 ", artikli=" + artikli +
+                ", komentari=" + komentari +
                 '}';
     }
 }
