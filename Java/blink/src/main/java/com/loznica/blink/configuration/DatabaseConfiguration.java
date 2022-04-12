@@ -16,16 +16,7 @@ import java.util.*;
 @Configuration
 public class DatabaseConfiguration {
     @Autowired
-    private ArtikalRepository artikalRepository;
-
-    @Autowired
     private KorisnikRepository korisnikRepository;
-
-    @Autowired
-    private MenadzerRepository menadzerRepository;
-
-    @Autowired
-    private RestoranRepository restoranRepository;
 
     @Bean
     public boolean Instantiate() {
