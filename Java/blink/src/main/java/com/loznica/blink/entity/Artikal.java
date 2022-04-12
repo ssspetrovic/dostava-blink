@@ -20,8 +20,7 @@ public class Artikal implements Serializable {
     @ManyToOne
     private Porudzbina porudzbina;
 
-    public Artikal() {
-    }
+    public Artikal() { super(); }
 
     public Artikal(Long id, String naziv, double cena, String opis, Restoran restoran, Porudzbina porudzbina) {
         this.id = id;
