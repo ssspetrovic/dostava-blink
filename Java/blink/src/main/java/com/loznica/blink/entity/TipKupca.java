@@ -9,10 +9,11 @@ public class TipKupca implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Kupac kupac;
 
     public enum Ime {HARDSTUCK, GOLD, DIAMOND};
+    @Enumerated(EnumType.STRING)
     private Ime ime;
     private Float popust;
     private Integer trazeniBodovi;

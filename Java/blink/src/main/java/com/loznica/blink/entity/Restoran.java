@@ -12,18 +12,21 @@ public class Restoran implements Serializable {
     private long id;
     private String naziv;
     public enum TipRestorana {KINESKI, ITALIJANSKI, MEKSICKI, DOMACI};
+    @Enumerated(EnumType.STRING)
+    private TipRestorana tipRestorana;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private Set<Artikal> artikli = new HashSet<>();
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private Set<Komentar> komentari = new HashSet<>();
 
     public Restoran() { super(); }
 
-    public Restoran(long id, String naziv, Set<Artikal> artikli, Set<Komentar> komentari) {
+    public Restoran(long id, String naziv, TipRestorana tipRestorana, Set<Artikal> artikli, Set<Komentar> komentari) {
         this.id = id;
         this.naziv = naziv;
+        this.tipRestorana = tipRestorana;
         this.artikli = artikli;
         this.komentari = komentari;
     }
@@ -42,6 +45,14 @@ public class Restoran implements Serializable {
 
     public void setNaziv(String naziv) {
         this.naziv = naziv;
+    }
+
+    public TipRestorana getTipRestorana() {
+        return tipRestorana;
+    }
+
+    public void setTipRestorana(TipRestorana tipRestorana) {
+        this.tipRestorana = tipRestorana;
     }
 
     public Set<Artikal> getArtikli() {
@@ -65,6 +76,7 @@ public class Restoran implements Serializable {
         return "Restoran{" +
                 "id=" + id +
                 ", naziv='" + naziv + '\'' +
+                ", tipRestorana=" + tipRestorana +
                 ", artikli=" + artikli +
                 ", komentari=" + komentari +
                 '}';

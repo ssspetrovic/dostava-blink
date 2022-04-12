@@ -16,19 +16,20 @@ public class Porudzbina {
 
     private UUID uuid;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private Set<Artikal> poruceniArtikli = new HashSet<>();
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Dostavljac dostavljac;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Restoran restoran;
 
     private Date vremePorudzbine;
     private double cena;
     private String korisnickoIme;
     public enum Status {OBRADA, U_PRIPREMI, CEKA_DOSTAVLJAC, U_TRANSPORTU, DOSTAVLJENA, OTKAZANA};
+    @Enumerated(EnumType.STRING)
     private Status status;
 
     public Porudzbina() {

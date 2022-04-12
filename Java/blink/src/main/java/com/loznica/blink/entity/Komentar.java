@@ -8,16 +8,17 @@ public class Komentar {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Kupac kupacPorudzbine;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Restoran ocenaRestorana;
 
     private String tekstKomentara;
 
     public enum Ocena{JEDAN, DVA, TRI, CETIRI, PET};
-    public Ocena ocena;
+    @Enumerated(EnumType.STRING)
+    private Ocena ocena;
 
     public Komentar() { super(); }
 

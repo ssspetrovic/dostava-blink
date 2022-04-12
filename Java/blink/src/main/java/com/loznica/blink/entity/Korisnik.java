@@ -15,9 +15,11 @@ public class Korisnik implements Serializable {
     private String ime;
     private String prezime;
     public enum Pol {MUSKI, ZENSKI};
+    @Enumerated(EnumType.STRING)
     private Pol pol;
     private Date datumRodjenja;
     public enum Uloga {ADMIN, MENADZER, DOSTAVLJAC, KUPAC};
+    @Enumerated(EnumType.STRING)
     public Uloga uloga;
 
     public Korisnik() { super(); }

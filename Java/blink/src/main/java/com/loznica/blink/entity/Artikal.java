@@ -11,15 +11,17 @@ public class Artikal implements Serializable {
     private String naziv;
     private double cena;
     public enum Tip {JELO, PICE};
-    public enum Kolicina {GRAMI, MILIMETRI};
+    public enum Kolicina {GRAMI, MILILITRI};
+    @Enumerated(EnumType.STRING)
     private Tip tip;
+    @Enumerated(EnumType.STRING)
     private Kolicina kolicina;
     private String opis;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Restoran restoran;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Porudzbina porudzbina;
 
     public Artikal() { super(); }
