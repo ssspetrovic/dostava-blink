@@ -10,8 +10,10 @@ public class Artikal implements Serializable {
     private Long id;
     private String naziv;
     private double cena;
-    private enum Tip {JELO, PICE};
-    private enum Kolicina {GRAMI, MILIMETRI};
+    public enum Tip {JELO, PICE};
+    public enum Kolicina {GRAMI, MILIMETRI};
+    private Tip tip;
+    private Kolicina kolicina;
     private String opis;
 
     @ManyToOne
@@ -22,10 +24,12 @@ public class Artikal implements Serializable {
 
     public Artikal() { super(); }
 
-    public Artikal(Long id, String naziv, double cena, String opis, Restoran restoran, Porudzbina porudzbina) {
+    public Artikal(Long id, String naziv, double cena, Tip tip, Kolicina kolicina, String opis, Restoran restoran, Porudzbina porudzbina) {
         this.id = id;
         this.naziv = naziv;
         this.cena = cena;
+        this.tip = tip;
+        this.kolicina = kolicina;
         this.opis = opis;
         this.restoran = restoran;
         this.porudzbina = porudzbina;
@@ -53,6 +57,22 @@ public class Artikal implements Serializable {
 
     public void setCena(double cena) {
         this.cena = cena;
+    }
+
+    public Tip getTip() {
+        return tip;
+    }
+
+    public void setTip(Tip tip) {
+        this.tip = tip;
+    }
+
+    public Kolicina getKolicina() {
+        return kolicina;
+    }
+
+    public void setKolicina(Kolicina kolicina) {
+        this.kolicina = kolicina;
     }
 
     public String getOpis() {
@@ -85,6 +105,8 @@ public class Artikal implements Serializable {
                 "id=" + id +
                 ", naziv='" + naziv + '\'' +
                 ", cena=" + cena +
+                ", tip=" + tip +
+                ", kolicina=" + kolicina +
                 ", opis='" + opis + '\'' +
                 ", restoran=" + restoran +
                 ", porudzbina=" + porudzbina +
