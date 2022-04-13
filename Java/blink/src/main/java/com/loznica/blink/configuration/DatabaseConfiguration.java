@@ -46,7 +46,6 @@ public class DatabaseConfiguration {
 
         Restoran r = new Restoran();
         Porudzbina p = new Porudzbina();
-        Komentar k = new Komentar();
         Kupac kp = new Kupac();
         Set<Komentar> komentari = new HashSet<>();
         Set<Porudzbina> porudzbine = new HashSet<>();
@@ -54,7 +53,7 @@ public class DatabaseConfiguration {
         Calendar c = new GregorianCalendar();
         c.set(2001, Calendar.JULY, 5);
         Korisnik srdjan = new Korisnik(1L, "spetrovic", "123", "Srdjan", "Petrovic", Korisnik.Pol.MUSKI, c.getTime(), Korisnik.Uloga.ADMIN);
-        c.set(2002, Calendar.DECEMBER, 27);
+        c.set(2001, Calendar.DECEMBER, 27);
         Korisnik nikola = new Korisnik(241L, "npantic", "admin123", "Nikola", "Pantic", Korisnik.Pol.MUSKI, c.getTime(), Korisnik.Uloga.ADMIN);
 
         korisnikRepository.saveAll( List.of(srdjan, nikola) );

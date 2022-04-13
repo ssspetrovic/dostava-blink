@@ -8,7 +8,7 @@ import java.util.Set;
 @Entity
 public class Restoran implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String naziv;
     public enum TipRestorana {KINESKI, ITALIJANSKI, MEKSICKI, DOMACI};
@@ -22,6 +22,13 @@ public class Restoran implements Serializable {
     private Set<Komentar> komentari = new HashSet<>();
 
     public Restoran() { super(); }
+
+    public Restoran(long id, String naziv, TipRestorana tipRestorana, Set<Komentar> komentari) {
+        this.id = id;
+        this.naziv = naziv;
+        this.tipRestorana = tipRestorana;
+        this.komentari = komentari;
+    }
 
     public Restoran(long id, String naziv, TipRestorana tipRestorana, Set<Artikal> artikli, Set<Komentar> komentari) {
         this.id = id;

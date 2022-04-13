@@ -26,6 +26,15 @@ public class Artikal implements Serializable {
 
     public Artikal() { super(); }
 
+    public Artikal(Long id, String naziv, double cena, Tip tip, Kolicina kolicina, String opis) {
+        this.id = id;
+        this.naziv = naziv;
+        this.cena = cena;
+        this.tip = tip;
+        this.kolicina = kolicina;
+        this.opis = opis;
+    }
+
     public Artikal(Long id, String naziv, double cena, Tip tip, Kolicina kolicina, String opis, Restoran restoran, Porudzbina porudzbina) {
         this.id = id;
         this.naziv = naziv;
