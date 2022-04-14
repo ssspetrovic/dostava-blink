@@ -11,7 +11,7 @@ public class Artikal implements Serializable {
     private String naziv;
     private double cena;
     public enum Tip {JELO, PICE};
-    public enum Kolicina {GRAMI, MILILITRI};
+    public enum Kolicina {GRAMI, MILILITRI}; //DOUBLE
     @Enumerated(EnumType.STRING)
     private Tip tip;
     @Enumerated(EnumType.STRING)

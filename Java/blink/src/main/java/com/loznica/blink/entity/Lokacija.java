@@ -11,8 +11,8 @@ public class Lokacija {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String geografskaDuzina;
-    private String geografskaSirina;
+    private String geografskaDuzina; //double
+    private String geografskaSirina; //double
     private String lokacija;
 
     public Lokacija(){ super(); }

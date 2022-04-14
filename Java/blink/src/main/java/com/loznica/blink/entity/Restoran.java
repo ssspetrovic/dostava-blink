@@ -11,7 +11,7 @@ public class Restoran implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String naziv;
-    public enum TipRestorana {KINESKI, ITALIJANSKI, MEKSICKI, DOMACI};
+    public enum TipRestorana {KINESKI, ITALIJANSKI, MEKSICKI, DOMACI}; //String
     @Enumerated(EnumType.STRING)
     private TipRestorana tipRestorana;
 
@@ -20,6 +20,8 @@ public class Restoran implements Serializable {
 
     @OneToMany(cascade = CascadeType.ALL)
     private Set<Komentar> komentari = new HashSet<>();
+
+    //Lokacija
 
     public Restoran() { super(); }
 

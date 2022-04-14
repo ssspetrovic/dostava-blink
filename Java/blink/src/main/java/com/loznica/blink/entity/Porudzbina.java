@@ -12,11 +12,11 @@ import java.util.UUID;
 public class Porudzbina {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id; //hibernate uuid generator
 
     private UUID uuid;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL) //mtm posebna klasa
     private Set<Artikal> poruceniArtikli = new HashSet<>();
 
     @ManyToOne(cascade = CascadeType.ALL)
@@ -31,6 +31,8 @@ public class Porudzbina {
     public enum Status {OBRADA, U_PRIPREMI, CEKA_DOSTAVLJAC, U_TRANSPORTU, DOSTAVLJENA, OTKAZANA};
     @Enumerated(EnumType.STRING)
     private Status status;
+
+    //Kupac
 
     public Porudzbina() {
         super();

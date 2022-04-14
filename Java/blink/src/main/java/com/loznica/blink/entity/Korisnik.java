@@ -9,7 +9,7 @@ public class Korisnik implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    //@Column unique
     private String korisnickoIme;
     private String lozinka;
     private String ime;
