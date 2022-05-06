@@ -4,12 +4,6 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
 
-enum Ime {
-    HARDSTUCK,
-    GOLD,
-    DIAMOND
-}
-
 @Entity
 public class TipKupca implements Serializable {
     @Id

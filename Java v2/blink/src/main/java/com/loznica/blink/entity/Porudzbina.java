@@ -7,14 +7,6 @@ import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
 
-enum Status {
-    OBRADA,
-    U_PRIPREMI,
-    CEKA_DOSTAVLJACA,
-    U_TRANSPORTU,
-    DOSTAVLJENA,
-    OTKAZANA
-}
 
 @Entity
 public class Porudzbina implements Serializable {

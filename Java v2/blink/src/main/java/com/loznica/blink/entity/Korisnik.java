@@ -4,14 +4,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
-enum Uloga {
-    ADMIN,
-    MENADZER,
-    DOSTAVLJAC,
-    KUPAC
-}
-
-@MappedSuperclass
+@Entity
 public class Korisnik implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

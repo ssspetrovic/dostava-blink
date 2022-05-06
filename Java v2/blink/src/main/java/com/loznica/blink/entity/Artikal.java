@@ -4,11 +4,6 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
 
-enum Tip {
-    JELO,
-    PICE
-}
-
 @Entity
 public class Artikal implements Serializable {
     @Id
