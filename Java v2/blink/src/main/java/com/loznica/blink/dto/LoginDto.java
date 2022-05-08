@@ -13,19 +13,19 @@ public class LoginDto {
         this.lozinka = lozinka;
     }
 
-    public String getUsername() {
+    public String getKorisnickoIme() {
         return korisnickoIme;
     }
 
-    public void setUsername(String username) {
+    public void setKorisnickoIme(String username) {
         this.korisnickoIme = username;
     }
 
-    public String getPassword() {
+    public String getLozinka() {
         return lozinka;
     }
 
-    public void setPassword(String password) {
+    public void setLozinka(String password) {
         this.lozinka = password;
     }
 }
