@@ -40,4 +40,8 @@ public class KorisnikService {
         return korisnik;
     }
 
+    public List<Korisnik> getAll(){
+        return korisnikRepository.findAll();
+    }
+
 }
