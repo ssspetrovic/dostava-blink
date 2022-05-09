@@ -45,6 +45,17 @@ public class KorisnikRestController {
         return ResponseEntity.ok("Uspesno ste se ulogovali!");
     }
 
+    @PostMapping("api/logout")
+    public ResponseEntity logout(HttpSession session){
+        Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
+
+        if (loggedKorisnik == null)
+            return new ResponseEntity("Forbidden", HttpStatus.FORBIDDEN);
+
+        session.invalidate();
+        return new ResponseEntity("Uspesno ste se izlogovali!", HttpStatus.OK);
+    }
+
     @GetMapping("/api/login/info")
     public ResponseEntity<Korisnik> getInfo(HttpSession session){
 
