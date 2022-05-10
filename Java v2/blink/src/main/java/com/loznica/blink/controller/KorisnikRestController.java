@@ -34,28 +34,6 @@ public class KorisnikRestController {
         return "Dobrodosli u Blink!";
     }
 
-    @PostMapping("/api/login")
-    public ResponseEntity<?> login(@RequestBody LoginDto loginDto, HttpSession session) {
-        if(loginDto.getKorisnickoIme().isEmpty() || loginDto.getLozinka().isEmpty())
-            return new ResponseEntity("Invalid login!", HttpStatus.BAD_REQUEST);
-        Korisnik loggedKorisnik = korisnikService.login(loginDto.getKorisnickoIme(), loginDto.getLozinka());
-        if(loggedKorisnik == null)
-            return new ResponseEntity<>("Korisnik ne postoji!", HttpStatus.NOT_FOUND);
-        session.setAttribute("korisnik", loggedKorisnik);
-        return ResponseEntity.ok("Uspesno ste se ulogovali!");
-    }
-
-    @PostMapping("api/logout")
-    public ResponseEntity logout(HttpSession session){
-        Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
-
-        if (loggedKorisnik == null)
-            return new ResponseEntity("Forbidden", HttpStatus.FORBIDDEN);
-
-        session.invalidate();
-        return new ResponseEntity("Uspesno ste se izlogovali!", HttpStatus.OK);
-    }
-
     @GetMapping("/api/login/info")
     public ResponseEntity<Korisnik> getInfo(HttpSession session){
 
@@ -89,39 +67,6 @@ public class KorisnikRestController {
         }
 
         return ResponseEntity.ok(k);
-
-    }
-
-    @PostMapping("/api/register")
-    public ResponseEntity<?> registracijaKorisnika(@RequestBody RegistrationRequest registrationRequest) {
-        String poruka;
-        ResponseEntity<String> registracija;
-
-        if(korisnikRepository.findByKorisnickoIme(registrationRequest.getKorisnickoIme()).isPresent()) {
-            poruka = "This user already exists";
-            return ResponseEntity.status(HttpStatus.PRECONDITION_REQUIRED).body(poruka);
-        }
-
-        Korisnik k = new Korisnik();
-        k.setKorisnickoIme(registrationRequest.getKorisnickoIme());
-        k.setLozinka(registrationRequest.getLozinka());
-        k.setIme(registrationRequest.getIme());
-        k.setPrezime(registrationRequest.getPrezime());
-        k.setPol(registrationRequest.getPol());
-        k.setDatumRodjenja(registrationRequest.getDatumRodjenja());
-        k.setUloga(Uloga.KUPAC);
-
-        try{
-            korisnikRepository.save(k);
-            poruka = "Hvala Vam na registraciji. Sve najlepse Vama i rodbini.";
-            registracija = ResponseEntity.ok(poruka);
-        }catch (Exception e){
-            poruka = "Neuspesna registracija, pokusajte ponovo...";
-            System.out.println(e.getMessage());
-            registracija = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(poruka);
-        }
-
-        return registracija;
 
     }
 
