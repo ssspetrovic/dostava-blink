@@ -22,8 +22,6 @@ public class RegisterService {
             kupacRepository.save((Kupac) k);
         else
             throw new Exception("Nije dozvoljena data uloga: " + u);
-
-
     }
 
     private void invalid(String korisnickoIme, List<Kupac> korisnikList) throws Exception {

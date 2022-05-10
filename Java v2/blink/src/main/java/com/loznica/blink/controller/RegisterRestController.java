@@ -39,7 +39,6 @@ public class RegisterRestController {
             return new ResponseEntity(greska, HttpStatus.BAD_REQUEST);
 
         return new ResponseEntity("USPESNA REGISTRACIJA, HVALA VAM", HttpStatus.OK);
-
     }
 
     private HashMap<String, String> Validate(RegisterDto registerDto) {

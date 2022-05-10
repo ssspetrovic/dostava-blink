@@ -77,6 +77,6 @@ public class RegisterDto {
         this.datumRodjenja = datumRodjenja;
     }
 
-    public Kupac ToKupac() { return new Kupac(korisnickoIme, lozinka, ime, prezime, pol, datumRodjenja);}
+    public Kupac ToKupac() { return new Kupac(korisnickoIme, lozinka, ime, prezime, pol, datumRodjenja); }
 
 }

@@ -1,10 +1,8 @@
 package com.loznica.blink.configuration;
 
-import com.loznica.blink.entity.Korisnik;
-import com.loznica.blink.entity.Menadzer;
-import com.loznica.blink.entity.Restoran;
-import com.loznica.blink.entity.Uloga;
+import com.loznica.blink.entity.*;
 import com.loznica.blink.repository.KorisnikRepository;
+import com.loznica.blink.repository.LokacijaRepository;
 import com.loznica.blink.repository.MenadzerRepository;
 import com.loznica.blink.repository.RestoranRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +24,9 @@ public class DatabaseConfiguration {
     @Autowired
     private RestoranRepository restoranRepository;
 
+    @Autowired
+    private LokacijaRepository lokacijaRepository;
+
     @Bean
     public boolean Instantiate(){
         Calendar c = new GregorianCalendar();
@@ -42,6 +43,9 @@ public class DatabaseConfiguration {
         c.set(2001, Calendar.JULY, 21);
         Menadzer sime = new Menadzer(3L, "sime", "la123", "Aleksa", "Simeunovic", "Muski", c.getTime(), Uloga.MENADZER, r);
         menadzerRepository.save(sime);
+
+        Lokacija l = new Lokacija();
+        lokacijaRepository.save(l);
 
         return true;
     }

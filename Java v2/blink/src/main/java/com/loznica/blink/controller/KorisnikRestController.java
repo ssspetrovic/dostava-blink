@@ -1,13 +1,14 @@
 package com.loznica.blink.controller;
 
 import com.loznica.blink.dto.LoginDto;
-import com.loznica.blink.entity.Korisnik;
-import com.loznica.blink.entity.Menadzer;
-import com.loznica.blink.entity.Uloga;
+import com.loznica.blink.dto.RestoranDto;
+import com.loznica.blink.entity.*;
 import com.loznica.blink.repository.KorisnikRepository;
 import com.loznica.blink.repository.MenadzerRepository;
+import com.loznica.blink.repository.RestoranRepository;
 import com.loznica.blink.security.RegistrationRequest;
 import com.loznica.blink.service.KorisnikService;
+import com.loznica.blink.service.RestoranService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,12 @@ public class KorisnikRestController {
 
     @Autowired
     private MenadzerRepository menadzerRepository;
+
+    @Autowired
+    private RestoranRepository restoranRepository;
+
+    @Autowired
+    private RestoranService restoranService;
 
     @GetMapping("/api/")
     public String dobrodoslica() {
@@ -131,13 +138,12 @@ public class KorisnikRestController {
         if(loggedKorisnik == null || !loggedKorisnik.getUloga().equals(Uloga.ADMIN)){
             System.out.println("Nema sesije.");
             return ResponseEntity.ok(loggedKorisnik);
-        }
-        else {
+        } else {
             String poruka;
             ResponseEntity<String> registracija;
 
             if (korisnikRepository.findByKorisnickoIme(registrationRequest.getKorisnickoIme()).isPresent()) {
-                poruka = "This user already exists";
+                poruka = "Korisnik vec postoji.";
                 return ResponseEntity.status(HttpStatus.PRECONDITION_REQUIRED).body(poruka);
             }
 
@@ -168,7 +174,7 @@ public class KorisnikRestController {
     public ResponseEntity<?> kreirajDostavljaca(@RequestBody RegistrationRequest registrationRequest, HttpSession session) {
         Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
 
-        if(loggedKorisnik == null || !loggedKorisnik.getUloga().equals(Uloga.ADMIN)){
+        if (loggedKorisnik == null || !loggedKorisnik.getUloga().equals(Uloga.ADMIN)){
             System.out.println("Nema sesije.");
             return ResponseEntity.ok(loggedKorisnik);
         }
@@ -177,7 +183,7 @@ public class KorisnikRestController {
             ResponseEntity<String> registracija;
 
             if (korisnikRepository.findByKorisnickoIme(registrationRequest.getKorisnickoIme()).isPresent()) {
-                poruka = "This user already exists";
+                poruka = "Korisnik vec postoji.";
                 return ResponseEntity.status(HttpStatus.PRECONDITION_REQUIRED).body(poruka);
             }
 
@@ -209,15 +215,14 @@ public class KorisnikRestController {
 
         Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
 
-        if(loggedKorisnik == null || !loggedKorisnik.getUloga().equals(Uloga.MENADZER)){
+        if(loggedKorisnik == null || !loggedKorisnik.getUloga().equals(Uloga.MENADZER)) {
             System.out.println("Nema sesije.");
             return ResponseEntity.ok(null);
-        }
-        else{
+        } else {
             List<Menadzer> menadzerList = menadzerRepository.findAll();
             List<Menadzer> ispis = new ArrayList<>();
 
-            for(Menadzer menadzer : menadzerList){
+            for (Menadzer menadzer : menadzerList){
                 if(menadzer.getUloga().equals(Uloga.MENADZER)) {
                     Menadzer m = new Menadzer();
                     m.setId(menadzer.getId());
@@ -236,8 +241,40 @@ public class KorisnikRestController {
 
             return ResponseEntity.ok(ispis);
         }
-
     }
 
+    @PostMapping("/api/restorani/")
+    public ResponseEntity<?> kreirajRestoran(@RequestBody RestoranDto restoranDto, HttpSession session) {
+        Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
+
+        if (loggedKorisnik == null || !loggedKorisnik.getUloga().equals(Uloga.ADMIN)) {
+            System.out.println("Nema sesije.");
+            return ResponseEntity.ok(loggedKorisnik);
+        }
+
+        String poruka;
+        ResponseEntity<String> kreirajRestoran;
+
+        Restoran restoran = restoranDto.ToRestoran();
+
+        try {
+            restoranService.KreirajRestoran(restoran);
+        } catch (Exception e) {
+            poruka = "Restoran vec postoji.";
+            kreirajRestoran = ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(poruka);
+        }
+
+        try {
+            restoranRepository.save(restoran);
+            poruka = "Restoran uspesno kreiran.";
+            kreirajRestoran = ResponseEntity.ok(poruka);
+        } catch (Exception e) {
+            poruka = "Neuspesno kreiranje restorana, pokusajte ponovo...";
+            System.out.println(e.getMessage());
+            kreirajRestoran = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(poruka);
+        }
+
+        return kreirajRestoran;
+    }
 }
 

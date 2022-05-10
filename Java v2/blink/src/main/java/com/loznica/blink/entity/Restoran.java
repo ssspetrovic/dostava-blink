@@ -30,6 +30,11 @@ public class Restoran implements Serializable {
 
     public Restoran() { super(); }
 
+    public Restoran(String naziv, String tipRestorana) {
+        this.naziv = naziv;
+        this.tipRestorana = tipRestorana;
+    }
+
     public Restoran(Long id, String naziv, String tipRestorana, Set<Artikal> artikli, Lokacija lokacija, Set<Komentar> komentari, Set<Porudzbina> porudzbine) {
         this.id = id;
         this.naziv = naziv;

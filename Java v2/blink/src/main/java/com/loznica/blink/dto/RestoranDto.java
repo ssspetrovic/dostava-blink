@@ -9,6 +9,10 @@ public class RestoranDto {
     private Restoran restoran;
     private Set<Artikal> artikli;
 
+    private String naziv;
+
+    private String tipRestorana;
+
     public RestoranDto() {
         super();
     }
@@ -33,4 +37,6 @@ public class RestoranDto {
     public void setArtikli(Set<Artikal> artikli) {
         this.artikli = artikli;
     }
+
+    public Restoran ToRestoran() { return new Restoran(naziv, tipRestorana); }
 }
