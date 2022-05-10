@@ -3,6 +3,7 @@ package com.loznica.blink.controller;
 import com.loznica.blink.dto.LoginDto;
 import com.loznica.blink.entity.Korisnik;
 import com.loznica.blink.entity.Uloga;
+import com.loznica.blink.service.KorisnikService;
 import com.loznica.blink.service.LoginService;
 import com.loznica.blink.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,9 @@ public class LoginRestController {
     @Autowired
     private SessionService sessionService;
 
+    @Autowired
+    private KorisnikService korisnikService;
+
     @PostMapping("/api/login")
     public ResponseEntity<?> login(@RequestBody LoginDto loginDto, HttpSession session) {
         Hashtable<String, String> greska = new Hashtable<>();
@@ -37,21 +41,22 @@ public class LoginRestController {
         if(!greska.isEmpty())
             return new ResponseEntity(greska, HttpStatus.BAD_REQUEST);
 
-        Korisnik k = null;
+        Korisnik loggedKorisnik = korisnikService.login(loginDto.getKorisnickoIme(), loginDto.getLozinka());
+        if(loggedKorisnik == null)
+            return new ResponseEntity<>("Korisnik ne postoji!", HttpStatus.NOT_FOUND);
 
         try {
-            k = loginService.login(loginDto.getKorisnickoIme(), loginDto.getLozinka());
+            loggedKorisnik = loginService.login(loginDto.getKorisnickoIme(), loginDto.getLozinka());
         } catch (AccountNotFoundException e) {
             greska.put("korisnickoIme", e.getMessage());
         }
 
-        if(!greska.isEmpty() || k == null)
+        if(!greska.isEmpty() || loggedKorisnik == null)
             return new ResponseEntity(greska, HttpStatus.BAD_REQUEST);
 
-        session.setAttribute("uloga", k.getUloga());
-        session.setAttribute("korisnickoIme", k.getKorisnickoIme());
+        session.setAttribute("korisnik", loggedKorisnik);
 
-        return new ResponseEntity(k, HttpStatus.OK);
+        return ResponseEntity.ok("Uspesno ste se ulogovali.");
 
     }
 
