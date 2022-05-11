@@ -1,6 +1,7 @@
 package com.loznica.blink.dto;
 
 import com.loznica.blink.entity.Artikal;
+import com.loznica.blink.entity.Menadzer;
 import com.loznica.blink.entity.Restoran;
 
 import java.util.Set;
@@ -12,6 +13,8 @@ public class RestoranDto {
     private String naziv;
 
     private String tipRestorana;
+
+    private Menadzer menadzer;
 
     public RestoranDto() {
         super();
@@ -39,4 +42,12 @@ public class RestoranDto {
     }
 
     public Restoran ToRestoran() { return new Restoran(naziv, tipRestorana); }
+
+    public Menadzer getMenadzer() {
+        return menadzer;
+    }
+
+    public void setMenadzer(Menadzer menadzer) {
+        this.menadzer = menadzer;
+    }
 }

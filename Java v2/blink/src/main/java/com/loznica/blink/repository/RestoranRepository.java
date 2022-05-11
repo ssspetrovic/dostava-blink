@@ -14,4 +14,5 @@ public interface RestoranRepository extends JpaRepository<Restoran, Long> {
 
     Restoran getByNaziv(String naziv);
 
+    Restoran getById(Long id);
 }

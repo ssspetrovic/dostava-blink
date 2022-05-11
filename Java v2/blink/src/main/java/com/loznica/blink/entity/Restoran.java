@@ -28,6 +28,9 @@ public class Restoran implements Serializable {
     @OneToMany
     private Set<Porudzbina> porudzbine;
 
+    @OneToOne
+    private Menadzer menadzer;
+
     public Restoran() { super(); }
 
     public Restoran(String naziv, String tipRestorana) {
@@ -35,7 +38,7 @@ public class Restoran implements Serializable {
         this.tipRestorana = tipRestorana;
     }
 
-    public Restoran(Long id, String naziv, String tipRestorana, Set<Artikal> artikli, Lokacija lokacija, Set<Komentar> komentari, Set<Porudzbina> porudzbine) {
+    public Restoran(Long id, String naziv, String tipRestorana, Set<Artikal> artikli, Lokacija lokacija, Set<Komentar> komentari, Set<Porudzbina> porudzbine, Menadzer menadzer) {
         this.id = id;
         this.naziv = naziv;
         this.tipRestorana = tipRestorana;
@@ -43,6 +46,7 @@ public class Restoran implements Serializable {
         this.lokacija = lokacija;
         this.komentari = komentari;
         this.porudzbine = porudzbine;
+        this.menadzer = menadzer;
     }
 
     public Long getId() {
@@ -101,6 +105,14 @@ public class Restoran implements Serializable {
         this.porudzbine = porudzbine;
     }
 
+    public Menadzer getMenadzer() {
+        return menadzer;
+    }
+
+    public void setMenadzer(Menadzer menadzer) {
+        this.menadzer = menadzer;
+    }
+
     @Override
     public String toString() {
         return "Restoran{" +
@@ -111,6 +123,7 @@ public class Restoran implements Serializable {
                 ", lokacija=" + lokacija +
                 ", komentari=" + komentari +
                 ", porudzbine=" + porudzbine +
+                ", menadzer=" + menadzer +
                 '}';
     }
 }

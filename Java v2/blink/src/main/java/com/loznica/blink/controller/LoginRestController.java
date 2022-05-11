@@ -56,7 +56,7 @@ public class LoginRestController {
 
         session.setAttribute("korisnik", loggedKorisnik);
 
-        return ResponseEntity.ok("Uspesno ste se ulogovali.");
+        return new ResponseEntity(loggedKorisnik, HttpStatus.OK);
 
     }
 

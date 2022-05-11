@@ -1,8 +1,8 @@
 package com.loznica.blink.controller;
 
-import com.loznica.blink.dto.LoginDto;
 import com.loznica.blink.dto.RestoranDto;
 import com.loznica.blink.entity.*;
+import com.loznica.blink.repository.DostavljacRepository;
 import com.loznica.blink.repository.KorisnikRepository;
 import com.loznica.blink.repository.MenadzerRepository;
 import com.loznica.blink.repository.RestoranRepository;
@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @RestController
 public class KorisnikRestController {
@@ -36,6 +38,9 @@ public class KorisnikRestController {
     @Autowired
     private RestoranService restoranService;
 
+    @Autowired
+    private DostavljacRepository dostavljacRepository;
+
     @GetMapping("/api/")
     public String dobrodoslica() {
         return "Dobrodosli u Blink!";
@@ -46,10 +51,9 @@ public class KorisnikRestController {
 
         Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
 
-        if(loggedKorisnik == null){
+        if (loggedKorisnik == null) {
             System.out.println("Nema sesije.");
-        }
-        else{
+        } else {
             System.out.println(loggedKorisnik);
         }
         return ResponseEntity.ok(loggedKorisnik);
@@ -67,194 +71,230 @@ public class KorisnikRestController {
         k.setPol(registrationRequest.getPol() == null ? k.getPol() : registrationRequest.getPol());
         k.setDatumRodjenja(registrationRequest.getDatumRodjenja() == null ? k.getDatumRodjenja() : registrationRequest.getDatumRodjenja());
 
-        try{
+        try {
             System.out.println("Uspesna izmena.");
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println("Neuspesna izmena.");
         }
 
         return ResponseEntity.ok(k);
-
     }
 
-    @GetMapping("/api/korisnici")
-    public List<Korisnik> getKorisnici() {
-        return korisnikService.findAll();
-    }
+    @GetMapping("/api/admin/korisnici/{id}")
+    public Korisnik getKorisnik(@PathVariable(name = "id") Long id, HttpSession session) {
+        Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
 
-    @GetMapping("/api/korisnici/{id}")
-    public Korisnik getKorisnik(@PathVariable(name = "id") Long id) {
+        if (loggedKorisnik == null) {
+            System.out.println("Nema sesije.");
+            return null;
+        } else if (!loggedKorisnik.getUloga().equals(Uloga.ADMIN)) {
+            System.out.println("Pristup nije odobren.");
+            return null;
+        }
+
         return korisnikService.findKorisnik(id);
     }
 
-    @PostMapping("/api/save-korisnici")
-    public String saveKorisnici(@RequestBody Korisnik korisnik) {
-        this.korisnikService.save(korisnik);
-        return "Uspesno sacuvan korisnik!";
-    }
-
-    @RequestMapping(value = "/api/delete/{id}", method = {RequestMethod.DELETE, RequestMethod.GET})
-    public String deleteKorisnik(@PathVariable(name = "id") Long id) {
-        korisnikService.deleteById(id);
-        return "Uspesno 'uklonjen' korisnik uwu!";
-    }
-
-    @GetMapping("/api/admin/clanovi")
-    public ResponseEntity<?> getKorisnici(HttpSession session) {
-
+    @PostMapping("/api/admin/sacuvaj-korisnika")
+    public ResponseEntity<?> saveKorisnici(@RequestBody Korisnik korisnik, HttpSession session) {
         Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
 
-        if(loggedKorisnik == null || !loggedKorisnik.getUloga().equals(Uloga.ADMIN)){
+        if (loggedKorisnik == null) {
             System.out.println("Nema sesije.");
             return ResponseEntity.ok(loggedKorisnik);
-        }
-        else{
-            List<Korisnik> korisnikList = korisnikRepository.findAll();
-            List<RegistrationRequest> registrationRequestList = new ArrayList<>();
-
-            for(Korisnik korisnik : korisnikList){
-                if(!korisnik.getUloga().equals(Uloga.ADMIN)){
-                    RegistrationRequest r = new RegistrationRequest();
-                    r.setKorisnickoIme(korisnik.getKorisnickoIme());
-                    r.setLozinka(korisnik.getLozinka());
-                    r.setIme(korisnik.getIme());
-                    r.setPrezime(korisnik.getPrezime());
-                    r.setPol(korisnik.getPol());
-                    r.setDatumRodjenja(korisnik.getDatumRodjenja());
-
-                    registrationRequestList.add(r);
-                }
-            }
-
-            return ResponseEntity.ok(registrationRequestList);
+        } else if (!loggedKorisnik.getUloga().equals(Uloga.ADMIN)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Pristup nije odobren.");
         }
 
+        this.korisnikService.save(korisnik);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Korisnk je uspesno sacuvan!");
     }
 
-    @PostMapping("/api/menadzeri")
+    @RequestMapping(value = "/api/admin/obrisi-korisnika/{id}", method = {RequestMethod.DELETE, RequestMethod.GET})
+    public ResponseEntity<?> deleteKorisnik(@PathVariable(name = "id") Long id, HttpSession session) {
+        Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
+
+        if (loggedKorisnik == null) {
+            System.out.println("Nema sesije.");
+            return ResponseEntity.ok(loggedKorisnik);
+        } else if (!loggedKorisnik.getUloga().equals(Uloga.ADMIN)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Pristup nije odobren.");
+        }
+
+        korisnikService.deleteById(id);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Korisnk je uspesno uklonjen!");
+    }
+
+    @GetMapping("/api/admin/korisnici/ispis")
+    public ResponseEntity<?> getKorisnici(HttpSession session) {
+        Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
+
+        if (loggedKorisnik == null) {
+            System.out.println("Nema sesije.");
+            return ResponseEntity.ok(loggedKorisnik);
+        } else if (!loggedKorisnik.getUloga().equals(Uloga.ADMIN)) {
+            System.out.println("Pristup nije odobren.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Pristup nije odobren.");
+        }
+
+        List<Korisnik> korisnikList = korisnikRepository.findAll();
+        List<RegistrationRequest> registrationRequestList = new ArrayList<>();
+
+        for (Korisnik korisnik : korisnikList) {
+            if (!korisnik.getUloga().equals(Uloga.ADMIN)){
+                RegistrationRequest r = new RegistrationRequest();
+                r.setKorisnickoIme(korisnik.getKorisnickoIme());
+                r.setLozinka(korisnik.getLozinka());
+                r.setIme(korisnik.getIme());
+                r.setPrezime(korisnik.getPrezime());
+                r.setPol(korisnik.getPol());
+                r.setDatumRodjenja(korisnik.getDatumRodjenja());
+
+                registrationRequestList.add(r);
+            }
+        }
+
+        return ResponseEntity.ok(registrationRequestList);
+    }
+
+    @PostMapping("/api/admin/kreiraj-menadzera")
     public ResponseEntity<?> kreirajMenadzera(@RequestBody RegistrationRequest registrationRequest, HttpSession session) {
         Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
 
-        if(loggedKorisnik == null || !loggedKorisnik.getUloga().equals(Uloga.ADMIN)){
+        if (loggedKorisnik == null) {
             System.out.println("Nema sesije.");
             return ResponseEntity.ok(loggedKorisnik);
-        } else {
-            String poruka;
-            ResponseEntity<String> registracija;
-
-            if (korisnikRepository.findByKorisnickoIme(registrationRequest.getKorisnickoIme()).isPresent()) {
-                poruka = "Korisnik vec postoji.";
-                return ResponseEntity.status(HttpStatus.PRECONDITION_REQUIRED).body(poruka);
-            }
-
-            Korisnik k = new Korisnik();
-            k.setKorisnickoIme(registrationRequest.getKorisnickoIme());
-            k.setLozinka(registrationRequest.getLozinka());
-            k.setIme(registrationRequest.getIme());
-            k.setPrezime(registrationRequest.getPrezime());
-            k.setPol(registrationRequest.getPol());
-            k.setDatumRodjenja(registrationRequest.getDatumRodjenja());
-            k.setUloga(Uloga.MENADZER);
-
-            try {
-                korisnikRepository.save(k);
-                poruka = "Hvala Vam na registraciji. Sve najlepse Vama i rodbini.";
-                registracija = ResponseEntity.ok(poruka);
-            } catch (Exception e) {
-                poruka = "Neuspesna registracija, pokusajte ponovo...";
-                System.out.println(e.getMessage());
-                registracija = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(poruka);
-            }
-
-            return registracija;
+        } else if (!loggedKorisnik.getUloga().equals(Uloga.ADMIN)) {
+            System.out.println("Pristup nije odobren.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Pristup nije odobren.");
         }
+
+        String poruka;
+        ResponseEntity<String> registracija;
+
+        if (korisnikRepository.findByKorisnickoIme(registrationRequest.getKorisnickoIme()).isPresent()) {
+            poruka = "Korisnik vec postoji.";
+            return ResponseEntity.status(HttpStatus.PRECONDITION_REQUIRED).body(poruka);
+        }
+
+        Menadzer m = new Menadzer();
+        m.setKorisnickoIme(registrationRequest.getKorisnickoIme());
+        m.setLozinka(registrationRequest.getLozinka());
+        m.setIme(registrationRequest.getIme());
+        m.setPrezime(registrationRequest.getPrezime());
+        m.setPol(registrationRequest.getPol());
+        m.setDatumRodjenja(registrationRequest.getDatumRodjenja());
+        m.setUloga(Uloga.MENADZER);
+
+        try {
+            menadzerRepository.save(m);
+            poruka = "Hvala Vam na registraciji. Sve najlepse Vama i rodbini.";
+            registracija = ResponseEntity.ok(poruka);
+        } catch (Exception e) {
+            poruka = "Neuspesna registracija, pokusajte ponovo...";
+            System.out.println(e.getMessage());
+            registracija = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(poruka);
+        }
+
+        return registracija;
     }
 
-    @PostMapping("/api/dostavljaci")
+    @PostMapping("/api/admin/kreiraj-dostavljaca")
     public ResponseEntity<?> kreirajDostavljaca(@RequestBody RegistrationRequest registrationRequest, HttpSession session) {
         Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
 
-        if (loggedKorisnik == null || !loggedKorisnik.getUloga().equals(Uloga.ADMIN)){
+        if (loggedKorisnik == null) {
             System.out.println("Nema sesije.");
             return ResponseEntity.ok(loggedKorisnik);
+        } else if (!loggedKorisnik.getUloga().equals(Uloga.ADMIN)) {
+            System.out.println("Pristup nije odobren.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Pristup nije odobren.");
         }
-        else {
-            String poruka;
-            ResponseEntity<String> registracija;
 
-            if (korisnikRepository.findByKorisnickoIme(registrationRequest.getKorisnickoIme()).isPresent()) {
-                poruka = "Korisnik vec postoji.";
-                return ResponseEntity.status(HttpStatus.PRECONDITION_REQUIRED).body(poruka);
-            }
+        String poruka;
+        ResponseEntity<String> registracija;
 
-            Korisnik k = new Korisnik();
-            k.setKorisnickoIme(registrationRequest.getKorisnickoIme());
-            k.setLozinka(registrationRequest.getLozinka());
-            k.setIme(registrationRequest.getIme());
-            k.setPrezime(registrationRequest.getPrezime());
-            k.setPol(registrationRequest.getPol());
-            k.setDatumRodjenja(registrationRequest.getDatumRodjenja());
-            k.setUloga(Uloga.DOSTAVLJAC);
-
-            try {
-                korisnikRepository.save(k);
-                poruka = "Hvala Vam na registraciji. Sve najlepse Vama i rodbini.";
-                registracija = ResponseEntity.ok(poruka);
-            } catch (Exception e) {
-                poruka = "Neuspesna registracija, pokusajte ponovo...";
-                System.out.println(e.getMessage());
-                registracija = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(poruka);
-            }
-
-            return registracija;
+        if (korisnikRepository.findByKorisnickoIme(registrationRequest.getKorisnickoIme()).isPresent()) {
+            poruka = "Korisnik vec postoji.";
+            return ResponseEntity.status(HttpStatus.PRECONDITION_REQUIRED).body(poruka);
         }
+
+        Dostavljac d = new Dostavljac();
+        d.setKorisnickoIme(registrationRequest.getKorisnickoIme());
+        d.setLozinka(registrationRequest.getLozinka());
+        d.setIme(registrationRequest.getIme());
+        d.setPrezime(registrationRequest.getPrezime());
+        d.setPol(registrationRequest.getPol());
+        d.setDatumRodjenja(registrationRequest.getDatumRodjenja());
+        d.setUloga(Uloga.DOSTAVLJAC);
+
+        try {
+            dostavljacRepository.save(d);
+            poruka = "Hvala Vam na registraciji. Sve najlepse Vama i rodbini.";
+            registracija = ResponseEntity.ok(poruka);
+        } catch (Exception e) {
+            poruka = "Neuspesna registracija, pokusajte ponovo...";
+            System.out.println(e.getMessage());
+            registracija = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(poruka);
+        }
+
+        return registracija;
     }
 
-    @GetMapping("/api/menadzeri/lista")
+    @GetMapping("/api/menadzer/ispis")
     public ResponseEntity<?> listaMenadzmenta(HttpSession session) {
 
         Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
 
-        if(loggedKorisnik == null || !loggedKorisnik.getUloga().equals(Uloga.MENADZER)) {
+        if(loggedKorisnik == null) {
             System.out.println("Nema sesije.");
             return ResponseEntity.ok(null);
-        } else {
-            List<Menadzer> menadzerList = menadzerRepository.findAll();
-            List<Menadzer> ispis = new ArrayList<>();
-
-            for (Menadzer menadzer : menadzerList){
-                if(menadzer.getUloga().equals(Uloga.MENADZER)) {
-                    Menadzer m = new Menadzer();
-                    m.setId(menadzer.getId());
-                    m.setKorisnickoIme(menadzer.getKorisnickoIme());
-                    m.setLozinka(menadzer.getLozinka());
-                    m.setIme(menadzer.getIme());
-                    m.setPrezime(menadzer.getPrezime());
-                    m.setDatumRodjenja(menadzer.getDatumRodjenja());
-                    m.setPol(menadzer.getPol());
-                    m.setRestoran(menadzer.getRestoran());
-                    m.getRestoran().setPorudzbine(menadzer.getRestoran().getPorudzbine());
-                    m.setUloga(Uloga.MENADZER);
-                    ispis.add(m);
-                }
-            }
-
-            return ResponseEntity.ok(ispis);
+        } else if (!loggedKorisnik.getUloga().equals(Uloga.MENADZER)) {
+            System.out.println("Pristup nije odobren.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Pristup nije odobren.");
         }
+
+        List<Menadzer> menadzerList = menadzerRepository.findAll();
+        List<Menadzer> ispis = new ArrayList<>();
+
+        for (Menadzer menadzer : menadzerList) {
+            if(menadzer.getUloga().equals(Uloga.MENADZER)) {
+                Menadzer m = new Menadzer();
+                m.setId(menadzer.getId());
+                m.setKorisnickoIme(menadzer.getKorisnickoIme());
+                m.setLozinka(menadzer.getLozinka());
+                m.setIme(menadzer.getIme());
+                m.setPrezime(menadzer.getPrezime());
+                m.setDatumRodjenja(menadzer.getDatumRodjenja());
+                m.setPol(menadzer.getPol());
+                m.setUloga(Uloga.MENADZER);
+                m.setRestoran(menadzer.getRestoran());
+
+                if (menadzer.getRestoran() != null) {
+                    m.getRestoran().setPorudzbine(menadzer.getRestoran().getPorudzbine());
+                }
+
+                ispis.add(m);
+            }
+        }
+
+        return ResponseEntity.ok(ispis);
     }
 
-    @PostMapping("/api/restorani/")
+    @PostMapping("/api/admin/kreiraj/restoran")
     public ResponseEntity<?> kreirajRestoran(@RequestBody RestoranDto restoranDto, HttpSession session) {
         Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
 
-        if (loggedKorisnik == null || !loggedKorisnik.getUloga().equals(Uloga.ADMIN)) {
+        if (loggedKorisnik == null) {
             System.out.println("Nema sesije.");
             return ResponseEntity.ok(loggedKorisnik);
+        } else if (!loggedKorisnik.getUloga().equals(Uloga.ADMIN)) {
+            System.out.println("Pristup nije odobren.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Pristup nije odobren.");
         }
 
         String poruka;
         ResponseEntity<String> kreirajRestoran;
-
         Restoran restoran = restoranDto.ToRestoran();
 
         try {
@@ -276,5 +316,45 @@ public class KorisnikRestController {
 
         return kreirajRestoran;
     }
+
+    @GetMapping("/api/menadzer/info/{id}")
+    public Menadzer ispisiMenadzera(@PathVariable(name = "id") Long id, HttpSession session) {
+        Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
+
+        if (loggedKorisnik == null) {
+            System.out.println("Nema sesije.");
+            return null;
+        } else if (!loggedKorisnik.getId().equals(id)) {
+            System.out.println("Pristup nije odobren.");
+            return null;
+        }
+
+        Menadzer menadzer = (Menadzer) korisnikService.findKorisnik(id);
+        return menadzer;
+    }
+
+    @GetMapping("/api/admin/restorani/{id}/postavi-menadzera")
+    public ResponseEntity<?> postaviMenadzera(@PathVariable(name = "id") Long id, @RequestParam String korisnickoIme, HttpSession session) {
+        Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
+
+        if (loggedKorisnik == null) {
+            System.out.println("Nema sesije.");
+            return ResponseEntity.ok(loggedKorisnik);
+        } else if (!loggedKorisnik.getUloga().equals(Uloga.ADMIN)) {
+            System.out.println("Pristup nije odobren.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Pristup nije odobren.");
+        }
+
+        Restoran restoran = restoranRepository.getById(id);
+
+        if (restoran == null) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Restoran ne postoji.");
+        }
+
+        restoran.setMenadzer(menadzerRepository.getByKorisnickoIme(korisnickoIme));
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Menadzer uspesno postavljen.");
+    }
+
+
 }
 

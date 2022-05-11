@@ -17,7 +17,7 @@ public class RestoranRestController {
     @Autowired
     private RestoranRepository restoranRepository;
 
-    @GetMapping("/api/restorani/lista/")
+    @GetMapping("/api/restorani/lista")
     public ResponseEntity Get() {
         List<Restoran> restoranList = restoranRepository.findAll();
         List<RestoranDto> restoranInfo = new ArrayList<>();

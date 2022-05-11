@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MenadzerRepository extends JpaRepository<Menadzer, Long> {
+    Menadzer getByKorisnickoIme(String korisnickoIme);
 }
