@@ -19,7 +19,7 @@ public class Restoran implements Serializable {
     @OneToMany
     private Set<Artikal> artikli;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Lokacija lokacija;
 
     @OneToMany
@@ -33,9 +33,17 @@ public class Restoran implements Serializable {
 
     public Restoran() { super(); }
 
-    public Restoran(String naziv, String tipRestorana) {
+    public Restoran(String naziv, String tipRestorana, Lokacija lokacija) {
         this.naziv = naziv;
         this.tipRestorana = tipRestorana;
+        this.lokacija = lokacija;
+    }
+
+    public Restoran(Long id, String naziv, String tipRestorana, Lokacija lokacija) {
+        this.id = id;
+        this.naziv = naziv;
+        this.tipRestorana = tipRestorana;
+        this.lokacija = lokacija;
     }
 
     public Restoran(Long id, String naziv, String tipRestorana, Set<Artikal> artikli, Lokacija lokacija, Set<Komentar> komentari, Set<Porudzbina> porudzbine, Menadzer menadzer) {
@@ -48,6 +56,7 @@ public class Restoran implements Serializable {
         this.porudzbine = porudzbine;
         this.menadzer = menadzer;
     }
+
 
     public Long getId() {
         return id;

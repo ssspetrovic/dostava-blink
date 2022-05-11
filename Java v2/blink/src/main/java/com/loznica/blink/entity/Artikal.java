@@ -14,7 +14,7 @@ public class Artikal implements Serializable {
     private String naziv;
 
     @Column
-    private double cena;
+    private Double cena;
 
     @Column
     private Tip tip;
@@ -60,7 +60,7 @@ public class Artikal implements Serializable {
         this.naziv = naziv;
     }
 
-    public double getCena() {
+    public Double getCena() {
         return cena;
     }
 

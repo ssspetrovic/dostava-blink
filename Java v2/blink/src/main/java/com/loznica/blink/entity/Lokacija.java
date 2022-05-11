@@ -1,5 +1,7 @@
 package com.loznica.blink.entity;
 
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -13,7 +15,7 @@ public class Lokacija implements Serializable {
     private double geografskaDuzina;
 
     @Column
-    private double GeografskaSirina;
+    private double geografskaSirina;
 
     @Column
     private String adresa;
@@ -26,9 +28,15 @@ public class Lokacija implements Serializable {
     public Lokacija(Long id, double geografskaDuzina, double geografskaSirina, String adresa, Restoran restoran) {
         this.id = id;
         this.geografskaDuzina = geografskaDuzina;
-        GeografskaSirina = geografskaSirina;
+        this.geografskaSirina = geografskaSirina;
         this.adresa = adresa;
         this.restoran = restoran;
+    }
+
+    public Lokacija(double geografskaDuzina, double geografskaSirina, String adresa){
+        this.geografskaDuzina = geografskaDuzina;
+        this.geografskaSirina = geografskaSirina;
+        this.adresa = adresa;
     }
 
     public Long getId() {
@@ -48,11 +56,11 @@ public class Lokacija implements Serializable {
     }
 
     public double getGeografskaSirina() {
-        return GeografskaSirina;
+        return geografskaSirina;
     }
 
     public void setGeografskaSirina(double geografskaSirina) {
-        GeografskaSirina = geografskaSirina;
+        geografskaSirina = geografskaSirina;
     }
 
     public String getAdresa() {
@@ -76,7 +84,7 @@ public class Lokacija implements Serializable {
         return "Lokacija{" +
                 "id=" + id +
                 ", geografskaDuzina=" + geografskaDuzina +
-                ", GeografskaSirina=" + GeografskaSirina +
+                ", GeografskaSirina=" + geografskaSirina +
                 ", adresa='" + adresa + '\'' +
                 ", restoran=" + restoran +
                 '}';

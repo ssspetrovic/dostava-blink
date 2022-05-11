@@ -1,5 +1,6 @@
 package com.loznica.blink.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -8,6 +9,7 @@ import java.util.Date;
 
 @Entity
 public class Menadzer extends Korisnik implements Serializable {
+
     @OneToOne
     private Restoran restoran;
 
@@ -28,7 +30,6 @@ public class Menadzer extends Korisnik implements Serializable {
 
     public Menadzer(Long id, String korisnickoIme, String lozinka, String ime, String prezime, String pol, Date datumRodjenja, Uloga uloga) {
         super(id, korisnickoIme, lozinka, ime, prezime, pol, datumRodjenja, uloga);
-        this.restoran = restoran;
     }
 
     public Restoran getRestoran() {

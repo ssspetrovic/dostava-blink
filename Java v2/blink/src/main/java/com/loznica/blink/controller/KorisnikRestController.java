@@ -281,7 +281,7 @@ public class KorisnikRestController {
         return ResponseEntity.ok(ispis);
     }
 
-    @PostMapping("/api/admin/kreiraj/restoran")
+    @PostMapping("/api/admin/kreiraj-restoran")
     public ResponseEntity<?> kreirajRestoran(@RequestBody RestoranDto restoranDto, HttpSession session) {
         Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
 
@@ -296,6 +296,12 @@ public class KorisnikRestController {
         String poruka;
         ResponseEntity<String> kreirajRestoran;
         Restoran restoran = restoranDto.ToRestoran();
+
+        List<Menadzer> menadzerList = menadzerRepository.findAll();
+
+        for(Menadzer m : menadzerList)
+            if(m.getRestoran() == restoran)
+                restoran.setMenadzer(m);
 
         try {
             restoranService.KreirajRestoran(restoran);
@@ -350,8 +356,10 @@ public class KorisnikRestController {
         if (restoran == null) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Restoran ne postoji.");
         }
-
-        restoran.setMenadzer(menadzerRepository.getByKorisnickoIme(korisnickoIme));
+        List<Restoran> restoranList = restoranRepository.findAll();
+        for(Restoran r : restoranList)
+            if(r.getMenadzer().toString().isEmpty())
+                r.setMenadzer(menadzerRepository.getByKorisnickoIme(korisnickoIme));
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("Menadzer uspesno postavljen.");
     }
 

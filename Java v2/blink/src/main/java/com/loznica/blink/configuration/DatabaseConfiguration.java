@@ -37,14 +37,13 @@ public class DatabaseConfiguration {
 
         korisnikRepository.saveAll(List.of(srdjan, nikola));
 
-        Restoran r = new Restoran();
-        r.setNaziv("lmao");
+        Restoran r = new Restoran("lmao", "meksicki", new Lokacija());
         Restoran rr = new Restoran();
+        restoranRepository.saveAll(List.of(r, rr));
 
         c.set(2001, Calendar.JULY, 21);
         Menadzer sime = new Menadzer(3L, "sime", "la123", "Aleksa", "Simeunovic", "Muski", c.getTime(), Uloga.MENADZER, r);
         Menadzer mm = new Menadzer(4L, "mm", "la123", "Aleksa", "Simeunovic", "Muski", c.getTime(), Uloga.MENADZER);
-        restoranRepository.saveAll(List.of(r, rr));
         menadzerRepository.saveAll(List.of(sime, mm));
 
 
