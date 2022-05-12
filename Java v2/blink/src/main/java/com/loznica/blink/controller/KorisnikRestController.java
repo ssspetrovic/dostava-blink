@@ -60,7 +60,7 @@ public class KorisnikRestController {
     }
 
     @PostMapping("/api/login/info/izmena")
-    public ResponseEntity<Korisnik> setInfo(HttpSession session, @RequestBody RegistrationRequest registrationRequest){
+    public ResponseEntity<Korisnik> setKorisnik(HttpSession session, @RequestBody RegistrationRequest registrationRequest) {
 
         Korisnik k = (Korisnik) session.getAttribute("korisnik");
 
@@ -101,7 +101,7 @@ public class KorisnikRestController {
 
         if (loggedKorisnik == null) {
             System.out.println("Nema sesije.");
-            return ResponseEntity.ok(loggedKorisnik);
+            return ResponseEntity.ok(null);
         } else if (!loggedKorisnik.getUloga().equals(Uloga.ADMIN)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Pristup nije odobren.");
         }
@@ -131,7 +131,7 @@ public class KorisnikRestController {
 
         if (loggedKorisnik == null) {
             System.out.println("Nema sesije.");
-            return ResponseEntity.ok(loggedKorisnik);
+            return ResponseEntity.ok(null);
         } else if (!loggedKorisnik.getUloga().equals(Uloga.ADMIN)) {
             System.out.println("Pristup nije odobren.");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Pristup nije odobren.");
@@ -298,10 +298,13 @@ public class KorisnikRestController {
         Restoran restoran = restoranDto.ToRestoran();
 
         List<Menadzer> menadzerList = menadzerRepository.findAll();
+        Menadzer menadzer = new Menadzer();
 
         for(Menadzer m : menadzerList)
-            if(m.getRestoran() == restoran)
+            if(m.getRestoran() == restoran) {
                 restoran.setMenadzer(m);
+                menadzer = m;
+            }
 
         try {
             restoranService.KreirajRestoran(restoran);
@@ -311,7 +314,8 @@ public class KorisnikRestController {
         }
 
         try {
-            restoranRepository.save(restoran);
+            restoranRepository.saveAndFlush(restoran);
+            menadzerRepository.saveAndFlush(menadzer);
             poruka = "Restoran uspesno kreiran.";
             kreirajRestoran = ResponseEntity.ok(poruka);
         } catch (Exception e) {
@@ -345,7 +349,7 @@ public class KorisnikRestController {
 
         if (loggedKorisnik == null) {
             System.out.println("Nema sesije.");
-            return ResponseEntity.ok(loggedKorisnik);
+            return ResponseEntity.ok(null);
         } else if (!loggedKorisnik.getUloga().equals(Uloga.ADMIN)) {
             System.out.println("Pristup nije odobren.");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Pristup nije odobren.");

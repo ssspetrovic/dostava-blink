@@ -28,7 +28,7 @@ public class Restoran implements Serializable {
     @OneToMany
     private Set<Porudzbina> porudzbine;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Menadzer menadzer;
 
     public Restoran() { super(); }

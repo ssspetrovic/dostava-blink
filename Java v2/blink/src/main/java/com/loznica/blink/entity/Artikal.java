@@ -1,14 +1,19 @@
 package com.loznica.blink.entity;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 public class Artikal implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(generator = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "uuid2")
+    @Column(columnDefinition = "BINARY(16)")
+    private UUID uuid;
 
     @Column
     private String naziv;
@@ -20,7 +25,7 @@ public class Artikal implements Serializable {
     private Tip tip;
 
     @Column
-    private double kolicina;
+    private Double kolicina;
 
     @Column
     private String opis;
@@ -33,8 +38,8 @@ public class Artikal implements Serializable {
 
     public Artikal() { super(); }
 
-    public Artikal(Long id, String naziv, double cena, Tip tip, double kolicina, String opis, Restoran restoran, Set<Porudzbina> porudzbine) {
-        this.id = id;
+    public Artikal(UUID uuid, String naziv, double cena, Tip tip, double kolicina, String opis, Restoran restoran, Set<Porudzbina> porudzbine) {
+        this.uuid = uuid;
         this.naziv = naziv;
         this.cena = cena;
         this.tip = tip;
@@ -44,12 +49,12 @@ public class Artikal implements Serializable {
         this.porudzbine = porudzbine;
     }
 
-    public Long getId() {
-        return id;
+    public UUID getUuid() {
+        return uuid;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
     }
 
     public String getNaziv() {
@@ -64,7 +69,7 @@ public class Artikal implements Serializable {
         return cena;
     }
 
-    public void setCena(double cena) {
+    public void setCena(Double cena) {
         this.cena = cena;
     }
 
@@ -76,11 +81,11 @@ public class Artikal implements Serializable {
         this.tip = tip;
     }
 
-    public double getKolicina() {
+    public Double getKolicina() {
         return kolicina;
     }
 
-    public void setKolicina(double kolicina) {
+    public void setKolicina(Double kolicina) {
         this.kolicina = kolicina;
     }
 
@@ -111,7 +116,7 @@ public class Artikal implements Serializable {
     @Override
     public String toString() {
         return "Artikal{" +
-                "id=" + id +
+                "uuid=" + uuid +
                 ", naziv='" + naziv + '\'' +
                 ", cena=" + cena +
                 ", tip=" + tip +

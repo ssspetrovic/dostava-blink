@@ -10,7 +10,7 @@ import java.util.Date;
 @Entity
 public class Menadzer extends Korisnik implements Serializable {
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Restoran restoran;
 
     public Menadzer() { super(); }

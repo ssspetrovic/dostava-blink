@@ -6,12 +6,14 @@ import com.loznica.blink.repository.LokacijaRepository;
 import com.loznica.blink.repository.MenadzerRepository;
 import com.loznica.blink.repository.RestoranRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+
 
 @Configuration
 public class DatabaseConfiguration {
