@@ -1,16 +1,17 @@
 package com.loznica.blink.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
 @Entity
+@DiscriminatorValue("Kupac")
 public class Kupac extends Korisnik implements Serializable {
-    @OneToMany
+    @OneToMany(mappedBy = "kupac")
+    @JsonIgnore
     private Set<Porudzbina> svePorudzbine;
 
     @Column
@@ -40,8 +41,8 @@ public class Kupac extends Korisnik implements Serializable {
         setDatumRodjenja(datumRodjenja);
     }
 
-    public Kupac(Long id, String korisnickoIme, String lozinka, String ime, String prezime, String pol, Date datumRodjenja, Uloga uloga, Set<Porudzbina> svePorudzbine, int brojBodova, TipKupca tipKupca, Set<Komentar> komentari) {
-        super(id, korisnickoIme, lozinka, ime, prezime, pol, datumRodjenja, uloga);
+    public Kupac(String korisnickoIme, String lozinka, String ime, String prezime, String pol, Date datumRodjenja, Uloga uloga, Set<Porudzbina> svePorudzbine, int brojBodova, TipKupca tipKupca, Set<Komentar> komentari) {
+        super(korisnickoIme, lozinka, ime, prezime, pol, datumRodjenja, uloga);
         this.svePorudzbine = svePorudzbine;
         this.brojBodova = brojBodova;
         this.tipKupca = tipKupca;
@@ -79,6 +80,8 @@ public class Kupac extends Korisnik implements Serializable {
     public void setKomentari(Set<Komentar> komentari) {
         this.komentari = komentari;
     }
+
+
 
     @Override
     public String toString() {

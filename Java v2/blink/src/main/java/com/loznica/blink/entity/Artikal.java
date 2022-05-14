@@ -10,10 +10,8 @@ import java.util.UUID;
 @Entity
 public class Artikal implements Serializable {
     @Id
-    @GeneratedValue(generator = "uuid2")
-    @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @Column(columnDefinition = "BINARY(16)")
-    private UUID uuid;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column
     private String naziv;
@@ -25,7 +23,7 @@ public class Artikal implements Serializable {
     private Tip tip;
 
     @Column
-    private Double kolicina;
+    private int kolicina;
 
     @Column
     private String opis;
@@ -33,28 +31,22 @@ public class Artikal implements Serializable {
     @ManyToOne
     private Restoran restoran;
 
-    @OneToMany
-    private Set<Porudzbina>  porudzbine;
-
     public Artikal() { super(); }
 
-    public Artikal(UUID uuid, String naziv, double cena, Tip tip, double kolicina, String opis, Restoran restoran, Set<Porudzbina> porudzbine) {
-        this.uuid = uuid;
+    public Artikal(String naziv, double cena, Tip tip, int kolicina, String opis) {
         this.naziv = naziv;
         this.cena = cena;
         this.tip = tip;
         this.kolicina = kolicina;
         this.opis = opis;
-        this.restoran = restoran;
-        this.porudzbine = porudzbine;
     }
 
-    public UUID getUuid() {
-        return uuid;
+    public Long getId() {
+        return id;
     }
 
-    public void setUuid(UUID uuid) {
-        this.uuid = uuid;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getNaziv() {
@@ -81,11 +73,11 @@ public class Artikal implements Serializable {
         this.tip = tip;
     }
 
-    public Double getKolicina() {
+    public int getKolicina() {
         return kolicina;
     }
 
-    public void setKolicina(Double kolicina) {
+    public void setKolicina(int kolicina) {
         this.kolicina = kolicina;
     }
 
@@ -105,25 +97,16 @@ public class Artikal implements Serializable {
         this.restoran = restoran;
     }
 
-    public Set<Porudzbina> getPorudzbine() {
-        return porudzbine;
-    }
-
-    public void setPorudzbine(Set<Porudzbina> porudzbine) {
-        this.porudzbine = porudzbine;
-    }
-
     @Override
     public String toString() {
         return "Artikal{" +
-                "uuid=" + uuid +
+                "id=" + id +
                 ", naziv='" + naziv + '\'' +
                 ", cena=" + cena +
                 ", tip=" + tip +
                 ", kolicina=" + kolicina +
                 ", opis='" + opis + '\'' +
                 ", restoran=" + restoran +
-                ", porudzbine=" + porudzbine +
                 '}';
     }
 }

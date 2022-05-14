@@ -20,17 +20,12 @@ public class Lokacija implements Serializable {
     @Column
     private String adresa;
 
-    @OneToOne
-    private Restoran restoran;
-
     public Lokacija() { super(); }
 
-    public Lokacija(Long id, double geografskaDuzina, double geografskaSirina, String adresa, Restoran restoran) {
-        this.id = id;
+    public Lokacija(Long id, double geografskaDuzina, double geografskaSirina, String adresa) {
         this.geografskaDuzina = geografskaDuzina;
         this.geografskaSirina = geografskaSirina;
         this.adresa = adresa;
-        this.restoran = restoran;
     }
 
     public Lokacija(double geografskaDuzina, double geografskaSirina, String adresa){
@@ -71,14 +66,6 @@ public class Lokacija implements Serializable {
         this.adresa = adresa;
     }
 
-    public Restoran getRestoran() {
-        return restoran;
-    }
-
-    public void setRestoran(Restoran restoran) {
-        this.restoran = restoran;
-    }
-
     @Override
     public String toString() {
         return "Lokacija{" +
@@ -86,7 +73,6 @@ public class Lokacija implements Serializable {
                 ", geografskaDuzina=" + geografskaDuzina +
                 ", GeografskaSirina=" + geografskaSirina +
                 ", adresa='" + adresa + '\'' +
-                ", restoran=" + restoran +
                 '}';
     }
 }

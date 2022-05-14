@@ -51,16 +51,15 @@ public class ArtikalRestController {
     }
 
     @PostMapping("/api/artikli/izmena/{uuid}")
-    public ResponseEntity<Artikal> setArtikal(@PathVariable(name = "uuid") UUID uuid, @RequestParam String korisnickoIme, @RequestBody Artikal artikal) {
+    public ResponseEntity<Artikal> setArtikal(@PathVariable(name = "id") Long id, @RequestParam String korisnickoIme, @RequestBody Artikal artikal) {
 
 
-        Artikal a = artikalRepository.findByUuid(uuid);
+        Artikal a = artikalRepository.findById(id);
 
         a.setNaziv(artikal.getNaziv() == null ? a.getNaziv() : artikal.getNaziv());
         a.setCena(artikal.getCena() == null ? a.getCena() : artikal.getCena());
         a.setTip(artikal.getTip() == null ? a.getTip() : artikal.getTip());
-        a.setKolicina(artikal.getKolicina() == null ? a.getKolicina() : artikal.getKolicina());
-        a.setPorudzbine(artikal.getPorudzbine() == null ? a.getPorudzbine() : artikal.getPorudzbine());
+        a.setKolicina(artikal.getKolicina() == 0 ? a.getKolicina() : artikal.getKolicina());
         a.setOpis(artikal.getOpis() == null ? a.getOpis() : artikal.getOpis());
         a.setRestoran(artikal.getRestoran() == null ? a.getRestoran() : artikal.getRestoran());
 

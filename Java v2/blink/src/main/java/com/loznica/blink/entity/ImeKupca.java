@@ -1,6 +1,6 @@
 package com.loznica.blink.entity;
 
-public enum Ime {
+public enum ImeKupca {
     HARDSTUCK,
     GOLD,
     DIAMOND
