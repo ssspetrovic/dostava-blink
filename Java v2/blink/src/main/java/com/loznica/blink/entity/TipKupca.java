@@ -5,13 +5,9 @@ import java.io.Serializable;
 import java.util.Set;
 
 @Entity
-public class TipKupca implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class TipKupca extends Kupac implements Serializable {
     @Column
-    private Ime ime;
+    private ImeKupca imeKupca;
 
     @Column
     private double popust;
@@ -24,28 +20,19 @@ public class TipKupca implements Serializable {
 
     public TipKupca() { super(); }
 
-    public TipKupca(Long id, Ime ime, double popust, int trazeniBodovi, Set<Kupac> kupci) {
-        this.id = id;
-        this.ime = ime;
+    public TipKupca(ImeKupca imeKupca, double popust, int trazeniBodovi, Set<Kupac> kupci) {
+        this.imeKupca = imeKupca;
         this.popust = popust;
         this.trazeniBodovi = trazeniBodovi;
         this.kupci = kupci;
     }
 
-    public Long getId() {
-        return id;
+    public ImeKupca getImeKupca() {
+        return imeKupca;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Ime getIme() {
-        return ime;
-    }
-
-    public void setIme(Ime ime) {
-        this.ime = ime;
+    public void setImeKupca(ImeKupca imeKupca) {
+        this.imeKupca = imeKupca;
     }
 
     public double getPopust() {
@@ -75,8 +62,7 @@ public class TipKupca implements Serializable {
     @Override
     public String toString() {
         return "TipKupca{" +
-                "id=" + id +
-                ", ime=" + ime +
+                ", imeKupca=" + imeKupca +
                 ", popust=" + popust +
                 ", trazeniBodovi=" + trazeniBodovi +
                 ", kupci=" + kupci +

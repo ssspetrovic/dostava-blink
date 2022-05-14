@@ -5,21 +5,24 @@ import java.io.Serializable;
 
 @Entity
 public class PorudzbineArtikli implements Serializable {
-    @Id@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Porudzbina porudzbina;
 
     @ManyToOne
     private Artikal artikal;
 
+    private int kolicina;
+
     public PorudzbineArtikli() { super(); }
 
-    public PorudzbineArtikli(Long id, Porudzbina porudzbina, Artikal artikal) {
-        this.id = id;
+    public PorudzbineArtikli(Porudzbina porudzbina, Artikal artikal, int kolicina) {
         this.porudzbina = porudzbina;
         this.artikal = artikal;
+        this.kolicina = kolicina;
     }
 
     public Long getId() {
@@ -46,12 +49,22 @@ public class PorudzbineArtikli implements Serializable {
         this.artikal = artikal;
     }
 
+    public int getKolicina() {
+        return kolicina;
+    }
+
+    public void setKolicina(int kolicina) {
+        this.kolicina = kolicina;
+    }
+
     @Override
     public String toString() {
         return "PorudzbineArtikli{" +
                 "id=" + id +
                 ", porudzbina=" + porudzbina +
                 ", artikal=" + artikal +
+                ", kolicina=" + kolicina +
                 '}';
     }
+
 }

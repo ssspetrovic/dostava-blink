@@ -17,7 +17,7 @@ public class Porudzbina implements Serializable {
     private UUID uuid;
 
     @OneToMany
-    private Set<Artikal> artikli;
+    private Set<PorudzbineArtikli> artikli;
 
     @ManyToOne
     private Restoran restoran;
@@ -28,26 +28,36 @@ public class Porudzbina implements Serializable {
     @Column
     private double cena;
 
-    @Column
-    private String kupac;
+    @ManyToOne
+    @JoinColumn(name = "kupac_korisnickoIme")
+    private Kupac kupac;
 
     @Column
     private Status status;
 
-    @ManyToOne
-    private Dostavljac dostavljac;
-
     public Porudzbina() { super(); }
 
-    public Porudzbina(UUID uuid, Set<Artikal> artikli, Restoran restoran, Date datumPorudzbine, double cena, String kupac, Status status, Dostavljac dostavljac) {
-        this.uuid = uuid;
+    public Porudzbina(Set<PorudzbineArtikli> artikli, Restoran restoran, Date datumPorudzbine, double cena, Kupac kupac, Status status) {
         this.artikli = artikli;
         this.restoran = restoran;
         this.datumPorudzbine = datumPorudzbine;
         this.cena = cena;
         this.kupac = kupac;
         this.status = status;
-        this.dostavljac = dostavljac;
+    }
+
+
+    public Porudzbina(Set<PorudzbineArtikli> artikli, Restoran restoran, double cena) {
+        this.artikli = artikli;
+        this.restoran = restoran;
+        this.datumPorudzbine = new Date();
+        this.cena = cena;
+    }
+
+    public Porudzbina(Restoran restoran, Kupac kupac) {
+        this.restoran = restoran;
+        this.datumPorudzbine = new Date();
+        this.kupac = kupac;
     }
 
     public UUID getUuid() {
@@ -58,11 +68,11 @@ public class Porudzbina implements Serializable {
         this.uuid = uuid;
     }
 
-    public Set<Artikal> getArtikli() {
+    public Set<PorudzbineArtikli> getArtikli() {
         return artikli;
     }
 
-    public void setArtikli(Set<Artikal> artikli) {
+    public void setArtikli(Set<PorudzbineArtikli> artikli) {
         this.artikli = artikli;
     }
 
@@ -90,11 +100,11 @@ public class Porudzbina implements Serializable {
         this.cena = cena;
     }
 
-    public String getKupac() {
+    public Kupac getKupac() {
         return kupac;
     }
 
-    public void setKupac(String kupac) {
+    public void setKupac(Kupac kupac) {
         this.kupac = kupac;
     }
 
@@ -104,14 +114,6 @@ public class Porudzbina implements Serializable {
 
     public void setStatus(Status status) {
         this.status = status;
-    }
-
-    public Dostavljac getDostavljac() {
-        return dostavljac;
-    }
-
-    public void setDostavljac(Dostavljac dostavljac) {
-        this.dostavljac = dostavljac;
     }
 
     @Override
@@ -124,7 +126,6 @@ public class Porudzbina implements Serializable {
                 ", cena=" + cena +
                 ", kupac='" + kupac + '\'' +
                 ", status=" + status +
-                ", dostavljac=" + dostavljac +
                 '}';
     }
 }

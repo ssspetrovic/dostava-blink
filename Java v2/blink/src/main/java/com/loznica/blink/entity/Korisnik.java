@@ -34,8 +34,7 @@ public class Korisnik implements Serializable {
 
     public Korisnik() { super(); }
 
-    public Korisnik(Long id, String korisnickoIme, String lozinka, String ime, String prezime, String pol, Date datumRodjenja, Uloga uloga) {
-        this.id = id;
+    public Korisnik(String korisnickoIme, String lozinka, String ime, String prezime, String pol, Date datumRodjenja, Uloga uloga) {
         this.korisnickoIme = korisnickoIme;
         this.lozinka = lozinka;
         this.ime = ime;

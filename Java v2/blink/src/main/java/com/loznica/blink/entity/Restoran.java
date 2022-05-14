@@ -19,42 +19,25 @@ public class Restoran implements Serializable {
     @OneToMany
     private Set<Artikal> artikli;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private Lokacija lokacija;
-
     @OneToMany
     private Set<Komentar> komentari;
 
     @OneToMany
     private Set<Porudzbina> porudzbine;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private Menadzer menadzer;
-
     public Restoran() { super(); }
 
     public Restoran(String naziv, String tipRestorana, Lokacija lokacija) {
         this.naziv = naziv;
         this.tipRestorana = tipRestorana;
-        this.lokacija = lokacija;
     }
 
-    public Restoran(Long id, String naziv, String tipRestorana, Lokacija lokacija) {
-        this.id = id;
-        this.naziv = naziv;
-        this.tipRestorana = tipRestorana;
-        this.lokacija = lokacija;
-    }
-
-    public Restoran(Long id, String naziv, String tipRestorana, Set<Artikal> artikli, Lokacija lokacija, Set<Komentar> komentari, Set<Porudzbina> porudzbine, Menadzer menadzer) {
-        this.id = id;
+    public Restoran(String naziv, String tipRestorana, Set<Artikal> artikli, Lokacija lokacija, Set<Komentar> komentari, Set<Porudzbina> porudzbine) {
         this.naziv = naziv;
         this.tipRestorana = tipRestorana;
         this.artikli = artikli;
-        this.lokacija = lokacija;
         this.komentari = komentari;
         this.porudzbine = porudzbine;
-        this.menadzer = menadzer;
     }
 
 
@@ -90,14 +73,6 @@ public class Restoran implements Serializable {
         this.artikli = artikli;
     }
 
-    public Lokacija getLokacija() {
-        return lokacija;
-    }
-
-    public void setLokacija(Lokacija lokacija) {
-        this.lokacija = lokacija;
-    }
-
     public Set<Komentar> getKomentari() {
         return komentari;
     }
@@ -114,14 +89,6 @@ public class Restoran implements Serializable {
         this.porudzbine = porudzbine;
     }
 
-    public Menadzer getMenadzer() {
-        return menadzer;
-    }
-
-    public void setMenadzer(Menadzer menadzer) {
-        this.menadzer = menadzer;
-    }
-
     @Override
     public String toString() {
         return "Restoran{" +
@@ -129,10 +96,8 @@ public class Restoran implements Serializable {
                 ", naziv='" + naziv + '\'' +
                 ", tipRestorana='" + tipRestorana + '\'' +
                 ", artikli=" + artikli +
-                ", lokacija=" + lokacija +
                 ", komentari=" + komentari +
                 ", porudzbine=" + porudzbine +
-                ", menadzer=" + menadzer +
                 '}';
     }
 }

@@ -301,10 +301,9 @@ public class KorisnikRestController {
         Menadzer menadzer = new Menadzer();
 
         for(Menadzer m : menadzerList)
-            if(m.getRestoran() == restoran) {
-                restoran.setMenadzer(m);
+            if(m.getRestoran() == restoran)
                 menadzer = m;
-            }
+
 
         try {
             restoranService.KreirajRestoran(restoran);
@@ -360,10 +359,10 @@ public class KorisnikRestController {
         if (restoran == null) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Restoran ne postoji.");
         }
-        List<Restoran> restoranList = restoranRepository.findAll();
-        for(Restoran r : restoranList)
-            if(r.getMenadzer().toString().isEmpty())
-                r.setMenadzer(menadzerRepository.getByKorisnickoIme(korisnickoIme));
+
+        Menadzer menadzer = menadzerRepository.getByKorisnickoIme(korisnickoIme);
+        menadzer.setRestoran(restoran);
+
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("Menadzer uspesno postavljen.");
     }
 

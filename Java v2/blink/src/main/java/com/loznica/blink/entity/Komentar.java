@@ -23,8 +23,7 @@ public class Komentar implements Serializable {
 
     public Komentar() { super(); }
 
-    public Komentar(Long id, Kupac kupac, Restoran restoran, String tekstKomentara, int ocena) {
-        this.id = id;
+    public Komentar(Kupac kupac, Restoran restoran, String tekstKomentara, int ocena) {
         this.kupac = kupac;
         this.restoran = restoran;
         this.tekstKomentara = tekstKomentara;
