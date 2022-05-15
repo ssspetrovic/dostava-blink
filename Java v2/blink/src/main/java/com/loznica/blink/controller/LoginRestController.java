@@ -41,9 +41,7 @@ public class LoginRestController {
         if(!greska.isEmpty())
             return new ResponseEntity(greska, HttpStatus.BAD_REQUEST);
 
-        Korisnik loggedKorisnik = korisnikService.login(loginDto.getKorisnickoIme(), loginDto.getLozinka());
-        if(loggedKorisnik == null)
-            return new ResponseEntity<>("Korisnik ne postoji!", HttpStatus.NOT_FOUND);
+        Korisnik loggedKorisnik = null;
 
         try {
             loggedKorisnik = loginService.login(loginDto.getKorisnickoIme(), loginDto.getLozinka());
@@ -56,9 +54,8 @@ public class LoginRestController {
 
         session.setAttribute("korisnik", loggedKorisnik);
         session.setAttribute("korisnickoIme", loggedKorisnik.getKorisnickoIme());
-        session.setAttribute("lozinka", loggedKorisnik.getLozinka());
+        session.setAttribute("uloga", loggedKorisnik.getUloga());
 
-//        System.out.println("uspesno ulogovan:" + loginDto.getKorisnickoIme());
         return new ResponseEntity(loggedKorisnik, HttpStatus.OK);
 
     }

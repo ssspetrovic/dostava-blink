@@ -26,6 +26,7 @@ public class Restoran implements Serializable {
     private Set<Komentar> komentari;
 
     @OneToMany
+    @JsonIgnore
     private Set<Porudzbina> porudzbine;
 
     public Restoran() { super(); }

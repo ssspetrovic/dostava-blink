@@ -9,6 +9,7 @@ import com.loznica.blink.repository.RestoranRepository;
 import com.loznica.blink.security.RegistrationRequest;
 import com.loznica.blink.service.KorisnikService;
 import com.loznica.blink.service.RestoranService;
+import com.loznica.blink.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @RestController
 public class KorisnikRestController {
@@ -41,6 +40,9 @@ public class KorisnikRestController {
     @Autowired
     private DostavljacRepository dostavljacRepository;
 
+    @Autowired
+    private SessionService sessionService;
+
     @GetMapping("/api/")
     public String dobrodoslica() {
         return "Dobrodosli u Blink!";
@@ -61,6 +63,9 @@ public class KorisnikRestController {
 
     @PostMapping("/api/login/info/izmena")
     public ResponseEntity<Korisnik> setKorisnik(HttpSession session, @RequestBody RegistrationRequest registrationRequest) {
+
+        if(!sessionService.validate(session))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         Korisnik k = (Korisnik) session.getAttribute("korisnik");
 

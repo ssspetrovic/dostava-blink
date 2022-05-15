@@ -16,7 +16,7 @@ public class Porudzbina implements Serializable {
     @Column(nullable = false)
     private UUID uuid;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private Set<PorudzbineArtikli> artikli;
 
     @ManyToOne

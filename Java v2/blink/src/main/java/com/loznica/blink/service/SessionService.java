@@ -10,9 +10,11 @@ public class SessionService {
 
     public boolean uloga(HttpSession session, Uloga uloga) {
 
-        Object ulogaSession = session.getAttribute("uloga");
+        Object ulogaSession = session.getAttribute("Uloga");
 
         if(ulogaSession == null)
+            return false;
+        if(!ulogaSession.toString().endsWith(uloga.toString()))
             return false;
         return ulogaSession.equals(uloga);
 
@@ -21,14 +23,10 @@ public class SessionService {
     public String getKorisnickoIme(HttpSession session) {
 
         Object korisnickoIme = session.getAttribute("korisnickoIme");
-        if(korisnickoIme == null) {
+        if(korisnickoIme == null)
             return "";
-        }
-
-        if(korisnickoIme.toString().isEmpty()) {
+        if(korisnickoIme.toString().isEmpty())
             return "";
-        }
-
         return korisnickoIme.toString();
 
     }
@@ -47,8 +45,13 @@ public class SessionService {
             return false;
 
         String korisnickoIme = getKorisnickoIme(session);
+        Uloga uloga = getUloga(session);
 
-        return korisnickoIme != null && !korisnickoIme.isEmpty();
+        if(korisnickoIme == null || korisnickoIme.isEmpty())
+            return false;
+
+        return !uloga.toString().isEmpty();
+
     }
 
 }

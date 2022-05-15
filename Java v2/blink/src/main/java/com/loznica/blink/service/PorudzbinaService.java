@@ -1,11 +1,9 @@
 package com.loznica.blink.service;
 
 import com.loznica.blink.dto.NovaPorudzbinaDto;
+import com.loznica.blink.dto.NovaPorudzbinaKupcaDto;
 import com.loznica.blink.entity.*;
-import com.loznica.blink.repository.KorisnikRepository;
-import com.loznica.blink.repository.KupacRepository;
-import com.loznica.blink.repository.PorudzbinaRepository;
-import com.loznica.blink.repository.RestoranRepository;
+import com.loznica.blink.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,9 +21,6 @@ public class PorudzbinaService {
     private KupacRepository kupacRepository;
 
     @Autowired
-    private KorisnikRepository korisnikRepository;
-
-    @Autowired
     private RestoranRepository restoranRepository;
 
     public void sacuvajPorudzbinu(NovaPorudzbinaDto novaPorudzbinaDto, String korisncikoIme) throws Exception {
@@ -37,7 +32,7 @@ public class PorudzbinaService {
 
         Porudzbina porudzbina = new Porudzbina(restoranOptional.get(), kupac);
 
-        porudzbina.setArtikli(nadjiPorudzbinu(porudzbina, restoranOptional));
+        porudzbina.setArtikli(nadjiPorudzbinu(porudzbina, restoranOptional, novaPorudzbinaDto));
         porudzbinaRepository.save(porudzbina);
 
     }
@@ -51,16 +46,16 @@ public class PorudzbinaService {
 
         Porudzbina porudzbina = new Porudzbina(restoranOptional.get(), kupac);
 
-        porudzbina.setArtikli(nadjiPorudzbinu(porudzbina, restoranOptional));
+        porudzbina.setArtikli(nadjiPorudzbinu(porudzbina, restoranOptional, novaPorudzbinaDto));
         porudzbinaRepository.delete(porudzbina);
 
     }
 
-    private Set<PorudzbineArtikli> nadjiPorudzbinu(Porudzbina porudzbina, Optional<Restoran> restoranOptional) throws Exception {
+    private Set<PorudzbineArtikli> nadjiPorudzbinu(Porudzbina porudzbina, Optional<Restoran> restoranOptional, NovaPorudzbinaDto novaPorudzbinaDto) throws Exception {
         Set<PorudzbineArtikli> porudzbineArtiklis = new HashSet<>();
-        for(PorudzbineArtikli artikal : porudzbina.getArtikli()) {
+        for(NovaPorudzbinaKupcaDto artikal : novaPorudzbinaDto.getNovePorudzbine()) {
             Artikal pronadjen = null;
-            for(Artikal a : restoranOptional.get().getArtikli()) {
+            for(Artikal a : restoranOptional.orElse(null).getArtikli()) {
                 if(a.getId().equals(artikal.getId())) {
                     pronadjen = a;
                     break;
@@ -71,8 +66,8 @@ public class PorudzbinaService {
                 throw new Exception("Artikal sa id " + artikal.getId() + "nije pronadjen.");
 
             porudzbineArtiklis.add(new PorudzbineArtikli(porudzbina, pronadjen, artikal.getKolicina()));
-
         }
+
 
         return porudzbineArtiklis;
     }
