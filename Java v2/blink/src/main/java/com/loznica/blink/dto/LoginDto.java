@@ -6,6 +6,7 @@ public class LoginDto {
     private String lozinka;
 
     public LoginDto() {
+        super();
     }
 
     public LoginDto(String korisnickoIme, String lozinka) {

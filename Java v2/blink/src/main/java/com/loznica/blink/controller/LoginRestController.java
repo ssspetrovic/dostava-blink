@@ -55,7 +55,10 @@ public class LoginRestController {
             return new ResponseEntity(greska, HttpStatus.BAD_REQUEST);
 
         session.setAttribute("korisnik", loggedKorisnik);
+        session.setAttribute("korisnickoIme", loggedKorisnik.getKorisnickoIme());
+        session.setAttribute("lozinka", loggedKorisnik.getLozinka());
 
+//        System.out.println("uspesno ulogovan:" + loginDto.getKorisnickoIme());
         return new ResponseEntity(loggedKorisnik, HttpStatus.OK);
 
     }

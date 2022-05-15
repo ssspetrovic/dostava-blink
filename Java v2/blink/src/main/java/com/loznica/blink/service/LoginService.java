@@ -14,7 +14,7 @@ public class LoginService {
     private KorisnikRepository korisnikRepository;
 
     public Korisnik login(String korisnickoIme, String lozinka) throws AccountNotFoundException {
-        Korisnik korisnik = nadjiKorisnika(korisnickoIme, korisnikRepository.findAll());
+        Korisnik korisnik = nadjiKorisnika(korisnickoIme, (List<Korisnik>) korisnikRepository.findAll());
 
         if(korisnik == null)
             throw new AccountNotFoundException("Ne postoji unet korisnik!");

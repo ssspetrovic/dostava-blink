@@ -157,10 +157,11 @@ public class PorudzbinaRestController {
     public ResponseEntity poruci(@RequestBody NovaPorudzbinaDto novaPorudzbinaDto, HttpSession session) {
         Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
 
-        if (loggedKorisnik == null) {
-            System.out.println("Nema sesije.");
-            return ResponseEntity.ok(null);
-        } else if (!loggedKorisnik.getUloga().equals(Uloga.KUPAC)) {
+        if (!sessionService.validate(session)) {
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+        }
+
+        if (!loggedKorisnik.getUloga().equals(Uloga.KUPAC)) {
             System.out.println("Pristup nije odobren.");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Pristup nije odobren.");
         }
@@ -176,9 +177,9 @@ public class PorudzbinaRestController {
                 NovaPorudzbinaKupcaDto artikal = novaPorudzbinaDto.getNovePorudzbine().get(i);
 
                 if (artikal.getId() == null)
-                    greska.put("Artikal [" + (i+1) + "]", "Nedostaje id.");
+                    greska.put("Artikal [" + (i + 1) + "]", "Nedostaje id.");
                 if (artikal.getKolicina() == 0)
-                    greska.put("Artikal [" + (i+1) + "]", "Broj artikala ne sme biti 0!");
+                    greska.put("Artikal [" + (i + 1) + "]", "Broj artikala ne sme biti 0!");
             }
 
 
@@ -188,6 +189,8 @@ public class PorudzbinaRestController {
         try {
             porudzbinaService.sacuvajPorudzbinu(novaPorudzbinaDto, sessionService.getKorisnickoIme(session));
         } catch (Exception e) {
+            System.out.println(sessionService.getKorisnickoIme(session));
+            System.out.println("HEEELLLOOOO");
             return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
 

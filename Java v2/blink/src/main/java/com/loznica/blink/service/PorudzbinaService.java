@@ -2,6 +2,7 @@ package com.loznica.blink.service;
 
 import com.loznica.blink.dto.NovaPorudzbinaDto;
 import com.loznica.blink.entity.*;
+import com.loznica.blink.repository.KorisnikRepository;
 import com.loznica.blink.repository.KupacRepository;
 import com.loznica.blink.repository.PorudzbinaRepository;
 import com.loznica.blink.repository.RestoranRepository;
@@ -20,6 +21,9 @@ public class PorudzbinaService {
 
     @Autowired
     private KupacRepository kupacRepository;
+
+    @Autowired
+    private KorisnikRepository korisnikRepository;
 
     @Autowired
     private RestoranRepository restoranRepository;
