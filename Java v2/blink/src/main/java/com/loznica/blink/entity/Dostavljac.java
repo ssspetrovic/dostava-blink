@@ -1,5 +1,7 @@
 package com.loznica.blink.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -11,6 +13,7 @@ import java.util.Set;
 @DiscriminatorValue("Dostavljac")
 public class Dostavljac extends Korisnik implements Serializable {
     @OneToMany
+    @JsonIgnore
     private Set<Porudzbina> porudzbine;
 
     public Dostavljac() { super(); }
@@ -19,9 +22,8 @@ public class Dostavljac extends Korisnik implements Serializable {
         this.porudzbine = porudzbine;
     }
 
-    public Dostavljac(String korisnickoIme, String lozinka, String ime, String prezime, String pol, Date datumRodjenja, Uloga uloga, Set<Porudzbina> porudzbine) {
+    public Dostavljac(String korisnickoIme, String lozinka, String ime, String prezime, String pol, Date datumRodjenja, Uloga uloga) {
         super(korisnickoIme, lozinka, ime, prezime, pol, datumRodjenja, uloga);
-        this.porudzbine = porudzbine;
     }
 
     public Set<Porudzbina> getPorudzbine() {

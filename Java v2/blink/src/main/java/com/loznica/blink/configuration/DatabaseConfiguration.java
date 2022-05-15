@@ -38,6 +38,9 @@ public class DatabaseConfiguration {
     @Autowired
     private PorudzbineArtikliRepository porudzbineArtikliRepository;
 
+    @Autowired
+    private DostavljacRepository dostavljacRepository;
+
     @Bean
     public boolean Instantiate(){
         Calendar c = new GregorianCalendar();
@@ -80,15 +83,29 @@ public class DatabaseConfiguration {
         artikalRepository.saveAll(List.of(a, a2));
 
         Porudzbina porudzbina = new Porudzbina(r, kupac);
-        PorudzbineArtikli pa = new PorudzbineArtikli(porudzbina, a, 4);
+        Porudzbina porudzbina2 = new Porudzbina(rr, kupac);
+        PorudzbineArtikli pa = new PorudzbineArtikli(porudzbina, a, 50);
+        PorudzbineArtikli pa2 = new PorudzbineArtikli(porudzbina2, a2, 20);
         porudzbineArtikliRepository.save(pa);
-        porudzbina.setArtikli(Set.of(pa));
+        porudzbineArtikliRepository.save(pa2);
+        porudzbina.setArtikli(Set.of(pa, pa2));
+        porudzbina.setStatus(Status.CEKA_DOSTAVLJACA);
         porudzbinaRepository.save(porudzbina);
+        porudzbinaRepository.save(porudzbina2);
 
         Kupac kupac2 = new Kupac("laki", "111", "Lazar", "Lazarevic", "Muski", c.getTime());
         kupac2.setUloga(Uloga.KUPAC);
-        kupac2.setSvePorudzbine(Set.of(porudzbina));
+        kupac2.setSvePorudzbine(Set.of(porudzbina, porudzbina2));
         kupacRepository.saveAndFlush(kupac2);
+
+        c.set(1996, Calendar.MAY, 12);
+        Dostavljac dostavljac = new Dostavljac("damir1", "999", "Damir", "Madzarevic", "Muski", c.getTime(), Uloga.DOSTAVLJAC);
+        dostavljac.setPorudzbine(Set.of(porudzbina));
+        dostavljacRepository.save(dostavljac);
+
+        r.setPorudzbine(Set.of(porudzbina));
+        r.setArtikli(Set.of(a, a2));
+        restoranRepository.saveAndFlush(r);
 
         return true;
     }
