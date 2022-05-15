@@ -1,5 +1,7 @@
 package com.loznica.blink.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
@@ -17,6 +19,7 @@ public class Restoran implements Serializable {
     private String tipRestorana;
 
     @OneToMany
+    @JsonIgnore
     private Set<Artikal> artikli;
 
     @OneToMany

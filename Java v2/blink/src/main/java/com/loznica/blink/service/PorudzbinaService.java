@@ -32,6 +32,27 @@ public class PorudzbinaService {
             throw new Exception("Restoran ne postoji!");
 
         Porudzbina porudzbina = new Porudzbina(restoranOptional.get(), kupac);
+
+        porudzbina.setArtikli(nadjiPorudzbinu(porudzbina, restoranOptional));
+        porudzbinaRepository.save(porudzbina);
+
+    }
+
+    public void obrisiPorudzbinu(NovaPorudzbinaDto novaPorudzbinaDto, String korisncikoIme) throws Exception {
+        Kupac kupac = kupacRepository.findByKorisnickoIme(korisncikoIme);
+        Optional<Restoran> restoranOptional = restoranRepository.findById(novaPorudzbinaDto.getIdRestorana());
+
+        if(restoranOptional.isEmpty())
+            throw new Exception("Restoran ne postoji!");
+
+        Porudzbina porudzbina = new Porudzbina(restoranOptional.get(), kupac);
+
+        porudzbina.setArtikli(nadjiPorudzbinu(porudzbina, restoranOptional));
+        porudzbinaRepository.delete(porudzbina);
+
+    }
+
+    private Set<PorudzbineArtikli> nadjiPorudzbinu(Porudzbina porudzbina, Optional<Restoran> restoranOptional) throws Exception {
         Set<PorudzbineArtikli> porudzbineArtiklis = new HashSet<>();
         for(PorudzbineArtikli artikal : porudzbina.getArtikli()) {
             Artikal pronadjen = null;
@@ -49,8 +70,7 @@ public class PorudzbinaService {
 
         }
 
-        porudzbina.setArtikli(porudzbineArtiklis);
-        porudzbinaRepository.save(porudzbina);
-
+        return porudzbineArtiklis;
     }
+
 }
