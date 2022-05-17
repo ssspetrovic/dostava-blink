@@ -1,5 +1,4 @@
 package com.loznica.blink.entity;
-
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.io.Serializable;
@@ -59,6 +58,7 @@ public class Porudzbina implements Serializable {
         this.datumPorudzbine = new Date();
         this.kupac = kupac;
     }
+
 
     public UUID getUuid() {
         return uuid;

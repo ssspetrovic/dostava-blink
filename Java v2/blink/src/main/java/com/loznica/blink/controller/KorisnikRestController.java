@@ -1,6 +1,5 @@
 package com.loznica.blink.controller;
 
-import com.loznica.blink.dto.RestoranDto;
 import com.loznica.blink.entity.*;
 import com.loznica.blink.repository.DostavljacRepository;
 import com.loznica.blink.repository.KorisnikRepository;
@@ -8,7 +7,6 @@ import com.loznica.blink.repository.MenadzerRepository;
 import com.loznica.blink.repository.RestoranRepository;
 import com.loznica.blink.security.RegistrationRequest;
 import com.loznica.blink.service.KorisnikService;
-import com.loznica.blink.service.RestoranService;
 import com.loznica.blink.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,9 +33,6 @@ public class KorisnikRestController {
     private RestoranRepository restoranRepository;
 
     @Autowired
-    private RestoranService restoranService;
-
-    @Autowired
     private DostavljacRepository dostavljacRepository;
 
     @Autowired
@@ -49,16 +44,15 @@ public class KorisnikRestController {
     }
 
     @GetMapping("/api/login/info")
-    public ResponseEntity<Korisnik> getInfo(HttpSession session){
+    public ResponseEntity getInfo(HttpSession session){
 
-        Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
+        if(!sessionService.validate(session))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        if (loggedKorisnik == null) {
-            System.out.println("Nema sesije.");
-        } else {
-            System.out.println(loggedKorisnik);
-        }
-        return ResponseEntity.ok(loggedKorisnik);
+        if(!sessionService.getUloga(session).equals(Uloga.KUPAC))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+
+        return ResponseEntity.status(HttpStatus.OK).body(session.getAttribute("korisnik"));
     }
 
     @PostMapping("/api/login/info/izmena")
@@ -86,61 +80,47 @@ public class KorisnikRestController {
     }
 
     @GetMapping("/api/admin/korisnici/{id}")
-    public Korisnik getKorisnik(@PathVariable(name = "id") Long id, HttpSession session) {
-        Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
+    public ResponseEntity getKorisnik(@PathVariable(name = "id") Long id, HttpSession session) {
+        if(!sessionService.validate(session))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        if (loggedKorisnik == null) {
-            System.out.println("Nema sesije.");
-            return null;
-        } else if (!loggedKorisnik.getUloga().equals(Uloga.ADMIN)) {
-            System.out.println("Pristup nije odobren.");
-            return null;
-        }
+        if(!sessionService.getUloga(session).equals(Uloga.ADMIN))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        return korisnikService.findKorisnik(id);
+        return ResponseEntity.status(HttpStatus.OK).body(korisnikService.findKorisnik(id));
     }
 
     @PostMapping("/api/admin/sacuvaj-korisnika")
-    public ResponseEntity<?> saveKorisnici(@RequestBody Korisnik korisnik, HttpSession session) {
-        Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
+    public ResponseEntity saveKorisnici(@RequestBody Korisnik korisnik, HttpSession session) {
+        if(!sessionService.validate(session))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        if (loggedKorisnik == null) {
-            System.out.println("Nema sesije.");
-            return ResponseEntity.ok(null);
-        } else if (!loggedKorisnik.getUloga().equals(Uloga.ADMIN)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Pristup nije odobren.");
-        }
+        if(!sessionService.getUloga(session).equals(Uloga.ADMIN))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         this.korisnikService.save(korisnik);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("Korisnk je uspesno sacuvan!");
     }
 
     @RequestMapping(value = "/api/admin/obrisi-korisnika/{id}", method = {RequestMethod.DELETE, RequestMethod.GET})
-    public ResponseEntity<?> deleteKorisnik(@PathVariable(name = "id") Long id, HttpSession session) {
-        Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
+    public ResponseEntity deleteKorisnik(@PathVariable(name = "id") Long id, HttpSession session) {
+        if(!sessionService.validate(session))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        if (loggedKorisnik == null) {
-            System.out.println("Nema sesije.");
-            return ResponseEntity.ok(loggedKorisnik);
-        } else if (!loggedKorisnik.getUloga().equals(Uloga.ADMIN)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Pristup nije odobren.");
-        }
+        if(!sessionService.getUloga(session).equals(Uloga.ADMIN))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         korisnikService.deleteById(id);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("Korisnk je uspesno uklonjen!");
     }
 
     @GetMapping("/api/admin/korisnici/ispis")
-    public ResponseEntity<?> getKorisnici(HttpSession session) {
-        Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
+    public ResponseEntity getKorisnici(HttpSession session) {
+        if(!sessionService.validate(session))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        if (loggedKorisnik == null) {
-            System.out.println("Nema sesije.");
-            return ResponseEntity.ok(null);
-        } else if (!loggedKorisnik.getUloga().equals(Uloga.ADMIN)) {
-            System.out.println("Pristup nije odobren.");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Pristup nije odobren.");
-        }
+        if(!sessionService.getUloga(session).equals(Uloga.ADMIN))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         List<Korisnik> korisnikList = korisnikRepository.findAll();
         List<RegistrationRequest> registrationRequestList = new ArrayList<>();
@@ -163,16 +143,12 @@ public class KorisnikRestController {
     }
 
     @PostMapping("/api/admin/kreiraj-menadzera")
-    public ResponseEntity<?> kreirajMenadzera(@RequestBody RegistrationRequest registrationRequest, HttpSession session) {
-        Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
+    public ResponseEntity kreirajMenadzera(@RequestBody RegistrationRequest registrationRequest, HttpSession session) {
+        if(!sessionService.validate(session))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        if (loggedKorisnik == null) {
-            System.out.println("Nema sesije.");
-            return ResponseEntity.ok(loggedKorisnik);
-        } else if (!loggedKorisnik.getUloga().equals(Uloga.ADMIN)) {
-            System.out.println("Pristup nije odobren.");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Pristup nije odobren.");
-        }
+        if(!sessionService.getUloga(session).equals(Uloga.ADMIN))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         String poruka;
         ResponseEntity<String> registracija;
@@ -205,16 +181,12 @@ public class KorisnikRestController {
     }
 
     @PostMapping("/api/admin/kreiraj-dostavljaca")
-    public ResponseEntity<?> kreirajDostavljaca(@RequestBody RegistrationRequest registrationRequest, HttpSession session) {
-        Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
+    public ResponseEntity kreirajDostavljaca(@RequestBody RegistrationRequest registrationRequest, HttpSession session) {
+        if(!sessionService.validate(session))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        if (loggedKorisnik == null) {
-            System.out.println("Nema sesije.");
-            return ResponseEntity.ok(loggedKorisnik);
-        } else if (!loggedKorisnik.getUloga().equals(Uloga.ADMIN)) {
-            System.out.println("Pristup nije odobren.");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Pristup nije odobren.");
-        }
+        if(!sessionService.getUloga(session).equals(Uloga.ADMIN))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         String poruka;
         ResponseEntity<String> registracija;
@@ -247,17 +219,12 @@ public class KorisnikRestController {
     }
 
     @GetMapping("/api/menadzer/ispis")
-    public ResponseEntity<?> listaMenadzmenta(HttpSession session) {
+    public ResponseEntity listaMenadzmenta(HttpSession session) {
+        if(!sessionService.validate(session))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
-
-        if(loggedKorisnik == null) {
-            System.out.println("Nema sesije.");
-            return ResponseEntity.ok(null);
-        } else if (!loggedKorisnik.getUloga().equals(Uloga.MENADZER)) {
-            System.out.println("Pristup nije odobren.");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Pristup nije odobren.");
-        }
+        if(!sessionService.getUloga(session).equals(Uloga.ADMIN))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         List<Menadzer> menadzerList = menadzerRepository.findAll();
         List<Menadzer> ispis = new ArrayList<>();
@@ -286,78 +253,25 @@ public class KorisnikRestController {
         return ResponseEntity.ok(ispis);
     }
 
-    @PostMapping("/api/admin/kreiraj-restoran")
-    public ResponseEntity<?> kreirajRestoran(@RequestBody RestoranDto restoranDto, HttpSession session) {
-        Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
-
-        if (loggedKorisnik == null) {
-            System.out.println("Nema sesije.");
-            return ResponseEntity.ok(loggedKorisnik);
-        } else if (!loggedKorisnik.getUloga().equals(Uloga.ADMIN)) {
-            System.out.println("Pristup nije odobren.");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Pristup nije odobren.");
-        }
-
-        String poruka;
-        ResponseEntity<String> kreirajRestoran;
-        Restoran restoran = restoranDto.ToRestoran();
-
-        List<Menadzer> menadzerList = menadzerRepository.findAll();
-        Menadzer menadzer = new Menadzer();
-
-        for(Menadzer m : menadzerList)
-            if(m.getRestoran() == restoran)
-                menadzer = m;
-
-
-        try {
-            restoranService.KreirajRestoran(restoran);
-        } catch (Exception e) {
-            poruka = "Restoran vec postoji.";
-            kreirajRestoran = ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(poruka);
-        }
-
-        try {
-            restoranRepository.saveAndFlush(restoran);
-            menadzerRepository.saveAndFlush(menadzer);
-            poruka = "Restoran uspesno kreiran.";
-            kreirajRestoran = ResponseEntity.ok(poruka);
-        } catch (Exception e) {
-            poruka = "Neuspesno kreiranje restorana, pokusajte ponovo...";
-            System.out.println(e.getMessage());
-            kreirajRestoran = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(poruka);
-        }
-
-        return kreirajRestoran;
-    }
 
     @GetMapping("/api/menadzer/info/{id}")
-    public Menadzer ispisiMenadzera(@PathVariable(name = "id") Long id, HttpSession session) {
-        Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
+    public ResponseEntity ispisiMenadzera(@PathVariable(name = "id") Long id, HttpSession session) {
+        if(!sessionService.validate(session))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        if (loggedKorisnik == null) {
-            System.out.println("Nema sesije.");
-            return null;
-        } else if (!loggedKorisnik.getId().equals(id)) {
-            System.out.println("Pristup nije odobren.");
-            return null;
-        }
+        if(!sessionService.getUloga(session).equals(Uloga.ADMIN))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        Menadzer menadzer = (Menadzer) korisnikService.findKorisnik(id);
-        return menadzer;
+        return ResponseEntity.status(HttpStatus.OK).body(menadzerRepository.findById(id));
     }
 
     @GetMapping("/api/admin/restorani/{id}/postavi-menadzera")
-    public ResponseEntity<?> postaviMenadzera(@PathVariable(name = "id") Long id, @RequestParam String korisnickoIme, HttpSession session) {
-        Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
+    public ResponseEntity postaviMenadzera(@PathVariable(name = "id") Long id, @RequestParam String korisnickoIme, HttpSession session) {
+        if(!sessionService.validate(session))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        if (loggedKorisnik == null) {
-            System.out.println("Nema sesije.");
-            return ResponseEntity.ok(null);
-        } else if (!loggedKorisnik.getUloga().equals(Uloga.ADMIN)) {
-            System.out.println("Pristup nije odobren.");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Pristup nije odobren.");
-        }
+        if(!sessionService.getUloga(session).equals(Uloga.ADMIN))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         Restoran restoran = restoranRepository.getById(id);
 

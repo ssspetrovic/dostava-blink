@@ -23,6 +23,10 @@ public class PorudzbinaService {
     @Autowired
     private RestoranRepository restoranRepository;
 
+    @Autowired
+    private PorudzbineArtikliRepository porudzbineArtikliRepository;
+
+
     public void sacuvajPorudzbinu(NovaPorudzbinaDto novaPorudzbinaDto, String korisncikoIme) throws Exception {
         Kupac kupac = kupacRepository.findByKorisnickoIme(korisncikoIme);
         Optional<Restoran> restoranOptional = restoranRepository.findById(novaPorudzbinaDto.getIdRestorana());
@@ -37,18 +41,10 @@ public class PorudzbinaService {
 
     }
 
-    public void obrisiPorudzbinu(NovaPorudzbinaDto novaPorudzbinaDto, String korisncikoIme) throws Exception {
-        Kupac kupac = kupacRepository.findByKorisnickoIme(korisncikoIme);
-        Optional<Restoran> restoranOptional = restoranRepository.findById(novaPorudzbinaDto.getIdRestorana());
-
-        if(restoranOptional.isEmpty())
-            throw new Exception("Restoran ne postoji!");
-
-        Porudzbina porudzbina = new Porudzbina(restoranOptional.get(), kupac);
-
-        porudzbina.setArtikli(nadjiPorudzbinu(porudzbina, restoranOptional, novaPorudzbinaDto));
-        porudzbinaRepository.delete(porudzbina);
-
+    public void obrisiPorudzbinu(Long id) {
+        Optional<PorudzbineArtikli> porudzbineArtikli = porudzbineArtikliRepository.findById(id);
+        porudzbineArtikliRepository.delete(porudzbineArtikli.get());
+        porudzbinaRepository.delete(porudzbineArtikli.get().getPorudzbina());
     }
 
     private Set<PorudzbineArtikli> nadjiPorudzbinu(Porudzbina porudzbina, Optional<Restoran> restoranOptional, NovaPorudzbinaDto novaPorudzbinaDto) throws Exception {
@@ -65,7 +61,14 @@ public class PorudzbinaService {
             if(pronadjen == null)
                 throw new Exception("Artikal sa id " + artikal.getId() + "nije pronadjen.");
 
-            porudzbineArtiklis.add(new PorudzbineArtikli(porudzbina, pronadjen, artikal.getKolicina()));
+            NovaPorudzbinaKupcaDto novaPorudzbinaKupcaDto = null;
+
+            for(NovaPorudzbinaKupcaDto np : novaPorudzbinaDto.getNovePorudzbine())
+                if(np != null)
+                    novaPorudzbinaKupcaDto = np;
+            PorudzbineArtikli pa = new PorudzbineArtikli(porudzbina, pronadjen, artikal.getKolicina(), pronadjen.getCena()*novaPorudzbinaKupcaDto.getKolicina());
+            porudzbineArtiklis.add(pa);
+            porudzbineArtikliRepository.save(pa);
         }
 
 

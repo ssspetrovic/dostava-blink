@@ -69,7 +69,7 @@ public class DatabaseConfiguration {
         kupacRepository.save(kupac);
 
 
-        Lokacija l = new Lokacija();
+        Lokacija l = new Lokacija(45.5D, 43.3D, "FTN");
         lokacijaRepository.save(l);
 
         c.set(2022, Calendar.MAY, 12);
@@ -84,8 +84,8 @@ public class DatabaseConfiguration {
 
         Porudzbina porudzbina = new Porudzbina(r, kupac);
         Porudzbina porudzbina2 = new Porudzbina(rr, kupac);
-        PorudzbineArtikli pa = new PorudzbineArtikli(porudzbina, a, 50);
-        PorudzbineArtikli pa2 = new PorudzbineArtikli(porudzbina2, a2, 20);
+        PorudzbineArtikli pa = new PorudzbineArtikli(porudzbina, a, 50, 50*a.getCena());
+        PorudzbineArtikli pa2 = new PorudzbineArtikli(porudzbina2, a2, 20, 20*a2.getCena());
         porudzbineArtikliRepository.save(pa);
         porudzbineArtikliRepository.save(pa2);
         porudzbina.setArtikli(Set.of(pa, pa2));
@@ -105,6 +105,7 @@ public class DatabaseConfiguration {
 
         r.setPorudzbine(Set.of(porudzbina));
         r.setArtikli(Set.of(a, a2));
+        r.setLokacija(l);
         restoranRepository.saveAndFlush(r);
 
         return true;

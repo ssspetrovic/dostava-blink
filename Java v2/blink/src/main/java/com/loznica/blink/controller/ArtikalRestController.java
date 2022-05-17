@@ -2,13 +2,16 @@ package com.loznica.blink.controller;
 
 import com.loznica.blink.entity.Artikal;
 import com.loznica.blink.entity.Menadzer;
+import com.loznica.blink.entity.Uloga;
 import com.loznica.blink.repository.ArtikalRepository;
 import com.loznica.blink.repository.MenadzerRepository;
+import com.loznica.blink.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 
 @RestController
@@ -20,8 +23,16 @@ public class ArtikalRestController {
     @Autowired
     ArtikalRepository artikalRepository;
 
+    @Autowired
+    SessionService sessionService;
+
     @PostMapping("/api/artikli/kreiraj-artikal")
-    public ResponseEntity<Artikal> kreirajArtikal(@RequestParam String korisnickoIme, @RequestBody Artikal artikal) {
+    public ResponseEntity<Artikal> kreirajArtikal(@RequestParam String korisnickoIme, @RequestBody Artikal artikal, HttpSession session) {
+        if(!sessionService.validate(session))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+
+        if(!sessionService.getUloga(session).equals(Uloga.MENADZER))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         HashMap<String, String> greska = Validate(artikal);
 
@@ -50,8 +61,12 @@ public class ArtikalRestController {
     }
 
     @PostMapping("/api/artikli/izmena/{uuid}")
-    public ResponseEntity<Artikal> setArtikal(@PathVariable(name = "id") Long id, @RequestParam String korisnickoIme, @RequestBody Artikal artikal) {
+    public ResponseEntity<Artikal> setArtikal(@PathVariable(name = "id") Long id, @RequestParam String korisnickoIme, @RequestBody Artikal artikal, HttpSession session) {
+        if(!sessionService.validate(session))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
 
+        if(!sessionService.getUloga(session).equals(Uloga.MENADZER))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         Artikal a = artikalRepository.findById(id);
 

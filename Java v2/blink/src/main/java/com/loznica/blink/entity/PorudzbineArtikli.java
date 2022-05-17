@@ -1,5 +1,7 @@
 package com.loznica.blink.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -10,6 +12,7 @@ public class PorudzbineArtikli implements Serializable {
     private Long id;
 
     @ManyToOne(cascade = CascadeType.ALL)
+    @JsonIgnore
     private Porudzbina porudzbina;
 
     @ManyToOne
@@ -17,12 +20,15 @@ public class PorudzbineArtikli implements Serializable {
 
     private int kolicina;
 
+    private Double ukupnaCena;
+
     public PorudzbineArtikli() { super(); }
 
-    public PorudzbineArtikli(Porudzbina porudzbina, Artikal artikal, int kolicina) {
+    public PorudzbineArtikli(Porudzbina porudzbina, Artikal artikal, int kolicina, Double ukupnaCena) {
         this.porudzbina = porudzbina;
         this.artikal = artikal;
         this.kolicina = kolicina;
+        this.ukupnaCena = ukupnaCena;
     }
 
     public Long getId() {
@@ -57,6 +63,14 @@ public class PorudzbineArtikli implements Serializable {
         this.kolicina = kolicina;
     }
 
+    public Double getUkupnaCena() {
+        return ukupnaCena;
+    }
+
+    public void setUkupnaCena(int kolicina, Double cena) {
+        ukupnaCena = kolicina*cena;
+    }
+
     @Override
     public String toString() {
         return "PorudzbineArtikli{" +
@@ -64,7 +78,7 @@ public class PorudzbineArtikli implements Serializable {
                 ", porudzbina=" + porudzbina +
                 ", artikal=" + artikal +
                 ", kolicina=" + kolicina +
+                ", ukupnaCena=" + ukupnaCena +
                 '}';
     }
-
 }

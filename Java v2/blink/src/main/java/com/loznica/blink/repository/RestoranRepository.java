@@ -1,5 +1,4 @@
 package com.loznica.blink.repository;
-
 import com.loznica.blink.entity.Restoran;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
@@ -10,7 +9,7 @@ import java.util.Optional;
 @Repository
 public interface RestoranRepository extends JpaRepository<Restoran, Long> {
 
-    Optional<Restoran> findByNaziv(@Param("naziv") String naziv);
+    Restoran getByTipRestorana(@Param("tipRestorana") String tipRestorana);
 
     Restoran getByNaziv(String naziv);
 

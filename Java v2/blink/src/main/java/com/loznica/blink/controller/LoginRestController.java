@@ -62,10 +62,8 @@ public class LoginRestController {
 
     @PostMapping("api/logout")
     public ResponseEntity logout(HttpSession session) {
-        Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
-
-        if(loggedKorisnik == null)
-            return new ResponseEntity("Zabranjen izlazak.", HttpStatus.FORBIDDEN);
+        if(!sessionService.validate(session))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         session.invalidate();
         return new ResponseEntity("Uspesno ste napustili profil, pozdrav!", HttpStatus.OK);

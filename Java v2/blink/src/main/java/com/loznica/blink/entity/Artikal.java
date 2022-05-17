@@ -30,6 +30,7 @@ public class Artikal implements Serializable {
     private String opis;
 
     @ManyToOne
+    @JsonIgnore
     private Restoran restoran;
 
     public Artikal() { super(); }

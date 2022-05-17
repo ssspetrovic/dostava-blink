@@ -15,7 +15,7 @@ public class Kupac extends Korisnik implements Serializable {
     private Set<Porudzbina> svePorudzbine;
 
     @Column
-    private int brojBodova;
+    private Double brojBodova;
 
     @ManyToOne
     private TipKupca tipKupca;
@@ -23,9 +23,9 @@ public class Kupac extends Korisnik implements Serializable {
     @OneToMany
     private Set<Komentar> komentari;
 
-    public Kupac() { super(); }
+    public Kupac() { super(); this.brojBodova = 0D;}
 
-    public Kupac(Set<Porudzbina> svePorudzbine, int brojBodova, TipKupca tipKupca, Set<Komentar> komentari) {
+    public Kupac(Set<Porudzbina> svePorudzbine, Double brojBodova, TipKupca tipKupca, Set<Komentar> komentari) {
         this.svePorudzbine = svePorudzbine;
         this.brojBodova = brojBodova;
         this.tipKupca = tipKupca;
@@ -39,9 +39,10 @@ public class Kupac extends Korisnik implements Serializable {
         setPrezime(prezime);
         setPol(pol);
         setDatumRodjenja(datumRodjenja);
+        brojBodova = 0D;
     }
 
-    public Kupac(String korisnickoIme, String lozinka, String ime, String prezime, String pol, Date datumRodjenja, Uloga uloga, Set<Porudzbina> svePorudzbine, int brojBodova, TipKupca tipKupca, Set<Komentar> komentari) {
+    public Kupac(String korisnickoIme, String lozinka, String ime, String prezime, String pol, Date datumRodjenja, Uloga uloga, Set<Porudzbina> svePorudzbine, Double brojBodova, TipKupca tipKupca, Set<Komentar> komentari) {
         super(korisnickoIme, lozinka, ime, prezime, pol, datumRodjenja, uloga);
         this.svePorudzbine = svePorudzbine;
         this.brojBodova = brojBodova;
@@ -57,12 +58,12 @@ public class Kupac extends Korisnik implements Serializable {
         this.svePorudzbine = svePorudzbine;
     }
 
-    public int getBrojBodova() {
+    public Double getBrojBodova() {
         return brojBodova;
     }
 
-    public void setBrojBodova(int brojBodova) {
-        this.brojBodova = brojBodova;
+    public void setBrojBodova(Double brojBodova) {
+       this.brojBodova += brojBodova;
     }
 
     public TipKupca getTipKupca() {
