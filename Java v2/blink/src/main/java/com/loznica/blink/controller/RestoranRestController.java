@@ -54,8 +54,8 @@ public class RestoranRestController {
     public Restoran ispisiRestoran(@PathVariable(name = "id") Long id) {
         List<Restoran> restoranList = restoranRepository.findAll();
 
-        for(Restoran r : restoranList)
-            if(Objects.equals(id, r.getId()))
+        for (Restoran r : restoranList)
+            if (Objects.equals(id, r.getId()))
                 return r;
 
         return null;
@@ -63,10 +63,10 @@ public class RestoranRestController {
 
     @PostMapping("/api/admin/kreiraj-restoran")
     public ResponseEntity<?> kreirajRestoran(@RequestBody RestoranDto restoranDto, HttpSession session) {
-        if(!sessionService.validate(session))
+        if (!sessionService.validate(session))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        if(!sessionService.getUloga(session).equals(Uloga.ADMIN))
+        if (!sessionService.getUloga(session).equals(Uloga.ADMIN))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         String poruka;
@@ -76,8 +76,8 @@ public class RestoranRestController {
         List<Menadzer> menadzerList = menadzerRepository.findAll();
         Menadzer menadzer = new Menadzer();
 
-        for(Menadzer m : menadzerList)
-            if(m.getRestoran() == restoran)
+        for (Menadzer m : menadzerList)
+            if (m.getRestoran() == restoran)
                 menadzer = m;
 
 
@@ -104,15 +104,15 @@ public class RestoranRestController {
 
     @GetMapping("/api/restoran/pretragaNaziv")
     public ResponseEntity pretraziRestoranPoNazivu(@RequestParam String naziv, HttpSession session) {
-        if(!sessionService.validate(session))
+        if (!sessionService.validate(session))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        if(naziv == null || naziv.isEmpty())
+        if (naziv == null || naziv.isEmpty())
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         Restoran restoran = restoranRepository.getByNaziv(naziv);
 
-        if(restoran == null)
+        if (restoran == null)
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
 
         return ResponseEntity.status(HttpStatus.OK).body(restoran);
@@ -120,15 +120,15 @@ public class RestoranRestController {
 
     @GetMapping("/api/restoran/pretragaTip")
     public ResponseEntity pretraziRestoranPoTipu(@RequestParam String tipRestorana, HttpSession session) {
-        if(!sessionService.validate(session))
+        if (!sessionService.validate(session))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        if(tipRestorana == null || tipRestorana.isEmpty())
+        if (tipRestorana == null || tipRestorana.isEmpty())
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         Restoran restoran = restoranRepository.getByTipRestorana(tipRestorana);
 
-        if(restoran == null)
+        if (restoran == null)
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
 
         return ResponseEntity.status(HttpStatus.OK).body(restoran);
@@ -136,25 +136,23 @@ public class RestoranRestController {
 
     @GetMapping("/api/restoran/pretragaLokacija/{id}")
     public ResponseEntity pretraziRestoranPoLokaciji(@PathVariable(name = "id") Long id, HttpSession session) {
-        if(!sessionService.validate(session))
+        if (!sessionService.validate(session))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         Lokacija lokacija = lokacijaRepository.getById(id);
 
         Restoran restoran = null;
 
-        for(Restoran r : restoranRepository.findAll())
-            if(r.getLokacija() == lokacija)
+        for (Restoran r : restoranRepository.findAll())
+            if (r.getLokacija() == lokacija)
                 restoran = r;
 
         System.out.println(restoran.getPorudzbine().toString());
 
 
-        if(restoran == null)
+        if (restoran == null)
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
 
         return ResponseEntity.status(HttpStatus.OK).body(restoran);
     }
-
-
 }

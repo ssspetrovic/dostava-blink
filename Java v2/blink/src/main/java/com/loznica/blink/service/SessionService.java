@@ -9,49 +9,48 @@ import javax.servlet.http.HttpSession;
 public class SessionService {
 
     public boolean uloga(HttpSession session, Uloga uloga) {
-
         Object ulogaSession = session.getAttribute("Uloga");
 
-        if(ulogaSession == null)
+        if (ulogaSession == null)
             return false;
-        if(!ulogaSession.toString().endsWith(uloga.toString()))
-            return false;
-        return ulogaSession.equals(uloga);
 
+        if (!ulogaSession.toString().endsWith(uloga.toString()))
+            return false;
+
+        return ulogaSession.equals(uloga);
     }
 
     public String getKorisnickoIme(HttpSession session) {
 
         Object korisnickoIme = session.getAttribute("korisnickoIme");
-        if(korisnickoIme == null)
+        if (korisnickoIme == null)
             return "";
-        if(korisnickoIme.toString().isEmpty())
-            return "";
-        return korisnickoIme.toString();
 
+        if (korisnickoIme.toString().isEmpty())
+            return "";
+
+        return korisnickoIme.toString();
     }
 
     public Uloga getUloga(HttpSession session) {
         Object uloga = session.getAttribute("uloga");
-        if(uloga == null)
+        if (uloga == null)
             return null;
-        if(uloga.toString().isEmpty())
+        if (uloga.toString().isEmpty())
             return null;
         return (Uloga) uloga;
     }
 
     public boolean validate(HttpSession session) {
-        if(session == null)
+        if (session == null)
             return false;
 
         String korisnickoIme = getKorisnickoIme(session);
         Uloga uloga = getUloga(session);
 
-        if(korisnickoIme == null || korisnickoIme.isEmpty())
+        if (korisnickoIme == null || korisnickoIme.isEmpty())
             return false;
 
         return !uloga.toString().isEmpty();
-
     }
-
 }

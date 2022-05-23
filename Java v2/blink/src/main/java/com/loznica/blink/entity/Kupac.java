@@ -23,7 +23,10 @@ public class Kupac extends Korisnik implements Serializable {
     @OneToMany
     private Set<Komentar> komentari;
 
-    public Kupac() { super(); this.brojBodova = 0D;}
+    public Kupac() {
+        super();
+        this.brojBodova = 0D;
+    }
 
     public Kupac(Set<Porudzbina> svePorudzbine, Double brojBodova, TipKupca tipKupca, Set<Komentar> komentari) {
         this.svePorudzbine = svePorudzbine;
@@ -63,7 +66,7 @@ public class Kupac extends Korisnik implements Serializable {
     }
 
     public void setBrojBodova(Double brojBodova) {
-       this.brojBodova += brojBodova;
+        this.brojBodova += brojBodova;
     }
 
     public TipKupca getTipKupca() {
@@ -81,7 +84,6 @@ public class Kupac extends Korisnik implements Serializable {
     public void setKomentari(Set<Komentar> komentari) {
         this.komentari = komentari;
     }
-
 
 
     @Override

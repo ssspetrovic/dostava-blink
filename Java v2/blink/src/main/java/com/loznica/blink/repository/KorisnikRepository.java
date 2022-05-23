@@ -13,5 +13,4 @@ public interface KorisnikRepository extends JpaRepository<Korisnik, Long> {
     Optional<Korisnik> findByKorisnickoIme(@Param("korisnickoIme") String korisnickoIme);
 
     Korisnik getById(@Param("id") Long id);
-
 }

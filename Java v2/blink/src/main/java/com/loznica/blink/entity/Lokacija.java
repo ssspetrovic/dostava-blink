@@ -20,7 +20,8 @@ public class Lokacija implements Serializable {
     @Column
     private String adresa;
 
-    public Lokacija() {}
+    public Lokacija() {
+    }
 
     public Lokacija(double geografskaDuzina, double geografskaSirina, String adresa) {
         this.geografskaDuzina = geografskaDuzina;

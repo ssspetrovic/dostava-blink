@@ -42,12 +42,12 @@ public class DatabaseConfiguration {
     private DostavljacRepository dostavljacRepository;
 
     @Bean
-    public boolean Instantiate(){
+    public boolean Instantiate() {
         Calendar c = new GregorianCalendar();
         c.set(2001, Calendar.JULY, 5);
         Korisnik srdjan = new Korisnik("spetrovic", "123", "Srdjan", "Petrovic", "Muski", c.getTime(), Uloga.ADMIN);
         c.set(2001, Calendar.DECEMBER, 27);
-        Korisnik nikola = new Korisnik( "pale", "456", "Nikola", "Pantic", "Muski", c.getTime(), Uloga.ADMIN);
+        Korisnik nikola = new Korisnik("pale", "456", "Nikola", "Pantic", "Muski", c.getTime(), Uloga.ADMIN);
 
         korisnikRepository.saveAll(List.of(srdjan, nikola));
 
@@ -57,10 +57,10 @@ public class DatabaseConfiguration {
         restoranRepository.save(rr);
 
         c.set(2001, Calendar.JULY, 21);
-        Menadzer sime = new Menadzer( "sime", "la123", "Aleksa", "Simeunovic", "Muski", c.getTime(), Uloga.MENADZER);
+        Menadzer sime = new Menadzer("sime", "la123", "Aleksa", "Simeunovic", "Muski", c.getTime(), Uloga.MENADZER);
         sime.setRestoran(r);
         menadzerRepository.save(sime);
-        Menadzer mm = new Menadzer( "mm", "la123", "Aleksa", "Simeunovic", "Muski", c.getTime(), Uloga.MENADZER);
+        Menadzer mm = new Menadzer("mm", "la123", "Aleksa", "Simeunovic", "Muski", c.getTime(), Uloga.MENADZER);
         mm.setRestoran(rr);
         menadzerRepository.save(mm);
 
@@ -84,8 +84,8 @@ public class DatabaseConfiguration {
 
         Porudzbina porudzbina = new Porudzbina(r, kupac);
         Porudzbina porudzbina2 = new Porudzbina(rr, kupac);
-        PorudzbineArtikli pa = new PorudzbineArtikli(porudzbina, a, 50, 50*a.getCena());
-        PorudzbineArtikli pa2 = new PorudzbineArtikli(porudzbina2, a2, 20, 20*a2.getCena());
+        PorudzbineArtikli pa = new PorudzbineArtikli(porudzbina, a, 50, 50 * a.getCena());
+        PorudzbineArtikli pa2 = new PorudzbineArtikli(porudzbina2, a2, 20, 20 * a2.getCena());
         porudzbineArtikliRepository.save(pa);
         porudzbineArtikliRepository.save(pa2);
         porudzbina.setArtikli(Set.of(pa, pa2));

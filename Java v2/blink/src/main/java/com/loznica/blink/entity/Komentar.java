@@ -21,7 +21,9 @@ public class Komentar implements Serializable {
     @Column
     private int ocena;
 
-    public Komentar() { super(); }
+    public Komentar() {
+        super();
+    }
 
     public Komentar(Kupac kupac, Restoran restoran, String tekstKomentara, int ocena) {
         this.kupac = kupac;

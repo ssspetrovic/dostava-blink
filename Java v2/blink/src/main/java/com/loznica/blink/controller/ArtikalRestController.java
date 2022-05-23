@@ -6,12 +6,16 @@ import com.loznica.blink.entity.Uloga;
 import com.loznica.blink.repository.ArtikalRepository;
 import com.loznica.blink.repository.MenadzerRepository;
 import com.loznica.blink.service.SessionService;
+import com.loznica.blink.util.FileUploadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.HashMap;
 
 @RestController
@@ -27,34 +31,41 @@ public class ArtikalRestController {
     SessionService sessionService;
 
     @PostMapping("/api/artikli/kreiraj-artikal")
-    public ResponseEntity<Artikal> kreirajArtikal(@RequestParam String korisnickoIme, @RequestBody Artikal artikal, HttpSession session) {
-        if(!sessionService.validate(session))
+    public ResponseEntity<Artikal> kreirajArtikal(@RequestParam String korisnickoIme, Artikal artikal, @RequestParam("image") MultipartFile multipartFile, HttpSession session) throws IOException {
+        if (!sessionService.validate(session))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        if(!sessionService.getUloga(session).equals(Uloga.MENADZER))
+        if (!sessionService.getUloga(session).equals(Uloga.MENADZER))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         HashMap<String, String> greska = Validate(artikal);
 
-        if(!greska.isEmpty())
+        if (!greska.isEmpty())
             return new ResponseEntity(greska, HttpStatus.BAD_REQUEST);
+
+        String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+        artikal.setSlike(fileName);
 
         Menadzer menadzer = menadzerRepository.getByKorisnickoIme(korisnickoIme);
         menadzer.getRestoran().getArtikli().add(artikal);
         artikalRepository.save(artikal);
 
+        String uploadDir = "user-photos/" + artikal.getId();
+        FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
+
         return ResponseEntity.ok(artikal);
     }
 
     private HashMap<String, String> Validate(Artikal artikal) {
-
         HashMap<String, String> greska = new HashMap<>();
 
-        if(artikal.getNaziv() == null || artikal.getNaziv().isEmpty())
+        if (artikal.getNaziv() == null || artikal.getNaziv().isEmpty())
             greska.put("naziv", "OBAVEZNO");
-        if(artikal.getCena() == null)
+
+        if (artikal.getCena() == null)
             greska.put("cena", "OBAVEZNO");
-        if(artikal.getTip() == null || artikal.getTip().toString().isEmpty())
+
+        if (artikal.getTip() == null || artikal.getTip().toString().isEmpty())
             greska.put("tip", "OBAVEZNO");
 
         return greska;
@@ -62,10 +73,10 @@ public class ArtikalRestController {
 
     @PostMapping("/api/artikli/izmena/{uuid}")
     public ResponseEntity<Artikal> setArtikal(@PathVariable(name = "id") Long id, @RequestParam String korisnickoIme, @RequestBody Artikal artikal, HttpSession session) {
-        if(!sessionService.validate(session))
+        if (!sessionService.validate(session))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        if(!sessionService.getUloga(session).equals(Uloga.MENADZER))
+        if (!sessionService.getUloga(session).equals(Uloga.MENADZER))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         Artikal a = artikalRepository.findById(id);
@@ -87,5 +98,4 @@ public class ArtikalRestController {
 
         return ResponseEntity.ok(a);
     }
-
 }

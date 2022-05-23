@@ -31,14 +31,13 @@ public class PorudzbinaService {
         Kupac kupac = kupacRepository.findByKorisnickoIme(korisncikoIme);
         Optional<Restoran> restoranOptional = restoranRepository.findById(novaPorudzbinaDto.getIdRestorana());
 
-        if(restoranOptional.isEmpty())
+        if (restoranOptional.isEmpty())
             throw new Exception("Restoran ne postoji!");
 
         Porudzbina porudzbina = new Porudzbina(restoranOptional.get(), kupac);
 
         porudzbina.setArtikli(nadjiPorudzbinu(porudzbina, restoranOptional, novaPorudzbinaDto));
         porudzbinaRepository.save(porudzbina);
-
     }
 
     public void obrisiPorudzbinu(Long id) {
@@ -49,24 +48,25 @@ public class PorudzbinaService {
 
     private Set<PorudzbineArtikli> nadjiPorudzbinu(Porudzbina porudzbina, Optional<Restoran> restoranOptional, NovaPorudzbinaDto novaPorudzbinaDto) throws Exception {
         Set<PorudzbineArtikli> porudzbineArtiklis = new HashSet<>();
-        for(NovaPorudzbinaKupcaDto artikal : novaPorudzbinaDto.getNovePorudzbine()) {
+
+        for (NovaPorudzbinaKupcaDto artikal : novaPorudzbinaDto.getNovePorudzbine()) {
             Artikal pronadjen = null;
-            for(Artikal a : restoranOptional.orElse(null).getArtikli()) {
-                if(a.getId().equals(artikal.getId())) {
+            for (Artikal a : restoranOptional.orElse(null).getArtikli()) {
+                if (a.getId().equals(artikal.getId())) {
                     pronadjen = a;
                     break;
                 }
             }
 
-            if(pronadjen == null)
+            if (pronadjen == null)
                 throw new Exception("Artikal sa id " + artikal.getId() + "nije pronadjen.");
 
             NovaPorudzbinaKupcaDto novaPorudzbinaKupcaDto = null;
 
-            for(NovaPorudzbinaKupcaDto np : novaPorudzbinaDto.getNovePorudzbine())
-                if(np != null)
+            for (NovaPorudzbinaKupcaDto np : novaPorudzbinaDto.getNovePorudzbine())
+                if (np != null)
                     novaPorudzbinaKupcaDto = np;
-            PorudzbineArtikli pa = new PorudzbineArtikli(porudzbina, pronadjen, artikal.getKolicina(), pronadjen.getCena()*novaPorudzbinaKupcaDto.getKolicina());
+            PorudzbineArtikli pa = new PorudzbineArtikli(porudzbina, pronadjen, artikal.getKolicina(), pronadjen.getCena() * novaPorudzbinaKupcaDto.getKolicina());
             porudzbineArtiklis.add(pa);
             porudzbineArtikliRepository.save(pa);
         }

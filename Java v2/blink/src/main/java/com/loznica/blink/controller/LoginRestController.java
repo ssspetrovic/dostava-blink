@@ -2,8 +2,6 @@ package com.loznica.blink.controller;
 
 import com.loznica.blink.dto.LoginDto;
 import com.loznica.blink.entity.Korisnik;
-import com.loznica.blink.entity.Uloga;
-import com.loznica.blink.service.KorisnikService;
 import com.loznica.blink.service.LoginService;
 import com.loznica.blink.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,19 +24,17 @@ public class LoginRestController {
     @Autowired
     private SessionService sessionService;
 
-    @Autowired
-    private KorisnikService korisnikService;
-
     @PostMapping("/api/login")
     public ResponseEntity<?> login(@RequestBody LoginDto loginDto, HttpSession session) {
         Hashtable<String, String> greska = new Hashtable<>();
 
-        if(loginDto.getKorisnickoIme() == null || loginDto.getKorisnickoIme().isEmpty())
+        if (loginDto.getKorisnickoIme() == null || loginDto.getKorisnickoIme().isEmpty())
             greska.put("korisnickoIme", "Korisnicko ime ne postoji, morate ga uneti!");
-        if(loginDto.getLozinka() == null || loginDto.getLozinka().isEmpty())
+
+        if (loginDto.getLozinka() == null || loginDto.getLozinka().isEmpty())
             greska.put("lozinka", "Lozinka ne postoji, morate je uneti!");
 
-        if(!greska.isEmpty())
+        if (!greska.isEmpty())
             return new ResponseEntity(greska, HttpStatus.BAD_REQUEST);
 
         Korisnik loggedKorisnik = null;
@@ -49,7 +45,7 @@ public class LoginRestController {
             greska.put("korisnickoIme", e.getMessage());
         }
 
-        if(!greska.isEmpty() || loggedKorisnik == null)
+        if (!greska.isEmpty() || loggedKorisnik == null)
             return new ResponseEntity(greska, HttpStatus.BAD_REQUEST);
 
         session.setAttribute("korisnik", loggedKorisnik);
@@ -57,12 +53,11 @@ public class LoginRestController {
         session.setAttribute("uloga", loggedKorisnik.getUloga());
 
         return new ResponseEntity(loggedKorisnik, HttpStatus.OK);
-
     }
 
     @PostMapping("api/logout")
     public ResponseEntity logout(HttpSession session) {
-        if(!sessionService.validate(session))
+        if (!sessionService.validate(session))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         session.invalidate();

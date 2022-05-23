@@ -1,5 +1,7 @@
 package com.loznica.blink.entity;
+
 import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -34,7 +36,9 @@ public class Porudzbina implements Serializable {
     @Column
     private Status status;
 
-    public Porudzbina() { super(); }
+    public Porudzbina() {
+        super();
+    }
 
     public Porudzbina(Set<PorudzbineArtikli> artikli, Restoran restoran, Date datumPorudzbine, double cena, Kupac kupac, Status status) {
         this.artikli = artikli;

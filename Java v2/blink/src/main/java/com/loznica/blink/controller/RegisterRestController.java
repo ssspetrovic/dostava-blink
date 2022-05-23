@@ -24,7 +24,7 @@ public class RegisterRestController {
 
         HashMap<String, String> greska = Validate(registerDto);
 
-        if(!greska.isEmpty())
+        if (!greska.isEmpty())
             return new ResponseEntity(greska, HttpStatus.BAD_REQUEST);
 
         Kupac k = registerDto.ToKupac();
@@ -35,7 +35,7 @@ public class RegisterRestController {
             greska.put("korisnickoIme", e.getMessage());
         }
 
-        if(!greska.isEmpty())
+        if (!greska.isEmpty())
             return new ResponseEntity(greska, HttpStatus.BAD_REQUEST);
 
         return new ResponseEntity("USPESNA REGISTRACIJA, HVALA VAM", HttpStatus.OK);
@@ -44,21 +44,24 @@ public class RegisterRestController {
     private HashMap<String, String> Validate(RegisterDto registerDto) {
         HashMap<String, String> greska = new HashMap<>();
 
-        if(registerDto.getKorisnickoIme() == null || registerDto.getKorisnickoIme().isEmpty())
+        if (registerDto.getKorisnickoIme() == null || registerDto.getKorisnickoIme().isEmpty())
             greska.put("korisnickoIme", "OBAVEZNO");
-        if(registerDto.getLozinka() == null || registerDto.getLozinka().isEmpty())
+
+        if (registerDto.getLozinka() == null || registerDto.getLozinka().isEmpty())
             greska.put("lozinka", "OBAVEZNA");
-        if(registerDto.getIme() == null || registerDto.getIme().isEmpty())
+
+        if (registerDto.getIme() == null || registerDto.getIme().isEmpty())
             greska.put("ime", "OBAVEZNO");
-        if(registerDto.getPrezime() == null || registerDto.getPrezime().isEmpty())
+
+        if (registerDto.getPrezime() == null || registerDto.getPrezime().isEmpty())
             greska.put("prezime", "OBAVEZNO");
-        if(registerDto.getPol() == null || registerDto.getPol().isEmpty())
+
+        if (registerDto.getPol() == null || registerDto.getPol().isEmpty())
             greska.put("pol", "OBAVEZNO");
-        if(registerDto.getDatumRodjenja() == null)
+
+        if (registerDto.getDatumRodjenja() == null)
             greska.put("datumRodjenja", "OBAVEZNO");
 
         return greska;
-
     }
-
 }

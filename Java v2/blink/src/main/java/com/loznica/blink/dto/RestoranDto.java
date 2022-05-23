@@ -44,7 +44,9 @@ public class RestoranDto {
         this.artikli = artikli;
     }
 
-    public Restoran ToRestoran() { return new Restoran(naziv, tipRestorana, lokacija); }
+    public Restoran ToRestoran() {
+        return new Restoran(naziv, tipRestorana, lokacija);
+    }
 
     public Menadzer getMenadzer() {
         return menadzer;

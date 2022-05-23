@@ -20,8 +20,8 @@ public class RestoranService {
     }
 
     private void invalid(String naziv, List<Restoran> restoranList) throws Exception {
-        for(Restoran r : restoranList)
-            if(r.getNaziv().equals(naziv))
+        for (Restoran r : restoranList)
+            if (r.getNaziv().equals(naziv))
                 pogresanNaziv(naziv);
     }
 

@@ -18,7 +18,8 @@ public class RegisterDto {
 
     private Date datumRodjenja;
 
-    public RegisterDto() {}
+    public RegisterDto() {
+    }
 
     public RegisterDto(String korisnickoIme, String lozinka, String ime, String prezime, String pol, Date datumRodjenja) {
         this.korisnickoIme = korisnickoIme;
@@ -77,6 +78,7 @@ public class RegisterDto {
         this.datumRodjenja = datumRodjenja;
     }
 
-    public Kupac ToKupac() { return new Kupac(korisnickoIme, lozinka, ime, prezime, pol, datumRodjenja); }
-
+    public Kupac ToKupac() {
+        return new Kupac(korisnickoIme, lozinka, ime, prezime, pol, datumRodjenja);
+    }
 }

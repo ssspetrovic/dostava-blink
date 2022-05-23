@@ -55,17 +55,17 @@ public class PorudzbinaRestController {
 
         Kupac kupac = kupacRepository.getById(loggedKorisnik.getId());
 
-        if(kupac.getKorisnickoIme() == null || kupac.getKorisnickoIme().toString().isEmpty())
+        if (kupac.getKorisnickoIme() == null || kupac.getKorisnickoIme().toString().isEmpty())
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         List<PorudzbinaDto> porudzbinaDtoList = new ArrayList<>();
 
-        for(Porudzbina p : kupac.getSvePorudzbine()) {
+        for (Porudzbina p : kupac.getSvePorudzbine()) {
             PorudzbinaDto porudzbinaDto = new PorudzbinaDto(p.getUuid(), p.getDatumPorudzbine());
 
             List<PorudzbinaKupcaDto> porudzbinaKupcaDtoList = new ArrayList<>();
 
-            for(PorudzbineArtikli pa : p.getArtikli()) {
+            for (PorudzbineArtikli pa : p.getArtikli()) {
                 Artikal a = pa.getArtikal();
                 porudzbinaKupcaDtoList.add(new PorudzbinaKupcaDto(a.getNaziv(), a.getCena(), pa.getKolicina()));
             }
@@ -74,7 +74,7 @@ public class PorudzbinaRestController {
             porudzbinaDtoList.add(porudzbinaDto);
         }
 
-        return new ResponseEntity(porudzbinaDtoList,HttpStatus.OK);
+        return new ResponseEntity(porudzbinaDtoList, HttpStatus.OK);
     }
 
     @GetMapping("/api/porudzbine/dostava")
@@ -91,13 +91,13 @@ public class PorudzbinaRestController {
         }
 
         Dostavljac dostavljac = dostavljacRepository.getById(loggedKorisnik.getId());
-        if(dostavljac.getKorisnickoIme() == null || dostavljac.getKorisnickoIme().toString().isEmpty())
+        if (dostavljac.getKorisnickoIme() == null || dostavljac.getKorisnickoIme().toString().isEmpty())
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         List<PorudzbinaDto> porudzbinaDtoList = new ArrayList<>();
 
-        for(Porudzbina p : dostavljac.getPorudzbine()) {
-            if(p.getStatus() == Status.CEKA_DOSTAVLJACA) {
+        for (Porudzbina p : dostavljac.getPorudzbine()) {
+            if (p.getStatus() == Status.CEKA_DOSTAVLJACA) {
                 PorudzbinaDto porudzbinaDto = new PorudzbinaDto(p.getUuid(), p.getDatumPorudzbine());
 
                 List<PorudzbinaKupcaDto> porudzbinaKupcaDtoList = new ArrayList<>();
@@ -112,8 +112,7 @@ public class PorudzbinaRestController {
             }
         }
 
-        return new ResponseEntity(porudzbinaDtoList,HttpStatus.OK);
-
+        return new ResponseEntity(porudzbinaDtoList, HttpStatus.OK);
     }
 
     @GetMapping("/api/porudzbine/menadzeri")
@@ -121,54 +120,54 @@ public class PorudzbinaRestController {
 
         Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
 
-        if(!sessionService.validate(session))
+        if (!sessionService.validate(session))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        if(!loggedKorisnik.getUloga().equals(Uloga.MENADZER))
+        if (!loggedKorisnik.getUloga().equals(Uloga.MENADZER))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         Menadzer menadzer = menadzerRepository.getById(loggedKorisnik.getId());
-        if(menadzer.getKorisnickoIme() == null || menadzer.getKorisnickoIme().toString().isEmpty())
+
+        if (menadzer.getKorisnickoIme() == null || menadzer.getKorisnickoIme().toString().isEmpty())
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         List<PorudzbinaDto> porudzbinaDtoList = new ArrayList<>();
 
-        for(Porudzbina p : menadzer.getRestoran().getPorudzbine()) {
+        for (Porudzbina p : menadzer.getRestoran().getPorudzbine()) {
 
-                PorudzbinaDto porudzbinaDto = new PorudzbinaDto(p.getUuid(), p.getDatumPorudzbine());
+            PorudzbinaDto porudzbinaDto = new PorudzbinaDto(p.getUuid(), p.getDatumPorudzbine());
 
-                List<PorudzbinaKupcaDto> porudzbinaKupcaDtoList = new ArrayList<>();
+            List<PorudzbinaKupcaDto> porudzbinaKupcaDtoList = new ArrayList<>();
 
-                for (PorudzbineArtikli pa : p.getArtikli()) {
-                    Artikal a = pa.getArtikal();
-                    porudzbinaKupcaDtoList.add(new PorudzbinaKupcaDto(a.getNaziv(), a.getCena(), pa.getKolicina()));
-                }
+            for (PorudzbineArtikli pa : p.getArtikli()) {
+                Artikal a = pa.getArtikal();
+                porudzbinaKupcaDtoList.add(new PorudzbinaKupcaDto(a.getNaziv(), a.getCena(), pa.getKolicina()));
+            }
 
-                porudzbinaDto.setPorudzbineKupca(porudzbinaKupcaDtoList);
-                porudzbinaDtoList.add(porudzbinaDto);
-
+            porudzbinaDto.setPorudzbineKupca(porudzbinaKupcaDtoList);
+            porudzbinaDtoList.add(porudzbinaDto);
         }
 
-        return new ResponseEntity(porudzbinaDtoList,HttpStatus.OK);
-
-
+        return new ResponseEntity(porudzbinaDtoList, HttpStatus.OK);
     }
 
     @PostMapping("/api/porudzbine")
     public ResponseEntity poruci(@RequestBody NovaPorudzbinaDto novaPorudzbinaDto, HttpSession session) {
-        if(!sessionService.validate(session))
+        if (!sessionService.validate(session))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        if(!sessionService.getUloga(session).equals(Uloga.KUPAC))
+        if (!sessionService.getUloga(session).equals(Uloga.KUPAC))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         Hashtable<String, String> greska = new Hashtable<>();
-        if(novaPorudzbinaDto.getIdRestorana() == 0)
+
+        if (novaPorudzbinaDto.getIdRestorana() == 0)
             greska.put("IdRestorana", "ID ne sme biti 0...");
-        if(novaPorudzbinaDto.getNovePorudzbine() == null || novaPorudzbinaDto.getNovePorudzbine().size() == 0)
+
+        if (novaPorudzbinaDto.getNovePorudzbine() == null || novaPorudzbinaDto.getNovePorudzbine().size() == 0)
             greska.put("NovePorudzbine", "Korpa ne sme biti prazna!");
 
-        if(novaPorudzbinaDto.getNovePorudzbine() != null)
+        if (novaPorudzbinaDto.getNovePorudzbine() != null)
             for (int i = 0; i < novaPorudzbinaDto.getNovePorudzbine().size(); i++) {
                 NovaPorudzbinaKupcaDto artikal = novaPorudzbinaDto.getNovePorudzbine().get(i);
 
@@ -179,7 +178,7 @@ public class PorudzbinaRestController {
             }
 
 
-        if(!greska.isEmpty())
+        if (!greska.isEmpty())
             return new ResponseEntity(greska, HttpStatus.BAD_REQUEST);
 
         try {
@@ -193,10 +192,10 @@ public class PorudzbinaRestController {
 
     @DeleteMapping("/api/porudzbine/{id}")
     public ResponseEntity skiniIzKorpe(@PathVariable Long id, HttpSession session) {
-        if(!sessionService.validate(session))
+        if (!sessionService.validate(session))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        if(!sessionService.getUloga(session).equals(Uloga.KUPAC))
+        if (!sessionService.getUloga(session).equals(Uloga.KUPAC))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         try {
@@ -210,27 +209,28 @@ public class PorudzbinaRestController {
 
     @GetMapping("/api/porudzbine/lista")
     public ResponseEntity listaPorudzbina(HttpSession session) {
-        if(!sessionService.validate(session))
+        if (!sessionService.validate(session))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
-        if(!sessionService.getUloga(session).equals(Uloga.KUPAC))
+
+        if (!sessionService.getUloga(session).equals(Uloga.KUPAC))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
 
         Kupac kupac = null;
 
-        for(Kupac temp : kupacRepository.findAll())
-            if(temp.getKorisnickoIme().equals(loggedKorisnik.getKorisnickoIme()))
+        for (Kupac temp : kupacRepository.findAll())
+            if (temp.getKorisnickoIme().equals(loggedKorisnik.getKorisnickoIme()))
                 kupac = temp;
 
-        if(kupac == null)
+        if (kupac == null)
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
 
         Set<PorudzbineArtikli> setPorudzbineArtikli = new HashSet<>();
 
-        for(PorudzbineArtikli pa : porudzbineArtikliRepository.findAll())
-            for(Porudzbina p : kupac.getSvePorudzbine())
-                if(pa.getPorudzbina().equals(p)){
+        for (PorudzbineArtikli pa : porudzbineArtikliRepository.findAll())
+            for (Porudzbina p : kupac.getSvePorudzbine())
+                if (pa.getPorudzbina().equals(p)) {
                     setPorudzbineArtikli.add(pa);
                     break;
                 }
@@ -241,26 +241,27 @@ public class PorudzbinaRestController {
 
     @GetMapping("/api/porudzbine/naruci/{id}")
     public ResponseEntity poruci(HttpSession session, @PathVariable(name = "id") Long id) {
-        if(!sessionService.validate(session))
+        if (!sessionService.validate(session))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
-        if(!sessionService.getUloga(session).equals(Uloga.KUPAC))
+
+        if (!sessionService.getUloga(session).equals(Uloga.KUPAC))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
 
         Kupac kupac = null;
 
-        for(Kupac temp : kupacRepository.findAll())
-            if(temp.getKorisnickoIme().equals(loggedKorisnik.getKorisnickoIme()))
+        for (Kupac temp : kupacRepository.findAll())
+            if (temp.getKorisnickoIme().equals(loggedKorisnik.getKorisnickoIme()))
                 kupac = temp;
 
         PorudzbineArtikli pa = null;
 
-        for(PorudzbineArtikli porudzbineArtikli : porudzbineArtikliRepository.findAll())
-            if(porudzbineArtikli.getId() == id)
+        for (PorudzbineArtikli porudzbineArtikli : porudzbineArtikliRepository.findAll())
+            if (Objects.equals(porudzbineArtikli.getId(), id))
                 pa = porudzbineArtikli;
 
-        if(pa == null || kupac == null)
+        if (pa == null || kupac == null)
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
 
         Porudzbina narudzbina = pa.getPorudzbina();
@@ -272,27 +273,29 @@ public class PorudzbinaRestController {
     }
 
     @GetMapping("/api/porudzbine/priprema/{id}")
-    public ResponseEntity uPripremi(@PathVariable(name = "id") Long id,  HttpSession session) {
-        if(!sessionService.validate(session))
+    public ResponseEntity uPripremi(@PathVariable(name = "id") Long id, HttpSession session) {
+        if (!sessionService.validate(session))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
-        if(!sessionService.getUloga(session).equals(Uloga.MENADZER))
+
+        if (!sessionService.getUloga(session).equals(Uloga.MENADZER))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         PorudzbineArtikli porudzbina = null;
 
-        for(PorudzbineArtikli pa : porudzbineArtikliRepository.findAll())
-            if(id == pa.getId())
+        for (PorudzbineArtikli pa : porudzbineArtikliRepository.findAll())
+            if (Objects.equals(id, pa.getId()))
                 porudzbina = pa;
 
         Porudzbina p = porudzbina.getPorudzbina();
 
-        if(porudzbina == null)
+        if (porudzbina == null)
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        if(p.getStatus() == Status.OBRADA)
+        if (p.getStatus() == Status.OBRADA) {
             p.setStatus(Status.U_PRIPREMI);
-        else
+        } else {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
 
         porudzbinaRepository.saveAndFlush(p);
 
@@ -300,55 +303,58 @@ public class PorudzbinaRestController {
     }
 
     @GetMapping("/api/porudzbine/ceka/{id}")
-    public ResponseEntity cekaDostavljaca(@PathVariable(name = "id") Long id,  HttpSession session) {
-        if(!sessionService.validate(session))
+    public ResponseEntity cekaDostavljaca(@PathVariable(name = "id") Long id, HttpSession session) {
+        if (!sessionService.validate(session))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
-        if(!sessionService.getUloga(session).equals(Uloga.MENADZER))
+
+        if (!sessionService.getUloga(session).equals(Uloga.MENADZER))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         PorudzbineArtikli porudzbina = null;
 
-        for(PorudzbineArtikli pa : porudzbineArtikliRepository.findAll())
-            if(id == pa.getId())
+        for (PorudzbineArtikli pa : porudzbineArtikliRepository.findAll())
+            if (Objects.equals(id, pa.getId()))
                 porudzbina = pa;
 
         Porudzbina p = porudzbina.getPorudzbina();
 
-        if(porudzbina == null)
+        if (porudzbina == null)
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        if(p.getStatus() == Status.U_PRIPREMI)
+        if (p.getStatus() == Status.U_PRIPREMI) {
             p.setStatus(Status.CEKA_DOSTAVLJACA);
-        else
+        } else {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
-
+        }
         porudzbinaRepository.saveAndFlush(p);
 
         return ResponseEntity.status(HttpStatus.OK).body("Vasa porudzbina je sada u statusu: " + p.getStatus());
     }
 
     @GetMapping("/api/porudzbine/transport/{id}")
-    public ResponseEntity uTransportu(@PathVariable(name = "id") Long id,  HttpSession session) {
-        if(!sessionService.validate(session))
+    public ResponseEntity uTransportu(@PathVariable(name = "id") Long id, HttpSession session) {
+        if (!sessionService.validate(session))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
-        if(!sessionService.getUloga(session).equals(Uloga.DOSTAVLJAC))
+
+        if (!sessionService.getUloga(session).equals(Uloga.DOSTAVLJAC))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         PorudzbineArtikli porudzbina = null;
 
-        for(PorudzbineArtikli pa : porudzbineArtikliRepository.findAll())
-            if(id == pa.getId())
+        for (PorudzbineArtikli pa : porudzbineArtikliRepository.findAll())
+            if (Objects.equals(id, pa.getId()))
                 porudzbina = pa;
 
         Porudzbina p = porudzbina.getPorudzbina();
 
-        if(porudzbina == null)
+        if (porudzbina == null)
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        if(p.getStatus() == Status.CEKA_DOSTAVLJACA)
+        if (p.getStatus() == Status.CEKA_DOSTAVLJACA) {
             p.setStatus(Status.U_TRANSPORTU);
-        else
+        } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Dostavljac jos uvek ceka porudzbinu.");
+        }
 
         porudzbinaRepository.saveAndFlush(p);
 
@@ -356,37 +362,36 @@ public class PorudzbinaRestController {
     }
 
     @GetMapping("/api/porudzbine/dostavljeno/{id}")
-    public ResponseEntity dostavljeno(@PathVariable(name = "id") Long id,  HttpSession session) {
-        if(!sessionService.validate(session))
+    public ResponseEntity dostavljeno(@PathVariable(name = "id") Long id, HttpSession session) {
+        if (!sessionService.validate(session))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
-        if(!sessionService.getUloga(session).equals(Uloga.DOSTAVLJAC))
+
+        if (!sessionService.getUloga(session).equals(Uloga.DOSTAVLJAC))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         PorudzbineArtikli porudzbina = null;
 
-        for(PorudzbineArtikli pa : porudzbineArtikliRepository.findAll())
-            if(id == pa.getId())
+        for (PorudzbineArtikli pa : porudzbineArtikliRepository.findAll())
+            if (Objects.equals(id, pa.getId()))
                 porudzbina = pa;
 
         Porudzbina p = porudzbina.getPorudzbina();
 
-        if(porudzbina == null)
+        if (porudzbina == null)
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        if(p.getStatus() == Status.U_TRANSPORTU)
+        if (p.getStatus() == Status.U_TRANSPORTU) {
             p.setStatus(Status.DOSTAVLJENA);
-        else
+        } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Dostavljac je doneo porudzbinu.");
+        }
 
         Kupac kupac = p.getKupac();
-        kupac.setBrojBodova(porudzbina.getUkupnaCena()/1000*133);
+        kupac.setBrojBodova(porudzbina.getUkupnaCena() / 1000 * 133);
 
         kupacRepository.saveAndFlush(kupac);
         porudzbinaRepository.saveAndFlush(p);
 
         return ResponseEntity.status(HttpStatus.OK).body("Vasa porudzbina je sada u statusu: " + p.getStatus());
     }
-
-
-
 }

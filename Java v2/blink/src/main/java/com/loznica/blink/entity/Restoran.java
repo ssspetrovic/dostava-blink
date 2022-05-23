@@ -28,10 +28,12 @@ public class Restoran implements Serializable {
     @JsonIgnore
     private Set<Porudzbina> porudzbine;
 
-    @OneToOne(cascade =  CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     private Lokacija lokacija;
 
-    public Restoran() { super(); }
+    public Restoran() {
+        super();
+    }
 
     public Restoran(String naziv, String tipRestorana, Lokacija lokacija) {
         this.naziv = naziv;

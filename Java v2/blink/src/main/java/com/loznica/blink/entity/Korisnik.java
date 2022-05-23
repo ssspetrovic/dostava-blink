@@ -32,7 +32,9 @@ public class Korisnik implements Serializable {
     @Enumerated(EnumType.STRING)
     private Uloga uloga;
 
-    public Korisnik() { super(); }
+    public Korisnik() {
+        super();
+    }
 
     public Korisnik(String korisnickoIme, String lozinka, String ime, String prezime, String pol, Date datumRodjenja, Uloga uloga) {
         this.korisnickoIme = korisnickoIme;

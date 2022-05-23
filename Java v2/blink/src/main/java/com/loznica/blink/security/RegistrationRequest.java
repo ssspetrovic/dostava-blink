@@ -16,7 +16,9 @@ public class RegistrationRequest {
 
     private Date datumRodjenja;
 
-    public RegistrationRequest() { super(); }
+    public RegistrationRequest() {
+        super();
+    }
 
     public RegistrationRequest(String korisnickoIme, String lozinka, String ime, String prezime, String pol, Date datumRodjenja) {
         super();

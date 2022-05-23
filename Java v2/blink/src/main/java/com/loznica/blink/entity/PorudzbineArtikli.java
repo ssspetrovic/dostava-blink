@@ -22,7 +22,9 @@ public class PorudzbineArtikli implements Serializable {
 
     private Double ukupnaCena;
 
-    public PorudzbineArtikli() { super(); }
+    public PorudzbineArtikli() {
+        super();
+    }
 
     public PorudzbineArtikli(Porudzbina porudzbina, Artikal artikal, int kolicina, Double ukupnaCena) {
         this.porudzbina = porudzbina;
@@ -68,7 +70,7 @@ public class PorudzbineArtikli implements Serializable {
     }
 
     public void setUkupnaCena(int kolicina, Double cena) {
-        ukupnaCena = kolicina*cena;
+        ukupnaCena = kolicina * cena;
     }
 
     @Override

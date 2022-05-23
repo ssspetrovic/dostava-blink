@@ -16,7 +16,9 @@ public class Dostavljac extends Korisnik implements Serializable {
     @JsonIgnore
     private Set<Porudzbina> porudzbine;
 
-    public Dostavljac() { super(); }
+    public Dostavljac() {
+        super();
+    }
 
     public Dostavljac(Set<Porudzbina> porudzbine) {
         this.porudzbine = porudzbine;

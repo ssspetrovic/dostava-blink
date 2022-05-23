@@ -18,7 +18,9 @@ public class TipKupca extends Kupac implements Serializable {
     @OneToMany
     private Set<Kupac> kupci;
 
-    public TipKupca() { super(); }
+    public TipKupca() {
+        super();
+    }
 
     public TipKupca(ImeKupca imeKupca, double popust, int trazeniBodovi, Set<Kupac> kupci) {
         this.imeKupca = imeKupca;

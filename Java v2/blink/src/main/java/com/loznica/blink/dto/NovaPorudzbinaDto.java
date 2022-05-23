@@ -13,7 +13,8 @@ public class NovaPorudzbinaDto {
         this.novePorudzbine = novePorudzbine;
     }
 
-    public NovaPorudzbinaDto() {}
+    public NovaPorudzbinaDto() {
+    }
 
     public Long getIdRestorana() {
         return idRestorana;

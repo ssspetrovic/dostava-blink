@@ -44,12 +44,12 @@ public class KorisnikRestController {
     }
 
     @GetMapping("/api/login/info")
-    public ResponseEntity getInfo(HttpSession session){
+    public ResponseEntity getInfo(HttpSession session) {
 
-        if(!sessionService.validate(session))
+        if (!sessionService.validate(session))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        if(!sessionService.getUloga(session).equals(Uloga.KUPAC))
+        if (!sessionService.getUloga(session).equals(Uloga.KUPAC))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         return ResponseEntity.status(HttpStatus.OK).body(session.getAttribute("korisnik"));
@@ -58,7 +58,7 @@ public class KorisnikRestController {
     @PostMapping("/api/login/info/izmena")
     public ResponseEntity<Korisnik> setKorisnik(HttpSession session, @RequestBody RegistrationRequest registrationRequest) {
 
-        if(!sessionService.validate(session))
+        if (!sessionService.validate(session))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         Korisnik k = (Korisnik) session.getAttribute("korisnik");
@@ -81,10 +81,10 @@ public class KorisnikRestController {
 
     @GetMapping("/api/admin/korisnici/{id}")
     public ResponseEntity getKorisnik(@PathVariable(name = "id") Long id, HttpSession session) {
-        if(!sessionService.validate(session))
+        if (!sessionService.validate(session))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        if(!sessionService.getUloga(session).equals(Uloga.ADMIN))
+        if (!sessionService.getUloga(session).equals(Uloga.ADMIN))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         return ResponseEntity.status(HttpStatus.OK).body(korisnikService.findKorisnik(id));
@@ -92,10 +92,10 @@ public class KorisnikRestController {
 
     @PostMapping("/api/admin/sacuvaj-korisnika")
     public ResponseEntity saveKorisnici(@RequestBody Korisnik korisnik, HttpSession session) {
-        if(!sessionService.validate(session))
+        if (!sessionService.validate(session))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        if(!sessionService.getUloga(session).equals(Uloga.ADMIN))
+        if (!sessionService.getUloga(session).equals(Uloga.ADMIN))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         this.korisnikService.save(korisnik);
@@ -104,10 +104,10 @@ public class KorisnikRestController {
 
     @RequestMapping(value = "/api/admin/obrisi-korisnika/{id}", method = {RequestMethod.DELETE, RequestMethod.GET})
     public ResponseEntity deleteKorisnik(@PathVariable(name = "id") Long id, HttpSession session) {
-        if(!sessionService.validate(session))
+        if (!sessionService.validate(session))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        if(!sessionService.getUloga(session).equals(Uloga.ADMIN))
+        if (!sessionService.getUloga(session).equals(Uloga.ADMIN))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         korisnikService.deleteById(id);
@@ -116,17 +116,17 @@ public class KorisnikRestController {
 
     @GetMapping("/api/admin/korisnici/ispis")
     public ResponseEntity getKorisnici(HttpSession session) {
-        if(!sessionService.validate(session))
+        if (!sessionService.validate(session))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        if(!sessionService.getUloga(session).equals(Uloga.ADMIN))
+        if (!sessionService.getUloga(session).equals(Uloga.ADMIN))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         List<Korisnik> korisnikList = korisnikRepository.findAll();
         List<RegistrationRequest> registrationRequestList = new ArrayList<>();
 
         for (Korisnik korisnik : korisnikList) {
-            if (!korisnik.getUloga().equals(Uloga.ADMIN)){
+            if (!korisnik.getUloga().equals(Uloga.ADMIN)) {
                 RegistrationRequest r = new RegistrationRequest();
                 r.setKorisnickoIme(korisnik.getKorisnickoIme());
                 r.setLozinka(korisnik.getLozinka());
@@ -144,10 +144,10 @@ public class KorisnikRestController {
 
     @PostMapping("/api/admin/kreiraj-menadzera")
     public ResponseEntity kreirajMenadzera(@RequestBody RegistrationRequest registrationRequest, HttpSession session) {
-        if(!sessionService.validate(session))
+        if (!sessionService.validate(session))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        if(!sessionService.getUloga(session).equals(Uloga.ADMIN))
+        if (!sessionService.getUloga(session).equals(Uloga.ADMIN))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         String poruka;
@@ -182,10 +182,10 @@ public class KorisnikRestController {
 
     @PostMapping("/api/admin/kreiraj-dostavljaca")
     public ResponseEntity kreirajDostavljaca(@RequestBody RegistrationRequest registrationRequest, HttpSession session) {
-        if(!sessionService.validate(session))
+        if (!sessionService.validate(session))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        if(!sessionService.getUloga(session).equals(Uloga.ADMIN))
+        if (!sessionService.getUloga(session).equals(Uloga.ADMIN))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         String poruka;
@@ -220,17 +220,17 @@ public class KorisnikRestController {
 
     @GetMapping("/api/menadzer/ispis")
     public ResponseEntity listaMenadzmenta(HttpSession session) {
-        if(!sessionService.validate(session))
+        if (!sessionService.validate(session))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        if(!sessionService.getUloga(session).equals(Uloga.ADMIN))
+        if (!sessionService.getUloga(session).equals(Uloga.ADMIN))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         List<Menadzer> menadzerList = menadzerRepository.findAll();
         List<Menadzer> ispis = new ArrayList<>();
 
         for (Menadzer menadzer : menadzerList) {
-            if(menadzer.getUloga().equals(Uloga.MENADZER)) {
+            if (menadzer.getUloga().equals(Uloga.MENADZER)) {
                 Menadzer m = new Menadzer();
                 m.setId(menadzer.getId());
                 m.setKorisnickoIme(menadzer.getKorisnickoIme());
@@ -256,10 +256,10 @@ public class KorisnikRestController {
 
     @GetMapping("/api/menadzer/info/{id}")
     public ResponseEntity ispisiMenadzera(@PathVariable(name = "id") Long id, HttpSession session) {
-        if(!sessionService.validate(session))
+        if (!sessionService.validate(session))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        if(!sessionService.getUloga(session).equals(Uloga.ADMIN))
+        if (!sessionService.getUloga(session).equals(Uloga.ADMIN))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         return ResponseEntity.status(HttpStatus.OK).body(menadzerRepository.findById(id));
@@ -267,10 +267,10 @@ public class KorisnikRestController {
 
     @GetMapping("/api/admin/restorani/{id}/postavi-menadzera")
     public ResponseEntity postaviMenadzera(@PathVariable(name = "id") Long id, @RequestParam String korisnickoIme, HttpSession session) {
-        if(!sessionService.validate(session))
+        if (!sessionService.validate(session))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        if(!sessionService.getUloga(session).equals(Uloga.ADMIN))
+        if (!sessionService.getUloga(session).equals(Uloga.ADMIN))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         Restoran restoran = restoranRepository.getById(id);
@@ -284,7 +284,4 @@ public class KorisnikRestController {
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("Menadzer uspesno postavljen.");
     }
-
-
 }
-

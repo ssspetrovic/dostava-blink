@@ -1,12 +1,9 @@
 package com.loznica.blink.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Set;
-import java.util.UUID;
 
 @Entity
 public class Artikal implements Serializable {
@@ -33,7 +30,12 @@ public class Artikal implements Serializable {
     @JsonIgnore
     private Restoran restoran;
 
-    public Artikal() { super(); }
+    @Column(nullable = true, length = 64)
+    private String slike;
+
+    public Artikal() {
+        super();
+    }
 
     public Artikal(String naziv, double cena, Tip tip, int kolicina, String opis) {
         this.naziv = naziv;
@@ -99,6 +101,23 @@ public class Artikal implements Serializable {
         this.restoran = restoran;
     }
 
+    public String getSlike() {
+        return slike;
+    }
+
+    public void setSlike(String slike) {
+        this.slike = slike;
+    }
+
+    @Transient
+    public String getPhotosImagePath() {
+        if (slike == null || id == null) {
+            return null;
+        }
+
+        return "user-photos/" + id + "/" + slike;
+    }
+
     @Override
     public String toString() {
         return "Artikal{" +
@@ -109,6 +128,7 @@ public class Artikal implements Serializable {
                 ", kolicina=" + kolicina +
                 ", opis='" + opis + '\'' +
                 ", restoran=" + restoran +
+                ", slike='" + slike + '\'' +
                 '}';
     }
 }

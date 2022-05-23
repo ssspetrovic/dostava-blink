@@ -11,7 +11,8 @@ public class NovaPorudzbinaKupcaDto {
         this.kolicina = kolicina;
     }
 
-    public NovaPorudzbinaKupcaDto() {}
+    public NovaPorudzbinaKupcaDto() {
+    }
 
     public Long getId() {
         return id;
@@ -28,5 +29,4 @@ public class NovaPorudzbinaKupcaDto {
     public void setKolicina(int kolicina) {
         this.kolicina = kolicina;
     }
-
 }

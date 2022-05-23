@@ -10,7 +10,9 @@ public class Menadzer extends Korisnik implements Serializable {
     @OneToOne
     private Restoran restoran;
 
-    public Menadzer() { super(); }
+    public Menadzer() {
+        super();
+    }
 
     public Menadzer(Restoran restoran) {
         this.restoran = restoran;

@@ -42,5 +42,4 @@ public class PorudzbinaDto {
     public void setPorudzbineKupca(List<PorudzbinaKupcaDto> porudzbineKupca) {
         this.porudzbineKupca = porudzbineKupca;
     }
-
 }

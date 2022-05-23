@@ -16,10 +16,10 @@ public class LoginService {
     public Korisnik login(String korisnickoIme, String lozinka) throws AccountNotFoundException {
         Korisnik korisnik = nadjiKorisnika(korisnickoIme, (List<Korisnik>) korisnikRepository.findAll());
 
-        if(korisnik == null)
+        if (korisnik == null)
             throw new AccountNotFoundException("Ne postoji unet korisnik!");
 
-        if(!korisnik.getLozinka().equals(lozinka))
+        if (!korisnik.getLozinka().equals(lozinka))
             throw new AccountNotFoundException("Pogresna sifra!");
 
         return korisnik;
@@ -27,12 +27,11 @@ public class LoginService {
     }
 
     private Korisnik nadjiKorisnika(String korisnickoIme, List<Korisnik> korisnikList) {
-        for(Korisnik k : korisnikList){
-            if(k.getKorisnickoIme().equals(korisnickoIme))
+        for (Korisnik k : korisnikList) {
+            if (k.getKorisnickoIme().equals(korisnickoIme))
                 return k;
         }
+
         return null;
     }
-
 }
-
