@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Objects;
 
 @RestController
 public class ArtikalRestController {
@@ -43,7 +44,7 @@ public class ArtikalRestController {
         if (!greska.isEmpty())
             return new ResponseEntity(greska, HttpStatus.BAD_REQUEST);
 
-        String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+        String fileName = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
         artikal.setSlike(fileName);
 
         Menadzer menadzer = menadzerRepository.getByKorisnickoIme(korisnickoIme);
@@ -89,7 +90,7 @@ public class ArtikalRestController {
         a.setRestoran(artikal.getRestoran() == null ? a.getRestoran() : artikal.getRestoran());
 
         if (artikal.getSlike() != null) {
-            String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+            String fileName = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
             artikal.setSlike(fileName);
             String uploadDir = "korisnik-slike/" + artikal.getId();
             FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
