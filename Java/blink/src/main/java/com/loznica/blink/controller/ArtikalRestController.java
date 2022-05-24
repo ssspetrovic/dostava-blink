@@ -50,7 +50,7 @@ public class ArtikalRestController {
         menadzer.getRestoran().getArtikli().add(artikal);
         artikalRepository.save(artikal);
 
-        String uploadDir = "user-photos/" + artikal.getId();
+        String uploadDir = "korisnik-slike/" + artikal.getId();
         FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
 
         return ResponseEntity.ok(artikal);
@@ -72,7 +72,7 @@ public class ArtikalRestController {
     }
 
     @PostMapping("/api/artikli/izmena/{uuid}")
-    public ResponseEntity<Artikal> setArtikal(@PathVariable(name = "id") Long id, @RequestParam String korisnickoIme, @RequestBody Artikal artikal, HttpSession session) {
+    public ResponseEntity<Artikal> setArtikal(@PathVariable(name = "id") Long id, @RequestParam String korisnickoIme, @RequestBody Artikal artikal, MultipartFile multipartFile, HttpSession session) throws IOException {
         if (!sessionService.validate(session))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
@@ -87,6 +87,15 @@ public class ArtikalRestController {
         a.setKolicina(artikal.getKolicina() == 0 ? a.getKolicina() : artikal.getKolicina());
         a.setOpis(artikal.getOpis() == null ? a.getOpis() : artikal.getOpis());
         a.setRestoran(artikal.getRestoran() == null ? a.getRestoran() : artikal.getRestoran());
+
+        if (artikal.getSlike() != null) {
+            String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+            artikal.setSlike(fileName);
+            String uploadDir = "korisnik-slike/" + artikal.getId();
+            FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
+        } else {
+            a.setSlike(a.getSlike());
+        }
 
         artikalRepository.saveAndFlush(a);
 

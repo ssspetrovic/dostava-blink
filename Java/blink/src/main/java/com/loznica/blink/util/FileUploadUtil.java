@@ -22,7 +22,7 @@ public class FileUploadUtil {
             Path filePath = uploadPath.resolve(fileName);
             Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException ioe) {
-            throw new IOException("Could not save image file: " + fileName, ioe);
+            throw new IOException("Neuspesno cuvanje slike: " + fileName, ioe);
         }
     }
 }
