@@ -99,7 +99,7 @@ public class KorisnikRestController {
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         this.korisnikService.save(korisnik);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Korisnk je uspesno sacuvan!");
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Korisnik je uspesno sacuvan!");
     }
 
     @RequestMapping(value = "/api/admin/obrisi-korisnika/{id}", method = {RequestMethod.DELETE, RequestMethod.GET})
@@ -122,24 +122,13 @@ public class KorisnikRestController {
         if (!sessionService.getUloga(session).equals(Uloga.ADMIN))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        List<Korisnik> korisnikList = korisnikRepository.findAll();
-        List<RegistrationRequest> registrationRequestList = new ArrayList<>();
+        List<Korisnik> listaKorisnika = new ArrayList<>();
 
-        for (Korisnik korisnik : korisnikList) {
-            if (!korisnik.getUloga().equals(Uloga.ADMIN)) {
-                RegistrationRequest r = new RegistrationRequest();
-                r.setKorisnickoIme(korisnik.getKorisnickoIme());
-                r.setLozinka(korisnik.getLozinka());
-                r.setIme(korisnik.getIme());
-                r.setPrezime(korisnik.getPrezime());
-                r.setPol(korisnik.getPol());
-                r.setDatumRodjenja(korisnik.getDatumRodjenja());
+        for(Korisnik k : korisnikRepository.findAll())
+            if(!(k.getUloga() == Uloga.ADMIN))
+                listaKorisnika.add(k);
 
-                registrationRequestList.add(r);
-            }
-        }
-
-        return ResponseEntity.ok(registrationRequestList);
+        return ResponseEntity.status(HttpStatus.OK).body(listaKorisnika);
     }
 
     @PostMapping("/api/admin/kreiraj-menadzera")
@@ -169,7 +158,7 @@ public class KorisnikRestController {
 
         try {
             menadzerRepository.save(m);
-            poruka = "Hvala Vam na registraciji. Sve najlepse Vama i rodbini.";
+            poruka = "Hvala Vam na registraciji. Zelimo Vam prijatan dan.";
             registracija = ResponseEntity.ok(poruka);
         } catch (Exception e) {
             poruka = "Neuspesna registracija, pokusajte ponovo...";
@@ -207,7 +196,7 @@ public class KorisnikRestController {
 
         try {
             dostavljacRepository.save(d);
-            poruka = "Hvala Vam na registraciji. Sve najlepse Vama i rodbini.";
+            poruka = "Hvala Vam na registraciji. Zelimo Vam prijatan dan.";
             registracija = ResponseEntity.ok(poruka);
         } catch (Exception e) {
             poruka = "Neuspesna registracija, pokusajte ponovo...";
@@ -265,23 +254,5 @@ public class KorisnikRestController {
         return ResponseEntity.status(HttpStatus.OK).body(menadzerRepository.findById(id));
     }
 
-    @GetMapping("/api/admin/restorani/{id}/postavi-menadzera")
-    public ResponseEntity postaviMenadzera(@PathVariable(name = "id") Long id, @RequestParam String korisnickoIme, HttpSession session) {
-        if (!sessionService.validate(session))
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        if (!sessionService.getUloga(session).equals(Uloga.ADMIN))
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
-
-        Restoran restoran = restoranRepository.getById(id);
-
-        if (restoran == null) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Restoran ne postoji.");
-        }
-
-        Menadzer menadzer = menadzerRepository.getByKorisnickoIme(korisnickoIme);
-        menadzer.setRestoran(restoran);
-
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Menadzer uspesno postavljen.");
-    }
 }

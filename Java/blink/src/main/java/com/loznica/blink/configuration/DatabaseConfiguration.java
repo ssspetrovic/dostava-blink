@@ -51,7 +51,7 @@ public class DatabaseConfiguration {
 
         korisnikRepository.saveAll(List.of(srdjan, nikola));
 
-        Restoran r = new Restoran("lmao", "meksicki", new Lokacija());
+        Restoran r = new Restoran("Atrijum", "Meksicki", new Lokacija());
         restoranRepository.save(r);
         Restoran rr = new Restoran();
         restoranRepository.save(rr);

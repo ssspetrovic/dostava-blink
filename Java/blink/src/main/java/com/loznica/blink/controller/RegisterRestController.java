@@ -28,7 +28,6 @@ public class RegisterRestController {
             return new ResponseEntity(greska, HttpStatus.BAD_REQUEST);
 
         Kupac k = registerDto.ToKupac();
-
         try {
             registerService.Registracija(k, Uloga.KUPAC);
         } catch (Exception e) {

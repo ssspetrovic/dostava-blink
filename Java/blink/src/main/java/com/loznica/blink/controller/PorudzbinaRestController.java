@@ -77,44 +77,6 @@ public class PorudzbinaRestController {
         return new ResponseEntity(porudzbinaDtoList, HttpStatus.OK);
     }
 
-    @GetMapping("/api/porudzbine/dostava")
-    public ResponseEntity zaDostavljanje(HttpSession session) {
-
-        Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
-
-        if (loggedKorisnik == null) {
-            System.out.println("Nema sesije.");
-            return ResponseEntity.ok(null);
-        } else if (!loggedKorisnik.getUloga().equals(Uloga.DOSTAVLJAC)) {
-            System.out.println("Pristup nije odobren.");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Pristup nije odobren.");
-        }
-
-        Dostavljac dostavljac = dostavljacRepository.getById(loggedKorisnik.getId());
-        if (dostavljac.getKorisnickoIme() == null || dostavljac.getKorisnickoIme().toString().isEmpty())
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
-
-        List<PorudzbinaDto> porudzbinaDtoList = new ArrayList<>();
-
-        for (Porudzbina p : dostavljac.getPorudzbine()) {
-            if (p.getStatus() == Status.CEKA_DOSTAVLJACA) {
-                PorudzbinaDto porudzbinaDto = new PorudzbinaDto(p.getUuid(), p.getDatumPorudzbine());
-
-                List<PorudzbinaKupcaDto> porudzbinaKupcaDtoList = new ArrayList<>();
-
-                for (PorudzbineArtikli pa : p.getArtikli()) {
-                    Artikal a = pa.getArtikal();
-                    porudzbinaKupcaDtoList.add(new PorudzbinaKupcaDto(a.getNaziv(), a.getCena(), pa.getKolicina()));
-                }
-
-                porudzbinaDto.setPorudzbineKupca(porudzbinaKupcaDtoList);
-                porudzbinaDtoList.add(porudzbinaDto);
-            }
-        }
-
-        return new ResponseEntity(porudzbinaDtoList, HttpStatus.OK);
-    }
-
     @GetMapping("/api/porudzbine/menadzeri")
     public ResponseEntity pregled(HttpSession session) {
 
@@ -190,6 +152,7 @@ public class PorudzbinaRestController {
         return ResponseEntity.status(HttpStatus.OK).body(novaPorudzbinaDto);
     }
 
+
     @DeleteMapping("/api/porudzbine/{id}")
     public ResponseEntity skiniIzKorpe(@PathVariable Long id, HttpSession session) {
         if (!sessionService.validate(session))
@@ -205,6 +168,24 @@ public class PorudzbinaRestController {
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(porudzbinaRepository.findAll());
+    }
+
+    @PostMapping("/api/porudzbine/kolicina/{id}")
+    public ResponseEntity smanjiKolicinu(@PathVariable(name = "id") Long id, HttpSession session, @RequestParam int kolicina) {
+        if (!sessionService.validate(session))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+
+        if (!sessionService.getUloga(session).equals(Uloga.KUPAC))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+
+        try {
+            porudzbinaService.izmeniPorudzbinu(id, kolicina);
+        } catch (Exception e) {
+            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body("Vasa porudzbina je izmenjena na " + kolicina + " porudzbine.");
+
     }
 
     @GetMapping("/api/porudzbine/lista")
@@ -394,4 +375,44 @@ public class PorudzbinaRestController {
 
         return ResponseEntity.status(HttpStatus.OK).body("Vasa porudzbina je sada u statusu: " + p.getStatus());
     }
+
+
+    @GetMapping("/api/porudzbine/dostava")
+    public ResponseEntity zaDostavljanje(HttpSession session) {
+
+        Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
+
+        if (loggedKorisnik == null) {
+            System.out.println("Nema sesije.");
+            return ResponseEntity.ok(null);
+        } else if (!loggedKorisnik.getUloga().equals(Uloga.DOSTAVLJAC)) {
+            System.out.println("Pristup nije odobren.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Pristup nije odobren.");
+        }
+
+        Dostavljac dostavljac = dostavljacRepository.getById(loggedKorisnik.getId());
+        if (dostavljac.getKorisnickoIme() == null || dostavljac.getKorisnickoIme().toString().isEmpty())
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+
+        List<PorudzbinaDto> porudzbinaDtoList = new ArrayList<>();
+
+        for (Porudzbina p : dostavljac.getPorudzbine()) {
+            if (p.getStatus() == Status.CEKA_DOSTAVLJACA) {
+                PorudzbinaDto porudzbinaDto = new PorudzbinaDto(p.getUuid(), p.getDatumPorudzbine());
+
+                List<PorudzbinaKupcaDto> porudzbinaKupcaDtoList = new ArrayList<>();
+
+                for (PorudzbineArtikli pa : p.getArtikli()) {
+                    Artikal a = pa.getArtikal();
+                    porudzbinaKupcaDtoList.add(new PorudzbinaKupcaDto(a.getNaziv(), a.getCena(), pa.getKolicina()));
+                }
+
+                porudzbinaDto.setPorudzbineKupca(porudzbinaKupcaDtoList);
+                porudzbinaDtoList.add(porudzbinaDto);
+            }
+        }
+
+        return new ResponseEntity(porudzbinaDtoList, HttpStatus.OK);
+    }
+
 }

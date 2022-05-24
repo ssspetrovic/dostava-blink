@@ -15,14 +15,11 @@ public class RegisterService {
     @Autowired
     private KupacRepository kupacRepository;
 
-    public void Registracija(Korisnik k, Uloga u) throws Exception {
+    public void Registracija(Kupac k, Uloga u) throws Exception {
         invalid(k.getKorisnickoIme(), kupacRepository.findAll());
 
-        if (u == Uloga.KUPAC) {
-            kupacRepository.save((Kupac) k);
-        } else {
-            throw new Exception("Nije dozvoljena data uloga: " + u);
-        }
+        k.setUloga(u);
+        kupacRepository.save(k);
     }
 
     private void invalid(String korisnickoIme, List<Kupac> korisnikList) throws Exception {
