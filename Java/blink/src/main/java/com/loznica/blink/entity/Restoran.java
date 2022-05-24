@@ -1,50 +1,61 @@
 package com.loznica.blink.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 public class Restoran implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
+
+    @Column
     private String naziv;
-    public enum TipRestorana {KINESKI, ITALIJANSKI, MEKSICKI, DOMACI}; //String
-    @Enumerated(EnumType.STRING)
-    private TipRestorana tipRestorana;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private Set<Artikal> artikli = new HashSet<>();
+    @Column
+    private String tipRestorana;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private Set<Komentar> komentari = new HashSet<>();
+    @OneToMany
+    private Set<Artikal> artikli;
 
-    //Lokacija
+    @OneToMany
+    private Set<Komentar> komentari;
 
-    public Restoran() { super(); }
+    @OneToMany
+    @JsonIgnore
+    private Set<Porudzbina> porudzbine;
 
-    public Restoran(long id, String naziv, TipRestorana tipRestorana, Set<Komentar> komentari) {
-        this.id = id;
-        this.naziv = naziv;
-        this.tipRestorana = tipRestorana;
-        this.komentari = komentari;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Lokacija lokacija;
+
+    public Restoran() {
+        super();
     }
 
-    public Restoran(long id, String naziv, TipRestorana tipRestorana, Set<Artikal> artikli, Set<Komentar> komentari) {
+    public Restoran(String naziv, String tipRestorana, Lokacija lokacija) {
+        this.naziv = naziv;
+        this.tipRestorana = tipRestorana;
+        this.lokacija = lokacija;
+    }
+
+    public Restoran(Long id, String naziv, String tipRestorana, Set<Artikal> artikli, Set<Komentar> komentari, Set<Porudzbina> porudzbine, Lokacija lokacija) {
         this.id = id;
         this.naziv = naziv;
         this.tipRestorana = tipRestorana;
         this.artikli = artikli;
         this.komentari = komentari;
+        this.porudzbine = porudzbine;
+        this.lokacija = lokacija;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -56,11 +67,11 @@ public class Restoran implements Serializable {
         this.naziv = naziv;
     }
 
-    public TipRestorana getTipRestorana() {
+    public String getTipRestorana() {
         return tipRestorana;
     }
 
-    public void setTipRestorana(TipRestorana tipRestorana) {
+    public void setTipRestorana(String tipRestorana) {
         this.tipRestorana = tipRestorana;
     }
 
@@ -80,14 +91,32 @@ public class Restoran implements Serializable {
         this.komentari = komentari;
     }
 
+    public Set<Porudzbina> getPorudzbine() {
+        return porudzbine;
+    }
+
+    public void setPorudzbine(Set<Porudzbina> porudzbine) {
+        this.porudzbine = porudzbine;
+    }
+
+    public Lokacija getLokacija() {
+        return lokacija;
+    }
+
+    public void setLokacija(Lokacija lokacija) {
+        this.lokacija = lokacija;
+    }
+
     @Override
     public String toString() {
         return "Restoran{" +
                 "id=" + id +
                 ", naziv='" + naziv + '\'' +
-                ", tipRestorana=" + tipRestorana +
+                ", tipRestorana='" + tipRestorana + '\'' +
                 ", artikli=" + artikli +
                 ", komentari=" + komentari +
+                ", porudzbine=" + porudzbine +
+                ", lokacija=" + lokacija +
                 '}';
     }
 }

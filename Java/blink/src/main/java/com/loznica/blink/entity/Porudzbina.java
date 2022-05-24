@@ -1,62 +1,68 @@
 package com.loznica.blink.entity;
 
-import org.aspectj.util.PartialOrder;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-@Entity
-public class Porudzbina {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; //hibernate uuid generator
 
+@Entity
+public class Porudzbina implements Serializable {
+    @Id
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @Column(nullable = false)
     private UUID uuid;
 
-    @OneToMany(cascade = CascadeType.ALL) //mtm posebna klasa
-    private Set<Artikal> poruceniArtikli = new HashSet<>();
+    @OneToMany(cascade = CascadeType.ALL)
+    private Set<PorudzbineArtikli> artikli;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    private Dostavljac dostavljac;
-
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Restoran restoran;
 
-    private Date vremePorudzbine;
-    private double cena;
-    private String korisnickoIme;
-    public enum Status {OBRADA, U_PRIPREMI, CEKA_DOSTAVLJAC, U_TRANSPORTU, DOSTAVLJENA, OTKAZANA};
-    @Enumerated(EnumType.STRING)
-    private Status status;
+    @Column
+    private Date datumPorudzbine;
 
-    //Kupac
+    @Column
+    private double cena;
+
+    @ManyToOne
+    @JoinColumn(name = "kupac_korisnickoIme")
+    private Kupac kupac;
+
+    @Column
+    private Status status;
 
     public Porudzbina() {
         super();
     }
 
-    public Porudzbina(Long id, UUID uuid, Set<Artikal> poruceniArtikli, Dostavljac dostavljac, Restoran restoran, Date vremePorudzbine, double cena, String korisnickoIme, Status status) {
-        this.id = id;
-        this.uuid = uuid;
-        this.poruceniArtikli = poruceniArtikli;
-        this.dostavljac = dostavljac;
+    public Porudzbina(Set<PorudzbineArtikli> artikli, Restoran restoran, Date datumPorudzbine, double cena, Kupac kupac, Status status) {
+        this.artikli = artikli;
         this.restoran = restoran;
-        this.vremePorudzbine = vremePorudzbine;
+        this.datumPorudzbine = datumPorudzbine;
         this.cena = cena;
-        this.korisnickoIme = korisnickoIme;
+        this.kupac = kupac;
         this.status = status;
     }
 
-    public Long getId() {
-        return id;
+
+    public Porudzbina(Set<PorudzbineArtikli> artikli, Restoran restoran, double cena) {
+        this.artikli = artikli;
+        this.restoran = restoran;
+        this.datumPorudzbine = new Date();
+        this.cena = cena;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public Porudzbina(Restoran restoran, Kupac kupac) {
+        this.restoran = restoran;
+        this.datumPorudzbine = new Date();
+        this.kupac = kupac;
     }
+
 
     public UUID getUuid() {
         return uuid;
@@ -66,20 +72,12 @@ public class Porudzbina {
         this.uuid = uuid;
     }
 
-    public Set<Artikal> getPoruceniArtikli() {
-        return poruceniArtikli;
+    public Set<PorudzbineArtikli> getArtikli() {
+        return artikli;
     }
 
-    public void setPoruceniArtikli(Set<Artikal> poruceniArtikli) {
-        this.poruceniArtikli = poruceniArtikli;
-    }
-
-    public Dostavljac getDostavljac() {
-        return dostavljac;
-    }
-
-    public void setDostavljac(Dostavljac dostavljac) {
-        this.dostavljac = dostavljac;
+    public void setArtikli(Set<PorudzbineArtikli> artikli) {
+        this.artikli = artikli;
     }
 
     public Restoran getRestoran() {
@@ -90,12 +88,12 @@ public class Porudzbina {
         this.restoran = restoran;
     }
 
-    public Date getVremePorudzbine() {
-        return vremePorudzbine;
+    public Date getDatumPorudzbine() {
+        return datumPorudzbine;
     }
 
-    public void setVremePorudzbine(Date vremePorudzbine) {
-        this.vremePorudzbine = vremePorudzbine;
+    public void setDatumPorudzbine(Date datumPorudzbine) {
+        this.datumPorudzbine = datumPorudzbine;
     }
 
     public double getCena() {
@@ -106,12 +104,12 @@ public class Porudzbina {
         this.cena = cena;
     }
 
-    public String getKorisnickoIme() {
-        return korisnickoIme;
+    public Kupac getKupac() {
+        return kupac;
     }
 
-    public void setKorisnickoIme(String korisnickoIme) {
-        this.korisnickoIme = korisnickoIme;
+    public void setKupac(Kupac kupac) {
+        this.kupac = kupac;
     }
 
     public Status getStatus() {
@@ -125,16 +123,13 @@ public class Porudzbina {
     @Override
     public String toString() {
         return "Porudzbina{" +
-                "id=" + id +
-                ", uuid=" + uuid +
-                ", poruceniArtikli=" + poruceniArtikli +
-                ", dostavljac=" + dostavljac +
+                "uuid=" + uuid +
+                ", artikli=" + artikli +
                 ", restoran=" + restoran +
-                ", vremePorudzbine=" + vremePorudzbine +
+                ", datumPorudzbine=" + datumPorudzbine +
                 ", cena=" + cena +
-                ", korisnickoIme='" + korisnickoIme + '\'' +
+                ", kupac='" + kupac + '\'' +
                 ", status=" + status +
                 '}';
     }
 }
-

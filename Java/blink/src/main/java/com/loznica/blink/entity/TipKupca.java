@@ -2,82 +2,72 @@ package com.loznica.blink.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
 
 @Entity
-public class TipKupca implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class TipKupca extends Kupac implements Serializable {
+    @Column
+    private ImeKupca imeKupca;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    private Kupac kupac;
+    @Column
+    private double popust;
 
-    public enum Ime {HARDSTUCK, GOLD, DIAMOND};
-    @Enumerated(EnumType.STRING)
-    private Ime ime;
-    private Float popust;
-    private Integer trazeniBodovi;
+    @Column
+    private int trazeniBodovi;
+
+    @OneToMany
+    private Set<Kupac> kupci;
 
     public TipKupca() {
         super();
     }
 
-    public TipKupca(Long id, Kupac kupac, Ime ime, Float popust, Integer trazeniBodovi) {
-        this.id = id;
-        this.kupac = kupac;
-        this.ime = ime;
+    public TipKupca(ImeKupca imeKupca, double popust, int trazeniBodovi, Set<Kupac> kupci) {
+        this.imeKupca = imeKupca;
         this.popust = popust;
         this.trazeniBodovi = trazeniBodovi;
+        this.kupci = kupci;
     }
 
-    public Long getId() {
-        return id;
+    public ImeKupca getImeKupca() {
+        return imeKupca;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setImeKupca(ImeKupca imeKupca) {
+        this.imeKupca = imeKupca;
     }
 
-    public Kupac getKupac() {
-        return kupac;
-    }
-
-    public void setKupac(Kupac kupac) {
-        this.kupac = kupac;
-    }
-
-    public Ime getIme() {
-        return ime;
-    }
-
-    public void setIme(Ime ime) {
-        this.ime = ime;
-    }
-
-    public Float getPopust() {
+    public double getPopust() {
         return popust;
     }
 
-    public void setPopust(Float popust) {
+    public void setPopust(double popust) {
         this.popust = popust;
     }
 
-    public Integer getTrazeniBodovi() {
+    public int getTrazeniBodovi() {
         return trazeniBodovi;
     }
 
-    public void setTrazeniBodovi(Integer trazeniBodovi) {
+    public void setTrazeniBodovi(int trazeniBodovi) {
         this.trazeniBodovi = trazeniBodovi;
+    }
+
+    public Set<Kupac> getKupci() {
+        return kupci;
+    }
+
+    public void setKupci(Set<Kupac> kupci) {
+        this.kupci = kupci;
     }
 
     @Override
     public String toString() {
         return "TipKupca{" +
-                "id=" + id +
-                ", kupac=" + kupac +
-                ", ime=" + ime +
+                ", imeKupca=" + imeKupca +
                 ", popust=" + popust +
                 ", trazeniBodovi=" + trazeniBodovi +
+                ", kupci=" + kupci +
                 '}';
     }
 }

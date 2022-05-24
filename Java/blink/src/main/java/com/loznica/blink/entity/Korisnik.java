@@ -9,28 +9,39 @@ public class Korisnik implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    //@Column unique
+
+    @Column(nullable = false, unique = true)
     private String korisnickoIme;
+
+    @Column
     private String lozinka;
+
+    @Column
     private String ime;
+
+    @Column
     private String prezime;
-    public enum Pol {MUSKI, ZENSKI};
-    @Enumerated(EnumType.STRING)
-    private Pol pol;
+
+    @Column
+    private String Pol;
+
+    @Column
     private Date datumRodjenja;
-    public enum Uloga {ADMIN, MENADZER, DOSTAVLJAC, KUPAC};
+
+    @Column
     @Enumerated(EnumType.STRING)
-    public Uloga uloga;
+    private Uloga uloga;
 
-    public Korisnik() { super(); }
+    public Korisnik() {
+        super();
+    }
 
-    public Korisnik(Long id, String korisnickoIme, String lozinka, String ime, String prezime, Pol pol, Date datumRodjenja, Uloga uloga) {
-        this.id = id;
+    public Korisnik(String korisnickoIme, String lozinka, String ime, String prezime, String pol, Date datumRodjenja, Uloga uloga) {
         this.korisnickoIme = korisnickoIme;
         this.lozinka = lozinka;
         this.ime = ime;
         this.prezime = prezime;
-        this.pol = pol;
+        Pol = pol;
         this.datumRodjenja = datumRodjenja;
         this.uloga = uloga;
     }
@@ -75,12 +86,12 @@ public class Korisnik implements Serializable {
         this.prezime = prezime;
     }
 
-    public Pol getPol() {
-        return pol;
+    public String getPol() {
+        return Pol;
     }
 
-    public void setPol(Pol pol) {
-        this.pol = pol;
+    public void setPol(String pol) {
+        Pol = pol;
     }
 
     public Date getDatumRodjenja() {
@@ -107,7 +118,7 @@ public class Korisnik implements Serializable {
                 ", lozinka='" + lozinka + '\'' +
                 ", ime='" + ime + '\'' +
                 ", prezime='" + prezime + '\'' +
-                ", pol=" + pol +
+                ", Pol='" + Pol + '\'' +
                 ", datumRodjenja=" + datumRodjenja +
                 ", uloga=" + uloga +
                 '}';

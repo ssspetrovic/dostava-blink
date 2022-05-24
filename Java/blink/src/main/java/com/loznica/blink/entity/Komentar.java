@@ -1,31 +1,33 @@
 package com.loznica.blink.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
-public class Komentar {
+public class Komentar implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    private Kupac kupacPorudzbine;
+    @ManyToOne
+    private Kupac kupac;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    private Restoran ocenaRestorana;
+    @ManyToOne
+    private Restoran restoran;
 
+    @Column
     private String tekstKomentara;
 
-    public enum Ocena{JEDAN, DVA, TRI, CETIRI, PET};
-    @Enumerated(EnumType.STRING)
-    private Ocena ocena;
+    @Column
+    private int ocena;
 
-    public Komentar() { super(); }
+    public Komentar() {
+        super();
+    }
 
-    public Komentar(Long id, Kupac kupacPorudzbine, Restoran ocenaRestorana, String tekstKomentara, Ocena ocena) {
-        this.id = id;
-        this.kupacPorudzbine = kupacPorudzbine;
-        this.ocenaRestorana = ocenaRestorana;
+    public Komentar(Kupac kupac, Restoran restoran, String tekstKomentara, int ocena) {
+        this.kupac = kupac;
+        this.restoran = restoran;
         this.tekstKomentara = tekstKomentara;
         this.ocena = ocena;
     }
@@ -38,20 +40,20 @@ public class Komentar {
         this.id = id;
     }
 
-    public Kupac getKupacPorudzbine() {
-        return kupacPorudzbine;
+    public Kupac getKupac() {
+        return kupac;
     }
 
-    public void setKupacPorudzbine(Kupac kupacPorudzbine) {
-        this.kupacPorudzbine = kupacPorudzbine;
+    public void setKupac(Kupac kupac) {
+        this.kupac = kupac;
     }
 
-    public Restoran getOcenaRestorana() {
-        return ocenaRestorana;
+    public Restoran getRestoran() {
+        return restoran;
     }
 
-    public void setOcenaRestorana(Restoran ocenaRestorana) {
-        this.ocenaRestorana = ocenaRestorana;
+    public void setRestoran(Restoran restoran) {
+        this.restoran = restoran;
     }
 
     public String getTekstKomentara() {
@@ -62,11 +64,11 @@ public class Komentar {
         this.tekstKomentara = tekstKomentara;
     }
 
-    public Ocena getOcena() {
+    public int getOcena() {
         return ocena;
     }
 
-    public void setOcena(Ocena ocena) {
+    public void setOcena(int ocena) {
         this.ocena = ocena;
     }
 
@@ -74,8 +76,8 @@ public class Komentar {
     public String toString() {
         return "Komentar{" +
                 "id=" + id +
-                ", kupacPorudzbine=" + kupacPorudzbine +
-                ", ocenaRestorana=" + ocenaRestorana +
+                ", kupac=" + kupac +
+                ", restoran=" + restoran +
                 ", tekstKomentara='" + tekstKomentara + '\'' +
                 ", ocena=" + ocena +
                 '}';

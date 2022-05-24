@@ -3,16 +3,17 @@ package com.loznica.blink.configuration;
 import com.loznica.blink.entity.*;
 import com.loznica.blink.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.*;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Set;
 
 @Configuration
 public class DatabaseConfiguration {
-    @Autowired
-    private ArtikalRepository artikalRepository;
-
     @Autowired
     private KorisnikRepository korisnikRepository;
 
@@ -26,94 +27,87 @@ public class DatabaseConfiguration {
     private LokacijaRepository lokacijaRepository;
 
     @Autowired
-    private DostavljacRepository dostavljacRepository;
-
-    @Autowired
-    private KomentarRepository komentarRepository;
-
-    @Autowired
     private KupacRepository kupacRepository;
+
+    @Autowired
+    private ArtikalRepository artikalRepository;
 
     @Autowired
     private PorudzbinaRepository porudzbinaRepository;
 
     @Autowired
-    private TipKupcaRepository tipKupcaRepository;
+    private PorudzbineArtikliRepository porudzbineArtikliRepository;
 
+    @Autowired
+    private DostavljacRepository dostavljacRepository;
 
     @Bean
     public boolean Instantiate() {
-
-        Restoran r = new Restoran();
-        Porudzbina p = new Porudzbina();
-        Kupac kp = new Kupac();
-        Set<Komentar> komentari = new HashSet<>();
-        Set<Porudzbina> porudzbine = new HashSet<>();
-
         Calendar c = new GregorianCalendar();
         c.set(2001, Calendar.JULY, 5);
-        Korisnik srdjan = new Korisnik(1L, "spetrovic", "123", "Srdjan", "Petrovic", Korisnik.Pol.MUSKI, c.getTime(), Korisnik.Uloga.ADMIN);
+        Korisnik srdjan = new Korisnik("spetrovic", "123", "Srdjan", "Petrovic", "Muski", c.getTime(), Uloga.ADMIN);
         c.set(2001, Calendar.DECEMBER, 27);
-        Korisnik nikola = new Korisnik(241L, "npantic", "admin123", "Nikola", "Pantic", Korisnik.Pol.MUSKI, c.getTime(), Korisnik.Uloga.ADMIN);
+        Korisnik nikola = new Korisnik("pale", "456", "Nikola", "Pantic", "Muski", c.getTime(), Uloga.ADMIN);
 
-        korisnikRepository.saveAll( List.of(srdjan, nikola) );
+        korisnikRepository.saveAll(List.of(srdjan, nikola));
 
+        Restoran r = new Restoran("lmao", "meksicki", new Lokacija());
+        restoranRepository.save(r);
+        Restoran rr = new Restoran();
+        restoranRepository.save(rr);
 
-        Lokacija l1 = new Lokacija(10L, "0 stepena", "34 stepena", "Dositejeva 16");
-        Lokacija l2 = new Lokacija(11L, "12 stepena", "79 stepena", "Fakultet Tehnickih Nauka");
+        c.set(2001, Calendar.JULY, 21);
+        Menadzer sime = new Menadzer("sime", "la123", "Aleksa", "Simeunovic", "Muski", c.getTime(), Uloga.MENADZER);
+        sime.setRestoran(r);
+        menadzerRepository.save(sime);
+        Menadzer mm = new Menadzer("mm", "la123", "Aleksa", "Simeunovic", "Muski", c.getTime(), Uloga.MENADZER);
+        mm.setRestoran(rr);
+        menadzerRepository.save(mm);
 
-        lokacijaRepository.saveAll(List.of(l1, l2));
-
-
-        Artikal secer = new Artikal(1024L, "Secer", 250, Artikal.Tip.JELO, Artikal.Kolicina.GRAMI,"1kg secera", r, p);
-        Artikal mleko = new Artikal(1025L, "Mleko", 115, Artikal.Tip.PICE, Artikal.Kolicina.MILILITRI,"1l mleka", r, p);
-
-        artikalRepository.saveAll(List.of(secer, mleko));
-
-        Set<Artikal> artikli = new HashSet<>();
-        artikli.add(secer);
-        artikli.add(mleko);
-
-
-        c.set(2001, Calendar.JUNE, 10);
-        Dostavljac d1 = new Dostavljac(420L, "markojov", "pw123", "Marko", "Jovanovic", Korisnik.Pol.MUSKI, c.getTime(), Korisnik.Uloga.DOSTAVLJAC, porudzbine);
-
-        dostavljacRepository.saveAll(List.of(d1));
+        Kupac kupac = new Kupac("aaa", "123", "A", "B", "Muski", c.getTime());
+        kupac.setUloga(Uloga.KUPAC);
+        kupacRepository.save(kupac);
 
 
-        Restoran r1 = new Restoran(11000L, "Ognjiste", Restoran.TipRestorana.DOMACI, artikli, komentari);
-        Restoran r2 = new Restoran(10250L, "Atrijum", Restoran.TipRestorana.ITALIJANSKI, artikli, komentari);
-        restoranRepository.saveAll(List.of(r1, r2));
+        Lokacija l = new Lokacija(45.5D, 43.3D, "FTN");
+        lokacijaRepository.save(l);
 
+        c.set(2022, Calendar.MAY, 12);
 
-        c.set(2004, Calendar.OCTOBER, 13);
-        Menadzer stefan = new Menadzer(334L, "stefan04", "loznika123", "Stefan", "Nikolic", Korisnik.Pol.MUSKI, c.getTime(), Korisnik.Uloga.MENADZER, r1);
+        Artikal a = new Artikal("Monster Energy", 150, Tip.PICE, 200, "Osvezavajuce energetsko pice.");
+        a.setRestoran(r);
 
-        menadzerRepository.saveAll(List.of(stefan));
+        Artikal a2 = new Artikal("Pepsi", 80, Tip.PICE, 1500, "Gazirano pice.");
+        a2.setRestoran(rr);
 
-        c.set(2022, Calendar.APRIL, 13);
-        Porudzbina p1 = new Porudzbina(15000L, UUID.randomUUID(), artikli, d1, r1, c.getTime(), 1500, "sanja01", Porudzbina.Status.U_PRIPREMI);
+        artikalRepository.saveAll(List.of(a, a2));
 
-        porudzbinaRepository.saveAll(List.of(p1));
+        Porudzbina porudzbina = new Porudzbina(r, kupac);
+        Porudzbina porudzbina2 = new Porudzbina(rr, kupac);
+        PorudzbineArtikli pa = new PorudzbineArtikli(porudzbina, a, 50, 50 * a.getCena());
+        PorudzbineArtikli pa2 = new PorudzbineArtikli(porudzbina2, a2, 20, 20 * a2.getCena());
+        porudzbineArtikliRepository.save(pa);
+        porudzbineArtikliRepository.save(pa2);
+        porudzbina.setArtikli(Set.of(pa, pa2));
+        porudzbina.setStatus(Status.CEKA_DOSTAVLJACA);
+        porudzbinaRepository.save(porudzbina);
+        porudzbinaRepository.save(porudzbina2);
 
-        porudzbine.add(p1);
+        Kupac kupac2 = new Kupac("laki", "111", "Lazar", "Lazarevic", "Muski", c.getTime());
+        kupac2.setUloga(Uloga.KUPAC);
+        kupac2.setSvePorudzbine(Set.of(porudzbina, porudzbina2));
+        kupacRepository.saveAndFlush(kupac2);
 
-        TipKupca tk1 = new TipKupca(111L, kp, TipKupca.Ime.HARDSTUCK, 10f, 10);
+        c.set(1996, Calendar.MAY, 12);
+        Dostavljac dostavljac = new Dostavljac("damir1", "999", "Damir", "Madzarevic", "Muski", c.getTime(), Uloga.DOSTAVLJAC);
+        dostavljac.setPorudzbine(Set.of(porudzbina));
+        dostavljacRepository.save(dostavljac);
 
-        tipKupcaRepository.saveAll(List.of(tk1));
-
-        c.set(2001, Calendar.AUGUST, 24);
-        Kupac kp1 = new Kupac(77L, "sanja01", "blink", "Sanja", "Markovic", Korisnik.Pol.ZENSKI, c.getTime(), Korisnik.Uloga.KUPAC, porudzbine,15, komentari, tk1);
-
-        kupacRepository.saveAll(List.of(kp1));
-
-        Komentar k1 = new Komentar(99L, kp1, r1, "Ne svidja mi se enterijer.", Komentar.Ocena.TRI);
-
-        komentarRepository.saveAll(List.of(k1));
-
-        komentari.add(k1);
+        r.setPorudzbine(Set.of(porudzbina));
+        r.setArtikli(Set.of(a, a2));
+        r.setLokacija(l);
+        restoranRepository.saveAndFlush(r);
 
         return true;
     }
-
 }

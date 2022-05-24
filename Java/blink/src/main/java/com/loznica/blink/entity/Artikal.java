@@ -1,5 +1,7 @@
 package com.loznica.blink.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -8,42 +10,39 @@ public class Artikal implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column
     private String naziv;
-    private double cena;
-    public enum Tip {JELO, PICE};
-    public enum Kolicina {GRAMI, MILILITRI}; //DOUBLE
-    @Enumerated(EnumType.STRING)
+
+    @Column
+    private Double cena;
+
+    @Column
     private Tip tip;
-    @Enumerated(EnumType.STRING)
-    private Kolicina kolicina;
+
+    @Column
+    private int kolicina;
+
+    @Column
     private String opis;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
+    @JsonIgnore
     private Restoran restoran;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    private Porudzbina porudzbina;
+    @Column(nullable = true, length = 64)
+    private String slike;
 
-    public Artikal() { super(); }
-
-    public Artikal(Long id, String naziv, double cena, Tip tip, Kolicina kolicina, String opis) {
-        this.id = id;
-        this.naziv = naziv;
-        this.cena = cena;
-        this.tip = tip;
-        this.kolicina = kolicina;
-        this.opis = opis;
+    public Artikal() {
+        super();
     }
 
-    public Artikal(Long id, String naziv, double cena, Tip tip, Kolicina kolicina, String opis, Restoran restoran, Porudzbina porudzbina) {
-        this.id = id;
+    public Artikal(String naziv, double cena, Tip tip, int kolicina, String opis) {
         this.naziv = naziv;
         this.cena = cena;
         this.tip = tip;
         this.kolicina = kolicina;
         this.opis = opis;
-        this.restoran = restoran;
-        this.porudzbina = porudzbina;
     }
 
     public Long getId() {
@@ -62,11 +61,11 @@ public class Artikal implements Serializable {
         this.naziv = naziv;
     }
 
-    public double getCena() {
+    public Double getCena() {
         return cena;
     }
 
-    public void setCena(double cena) {
+    public void setCena(Double cena) {
         this.cena = cena;
     }
 
@@ -78,11 +77,11 @@ public class Artikal implements Serializable {
         this.tip = tip;
     }
 
-    public Kolicina getKolicina() {
+    public int getKolicina() {
         return kolicina;
     }
 
-    public void setKolicina(Kolicina kolicina) {
+    public void setKolicina(int kolicina) {
         this.kolicina = kolicina;
     }
 
@@ -102,12 +101,21 @@ public class Artikal implements Serializable {
         this.restoran = restoran;
     }
 
-    public Porudzbina getPorudzbina() {
-        return porudzbina;
+    public String getSlike() {
+        return slike;
     }
 
-    public void setPorudzbina(Porudzbina porudzbina) {
-        this.porudzbina = porudzbina;
+    public void setSlike(String slike) {
+        this.slike = slike;
+    }
+
+    @Transient
+    public String getPhotosImagePath() {
+        if (slike == null || id == null) {
+            return null;
+        }
+
+        return "user-photos/" + id + "/" + slike;
     }
 
     @Override
@@ -120,7 +128,7 @@ public class Artikal implements Serializable {
                 ", kolicina=" + kolicina +
                 ", opis='" + opis + '\'' +
                 ", restoran=" + restoran +
-                ", porudzbina=" + porudzbina +
+                ", slike='" + slike + '\'' +
                 '}';
     }
 }

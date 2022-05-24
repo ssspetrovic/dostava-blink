@@ -6,22 +6,29 @@ import java.util.Date;
 
 @Entity
 public class Menadzer extends Korisnik implements Serializable {
-    @OneToOne(cascade = CascadeType.ALL)
+
+    @OneToOne
     private Restoran restoran;
 
-    public Menadzer() { super(); }
+    public Menadzer() {
+        super();
+    }
 
     public Menadzer(Restoran restoran) {
         this.restoran = restoran;
     }
 
-    public Menadzer(Long id, String korisnickoIme, String lozinka, String ime, String prezime, Pol pol, Date datumRodjenja, Uloga uloga) {
-        super(id, korisnickoIme, lozinka, ime, prezime, pol, datumRodjenja, uloga);
+    public Menadzer(String korisnickoIme) {
+        this.setKorisnickoIme(korisnickoIme);
     }
 
-    public Menadzer(Long id, String korisnickoIme, String lozinka, String ime, String prezime, Pol pol, Date datumRodjenja, Uloga uloga, Restoran restoran) {
-        super(id, korisnickoIme, lozinka, ime, prezime, pol, datumRodjenja, uloga);
+    public Menadzer(String korisnickoIme, String lozinka, String ime, String prezime, String pol, Date datumRodjenja, Uloga uloga, Restoran restoran) {
+        super(korisnickoIme, lozinka, ime, prezime, pol, datumRodjenja, uloga);
         this.restoran = restoran;
+    }
+
+    public Menadzer(String korisnickoIme, String lozinka, String ime, String prezime, String pol, Date datumRodjenja, Uloga uloga) {
+        super(korisnickoIme, lozinka, ime, prezime, pol, datumRodjenja, uloga);
     }
 
     public Restoran getRestoran() {
@@ -35,10 +42,7 @@ public class Menadzer extends Korisnik implements Serializable {
     @Override
     public String toString() {
         return "Menadzer{" +
-                "uloga=" + uloga +
-                ", restoran=" + restoran +
+                "restoran=" + restoran +
                 '}';
     }
 }
-
-

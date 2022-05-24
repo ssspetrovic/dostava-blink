@@ -1,16 +1,20 @@
 package com.loznica.blink.entity;
 
-import javax.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@DiscriminatorValue("Dostavljac")
 public class Dostavljac extends Korisnik implements Serializable {
-
     @OneToMany
-    private Set<Porudzbina> porudzbine = new HashSet<>();
+    @JsonIgnore
+    private Set<Porudzbina> porudzbine;
 
     public Dostavljac() {
         super();
@@ -20,9 +24,8 @@ public class Dostavljac extends Korisnik implements Serializable {
         this.porudzbine = porudzbine;
     }
 
-    public Dostavljac(Long id, String korisnickoIme, String lozinka, String ime, String prezime, Pol pol, Date datumRodjenja, Uloga uloga, Set<Porudzbina> porudzbine) {
-        super(id, korisnickoIme, lozinka, ime, prezime, pol, datumRodjenja, uloga);
-        this.porudzbine = porudzbine;
+    public Dostavljac(String korisnickoIme, String lozinka, String ime, String prezime, String pol, Date datumRodjenja, Uloga uloga) {
+        super(korisnickoIme, lozinka, ime, prezime, pol, datumRodjenja, uloga);
     }
 
     public Set<Porudzbina> getPorudzbine() {
@@ -37,7 +40,6 @@ public class Dostavljac extends Korisnik implements Serializable {
     public String toString() {
         return "Dostavljac{" +
                 "porudzbine=" + porudzbine +
-                ", uloga=" + uloga +
                 '}';
     }
 }

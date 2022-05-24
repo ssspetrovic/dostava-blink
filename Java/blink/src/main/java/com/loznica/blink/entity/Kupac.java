@@ -1,38 +1,56 @@
 package com.loznica.blink.entity;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@DiscriminatorValue("Kupac")
 public class Kupac extends Korisnik implements Serializable {
+    @OneToMany(mappedBy = "kupac")
+    @JsonIgnore
+    private Set<Porudzbina> svePorudzbine;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private Set<Porudzbina> svePorudzbine = new HashSet<>();
+    @Column
+    private Double brojBodova;
 
-    private Integer brojBodova;
-
-    @OneToMany(cascade = CascadeType.ALL)
-    private Set<Komentar> komentari = new HashSet<>();
-
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private TipKupca tipKupca;
+
+    @OneToMany
+    private Set<Komentar> komentari;
 
     public Kupac() {
         super();
+        this.brojBodova = 0D;
     }
 
-    public Kupac(Long id, String korisnickoIme, String lozinka, String ime, String prezime, Pol pol, Date datumRodjenja, Uloga uloga, Set<Porudzbina> svePorudzbine, Integer brojBodova, Set<Komentar> komentari, TipKupca tipKupca) {
-        super(id, korisnickoIme, lozinka, ime, prezime, pol, datumRodjenja, uloga);
+    public Kupac(Set<Porudzbina> svePorudzbine, Double brojBodova, TipKupca tipKupca, Set<Komentar> komentari) {
         this.svePorudzbine = svePorudzbine;
         this.brojBodova = brojBodova;
-        this.komentari = komentari;
         this.tipKupca = tipKupca;
+        this.komentari = komentari;
+    }
+
+    public Kupac(String korisnickoIme, String lozinka, String ime, String prezime, String pol, Date datumRodjenja) {
+        setKorisnickoIme(korisnickoIme);
+        setLozinka(lozinka);
+        setIme(ime);
+        setPrezime(prezime);
+        setPol(pol);
+        setDatumRodjenja(datumRodjenja);
+        brojBodova = 0D;
+    }
+
+    public Kupac(String korisnickoIme, String lozinka, String ime, String prezime, String pol, Date datumRodjenja, Uloga uloga, Set<Porudzbina> svePorudzbine, Double brojBodova, TipKupca tipKupca, Set<Komentar> komentari) {
+        super(korisnickoIme, lozinka, ime, prezime, pol, datumRodjenja, uloga);
+        this.svePorudzbine = svePorudzbine;
+        this.brojBodova = brojBodova;
+        this.tipKupca = tipKupca;
+        this.komentari = komentari;
     }
 
     public Set<Porudzbina> getSvePorudzbine() {
@@ -43,20 +61,12 @@ public class Kupac extends Korisnik implements Serializable {
         this.svePorudzbine = svePorudzbine;
     }
 
-    public Integer getBrojBodova() {
+    public Double getBrojBodova() {
         return brojBodova;
     }
 
-    public void setBrojBodova(Integer brojBodova) {
-        this.brojBodova = brojBodova;
-    }
-
-    public Set<Komentar> getKomentari() {
-        return komentari;
-    }
-
-    public void setKomentari(Set<Komentar> komentari) {
-        this.komentari = komentari;
+    public void setBrojBodova(Double brojBodova) {
+        this.brojBodova += brojBodova;
     }
 
     public TipKupca getTipKupca() {
@@ -67,14 +77,22 @@ public class Kupac extends Korisnik implements Serializable {
         this.tipKupca = tipKupca;
     }
 
+    public Set<Komentar> getKomentari() {
+        return komentari;
+    }
+
+    public void setKomentari(Set<Komentar> komentari) {
+        this.komentari = komentari;
+    }
+
+
     @Override
     public String toString() {
         return "Kupac{" +
-                "uloga=" + uloga +
-                ", svePorudzbine=" + svePorudzbine +
+                "svePorudzbine=" + svePorudzbine +
                 ", brojBodova=" + brojBodova +
-                ", komentari=" + komentari +
                 ", tipKupca=" + tipKupca +
+                ", komentari=" + komentari +
                 '}';
     }
 }
