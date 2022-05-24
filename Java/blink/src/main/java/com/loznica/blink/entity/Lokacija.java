@@ -1,27 +1,39 @@
 package com.loznica.blink.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import org.hibernate.annotations.Cascade;
+
+import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
-public class Lokacija {
+public class Lokacija implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String geografskaDuzina; //double
-    private String geografskaSirina; //double
-    private String lokacija;
+    @Column
+    private double geografskaDuzina;
 
-    public Lokacija(){ super(); }
+    @Column
+    private double geografskaSirina;
 
-    public Lokacija(Long id, String geografskaDuzina, String geografskaSirina, String lokacija) {
+    @Column
+    private String adresa;
+
+    public Lokacija() {
+    }
+
+    public Lokacija(double geografskaDuzina, double geografskaSirina, String adresa) {
+        this.geografskaDuzina = geografskaDuzina;
+        this.geografskaSirina = geografskaSirina;
+        this.adresa = adresa;
+    }
+
+    public Lokacija(Long id, double geografskaDuzina, double geografskaSirina, String adresa) {
         this.id = id;
         this.geografskaDuzina = geografskaDuzina;
         this.geografskaSirina = geografskaSirina;
-        this.lokacija = lokacija;
+        this.adresa = adresa;
     }
 
     public Long getId() {
@@ -32,37 +44,37 @@ public class Lokacija {
         this.id = id;
     }
 
-    public String getGeografskaDuzina() {
+    public double getGeografskaDuzina() {
         return geografskaDuzina;
     }
 
-    public void setGeografskaDuzina(String geografskaDuzina) {
+    public void setGeografskaDuzina(double geografskaDuzina) {
         this.geografskaDuzina = geografskaDuzina;
     }
 
-    public String getGeografskaSirina() {
+    public double getGeografskaSirina() {
         return geografskaSirina;
     }
 
-    public void setGeografskaSirina(String geografskaSirina) {
+    public void setGeografskaSirina(double geografskaSirina) {
         this.geografskaSirina = geografskaSirina;
     }
 
-    public String getLokacija() {
-        return lokacija;
+    public String getAdresa() {
+        return adresa;
     }
 
-    public void setLokacija(String lokacija) {
-        this.lokacija = lokacija;
+    public void setAdresa(String adresa) {
+        this.adresa = adresa;
     }
 
     @Override
     public String toString() {
         return "Lokacija{" +
                 "id=" + id +
-                ", geografskaDuzina='" + geografskaDuzina + '\'' +
-                ", geografskaSirina='" + geografskaSirina + '\'' +
-                ", lokacija='" + lokacija + '\'' +
+                ", geografskaDuzina=" + geografskaDuzina +
+                ", geografskaSirina=" + geografskaSirina +
+                ", adresa='" + adresa + '\'' +
                 '}';
     }
 }
