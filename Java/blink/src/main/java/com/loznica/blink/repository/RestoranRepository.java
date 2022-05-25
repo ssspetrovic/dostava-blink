@@ -1,4 +1,5 @@
 package com.loznica.blink.repository;
+import com.loznica.blink.entity.Lokacija;
 import com.loznica.blink.entity.Restoran;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
@@ -14,4 +15,7 @@ public interface RestoranRepository extends JpaRepository<Restoran, Long> {
     Restoran getByNaziv(String naziv);
 
     Restoran getById(Long id);
+
+    Restoran getByLokacija(Lokacija lokacija);
+
 }

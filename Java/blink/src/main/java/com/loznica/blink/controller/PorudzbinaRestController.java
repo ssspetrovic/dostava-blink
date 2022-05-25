@@ -171,11 +171,14 @@ public class PorudzbinaRestController {
     }
 
     @PostMapping("/api/porudzbine/kolicina/{id}")
-    public ResponseEntity smanjiKolicinu(@PathVariable(name = "id") Long id, HttpSession session, @RequestParam int kolicina) {
+    public ResponseEntity izmeniKolicinu(@PathVariable(name = "id") Long id, HttpSession session, @RequestParam int kolicina) {
         if (!sessionService.validate(session))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         if (!sessionService.getUloga(session).equals(Uloga.KUPAC))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+
+        if(kolicina == 0)
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         try {

@@ -42,13 +42,14 @@ public class PorudzbinaService {
 
     public void obrisiPorudzbinu(Long id) {
         Optional<PorudzbineArtikli> porudzbineArtikli = porudzbineArtikliRepository.findById(id);
-        porudzbineArtikliRepository.delete(porudzbineArtikli.get());
+        porudzbineArtikliRepository.deleteById(id);
         porudzbinaRepository.delete(porudzbineArtikli.get().getPorudzbina());
     }
 
     public void izmeniPorudzbinu(Long id, int kolicina) {
         PorudzbineArtikli porudzbineArtikli = porudzbineArtikliRepository.getById(id);
         porudzbineArtikli.setKolicina(kolicina);
+        porudzbineArtikli.setUkupnaCena(kolicina, porudzbineArtikli.getArtikal().getCena());
         porudzbineArtikliRepository.saveAndFlush(porudzbineArtikli);
     }
 

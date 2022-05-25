@@ -10,6 +10,7 @@ import com.loznica.blink.service.RestoranService;
 import com.loznica.blink.service.SessionService;
 import com.loznica.blink.util.FileUploadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
@@ -86,8 +87,10 @@ public class RestoranRestController {
         Menadzer menadzer = new Menadzer();
 
         for (Menadzer m : menadzerList)
-            if (m.getRestoran() == restoran)
+            if (m.getRestoran() == null) {
+                m.setRestoran(restoran);
                 menadzer = m;
+            }
 
 
         try {
@@ -131,6 +134,24 @@ public class RestoranRestController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("Menadzer uspesno postavljen.");
     }
 
+    @GetMapping("/api/admin/restorani/pretragaMenadzer")
+    public ResponseEntity pretraziRestoranPoMenadzeru(HttpSession session) {
+        if (!sessionService.validate(session))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+
+        if (!sessionService.getUloga(session).equals(Uloga.MENADZER))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+
+        Menadzer menadzer = (Menadzer) session.getAttribute("korisnik");
+
+        Restoran restoran = menadzer.getRestoran();
+
+        if(restoran == null)
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+
+        return ResponseEntity.status(HttpStatus.OK).body(restoran);
+    }
+
     @GetMapping("/api/restoran/pretragaNaziv")
     public ResponseEntity pretraziRestoranPoNazivu(@RequestParam String naziv, HttpSession session) {
         if (!sessionService.validate(session))
@@ -163,21 +184,17 @@ public class RestoranRestController {
         return ResponseEntity.status(HttpStatus.OK).body(restoran);
     }
 
-    @GetMapping("/api/restoran/pretragaLokacija/{id}")
-    public ResponseEntity pretraziRestoranPoLokaciji(@PathVariable(name = "id") Long id, HttpSession session) {
+    @GetMapping("/api/restoran/pretragaLokacija")
+    public ResponseEntity pretraziRestoranPoLokaciji(@RequestParam String adresa, HttpSession session) {
         if (!sessionService.validate(session))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        Lokacija lokacija = lokacijaRepository.getById(id);
+        Lokacija lokacija = lokacijaRepository.getByAdresa(adresa);
 
-        Restoran restoran = null;
+        if(lokacija == null || lokacija.toString().isEmpty())
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        for (Restoran r : restoranRepository.findAll())
-            if (r.getLokacija() == lokacija)
-                restoran = r;
-
-        System.out.println(restoran.getPorudzbine().toString());
-
+        Restoran restoran = restoranRepository.getByLokacija(lokacija);
 
         if (restoran == null)
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
@@ -186,7 +203,7 @@ public class RestoranRestController {
     }
 
     @PostMapping("/api/artikli/kreiraj-artikal")
-    public ResponseEntity<Artikal> kreirajArtikal(@RequestParam String korisnickoIme, Artikal artikal, @RequestParam("image") MultipartFile multipartFile, HttpSession session) throws IOException {
+    public ResponseEntity kreirajArtikal(@RequestParam String korisnickoIme, Artikal artikal, @RequestParam("image") MultipartFile multipartFile, HttpSession session) throws IOException {
         if (!sessionService.validate(session))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
@@ -200,6 +217,10 @@ public class RestoranRestController {
 
         String fileName = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
         artikal.setSlike(fileName);
+
+        for(Artikal a : artikalRepository.findAll())
+            if(artikal.getNaziv().equals(a.getNaziv()))
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Artikal vec postoji!");
 
         Menadzer menadzer = menadzerRepository.getByKorisnickoIme(korisnickoIme);
         menadzer.getRestoran().getArtikli().add(artikal);
@@ -223,11 +244,14 @@ public class RestoranRestController {
         if (artikal.getTip() == null || artikal.getTip().toString().isEmpty())
             greska.put("tip", "OBAVEZNO");
 
+        if (artikal.getSlike() == null || artikal.getSlike().toString().isEmpty())
+            greska.put("slike", "OBAVEZNO");
+
         return greska;
     }
 
     @PostMapping("/api/artikli/izmena/{id}")
-    public ResponseEntity<Artikal> setArtikal(@PathVariable(name = "id") Long id, @RequestBody Artikal artikal, MultipartFile multipartFile, HttpSession session) throws IOException {
+    public ResponseEntity<Artikal> setArtikal(@PathVariable(name = "id") Long id, Artikal artikal,@RequestParam("image") MultipartFile multipartFile, HttpSession session) throws IOException {
         if (!sessionService.validate(session))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
@@ -243,7 +267,7 @@ public class RestoranRestController {
         a.setOpis(artikal.getOpis() == null ? a.getOpis() : artikal.getOpis());
         a.setRestoran(artikal.getRestoran() == null ? a.getRestoran() : artikal.getRestoran());
 
-        if (artikal.getSlike() != null) {
+        if (artikal.getSlike() == null) {
             String fileName = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
             artikal.setSlike(fileName);
             String uploadDir = "korisnik-slike/" + artikal.getId();
@@ -261,6 +285,27 @@ public class RestoranRestController {
         }
 
         return ResponseEntity.ok(a);
+    }
+
+    @DeleteMapping("/api/artikal/obrisi/{id}")
+    public ResponseEntity obrisiArtikal(@PathVariable Long id, HttpSession session) {
+        if (!sessionService.validate(session))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+
+        if (!sessionService.getUloga(session).equals(Uloga.MENADZER))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+
+        Artikal artikal = artikalRepository.findById(id);
+
+        if(artikal == null)
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+
+        try {
+            artikalRepository.delete(artikal);
+        } catch (Exception e) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(artikalRepository.findAll());
     }
 
 }

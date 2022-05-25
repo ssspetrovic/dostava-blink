@@ -80,15 +80,19 @@ public class DatabaseConfiguration {
         Artikal a2 = new Artikal("Pepsi", 80, Tip.PICE, 1500, "Gazirano pice.");
         a2.setRestoran(rr);
 
-        artikalRepository.saveAll(List.of(a, a2));
+        Artikal a3 = new Artikal("Coca-Cola", 65, Tip.PICE, 2000, "Gazirano pice.");
+
+        artikalRepository.saveAll(List.of(a, a2, a3));
 
         Porudzbina porudzbina = new Porudzbina(r, kupac);
         Porudzbina porudzbina2 = new Porudzbina(rr, kupac);
         PorudzbineArtikli pa = new PorudzbineArtikli(porudzbina, a, 50, 50 * a.getCena());
         PorudzbineArtikli pa2 = new PorudzbineArtikli(porudzbina2, a2, 20, 20 * a2.getCena());
+        PorudzbineArtikli pa3 = new PorudzbineArtikli(porudzbina, a3, 40, 40 * a3.getCena());
         porudzbineArtikliRepository.save(pa);
         porudzbineArtikliRepository.save(pa2);
-        porudzbina.setArtikli(Set.of(pa, pa2));
+        porudzbina.setArtikli(Set.of(pa, pa3));
+        porudzbina2.setArtikli(Set.of(pa2));
         porudzbina.setStatus(Status.CEKA_DOSTAVLJACA);
         porudzbinaRepository.save(porudzbina);
         porudzbinaRepository.save(porudzbina2);
