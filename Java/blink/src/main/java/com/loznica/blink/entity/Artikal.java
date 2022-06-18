@@ -1,7 +1,5 @@
 package com.loznica.blink.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -26,10 +24,6 @@ public class Artikal implements Serializable {
     @Column
     private String opis;
 
-    @ManyToOne
-    @JsonIgnore
-    private Restoran restoran;
-
     @Column(nullable = true, length = 64)
     private String slike;
 
@@ -45,14 +39,13 @@ public class Artikal implements Serializable {
         this.opis = opis;
     }
 
-    public Artikal(Long id, String naziv, Double cena, Tip tip, int kolicina, String opis, Restoran restoran, String slike) {
+    public Artikal(Long id, String naziv, Double cena, Tip tip, int kolicina, String opis, String slike) {
         this.id = id;
         this.naziv = naziv;
         this.cena = cena;
         this.tip = tip;
         this.kolicina = kolicina;
         this.opis = opis;
-        this.restoran = restoran;
         this.slike = slike;
     }
 
@@ -103,15 +96,6 @@ public class Artikal implements Serializable {
     public void setOpis(String opis) {
         this.opis = opis;
     }
-
-    public Restoran getRestoran() {
-        return restoran;
-    }
-
-    public void setRestoran(Restoran restoran) {
-        this.restoran = restoran;
-    }
-
     public String getSlike() {
         return slike;
     }
@@ -138,7 +122,6 @@ public class Artikal implements Serializable {
                 ", tip=" + tip +
                 ", kolicina=" + kolicina +
                 ", opis='" + opis + '\'' +
-                ", restoran=" + restoran +
                 ", slike='" + slike + '\'' +
                 '}';
     }

@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface PorudzbinaRepository extends JpaRepository<Porudzbina, Long> {
+public interface PorudzbinaRepository extends JpaRepository<Porudzbina, UUID> {
     Porudzbina getByUuid(UUID uuid);
 }

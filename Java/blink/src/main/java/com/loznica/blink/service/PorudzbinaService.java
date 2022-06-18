@@ -43,7 +43,6 @@ public class PorudzbinaService {
     public void obrisiPorudzbinu(Long id) {
         Optional<PorudzbineArtikli> porudzbineArtikli = porudzbineArtikliRepository.findById(id);
         porudzbineArtikliRepository.deleteById(id);
-        porudzbinaRepository.delete(porudzbineArtikli.get().getPorudzbina());
     }
 
     public void izmeniPorudzbinu(Long id, int kolicina) {

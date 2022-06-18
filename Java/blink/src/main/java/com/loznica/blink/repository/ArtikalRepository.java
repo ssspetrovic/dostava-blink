@@ -7,6 +7,5 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface ArtikalRepository extends JpaRepository<Artikal, UUID> {
-    Artikal findById(Long id);
+public interface ArtikalRepository extends JpaRepository<Artikal, Long> {
 }

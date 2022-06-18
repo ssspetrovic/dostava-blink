@@ -75,10 +75,8 @@ public class DatabaseConfiguration {
         c.set(2022, Calendar.MAY, 12);
 
         Artikal a = new Artikal("Monster Energy", 150, Tip.PICE, 200, "Osvezavajuce energetsko pice.");
-        a.setRestoran(r);
 
         Artikal a2 = new Artikal("Pepsi", 80, Tip.PICE, 1500, "Gazirano pice.");
-        a2.setRestoran(rr);
 
         Artikal a3 = new Artikal("Coca-Cola", 65, Tip.PICE, 2000, "Gazirano pice.");
 
@@ -107,7 +105,6 @@ public class DatabaseConfiguration {
         dostavljac.setPorudzbine(Set.of(porudzbina));
         dostavljacRepository.save(dostavljac);
 
-        r.setPorudzbine(Set.of(porudzbina));
         r.setArtikli(Set.of(a, a2));
         r.setLokacija(l);
         restoranRepository.saveAndFlush(r);

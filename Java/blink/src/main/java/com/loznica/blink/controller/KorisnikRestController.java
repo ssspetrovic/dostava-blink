@@ -220,22 +220,7 @@ public class KorisnikRestController {
 
         for (Menadzer menadzer : menadzerList) {
             if (menadzer.getUloga().equals(Uloga.MENADZER)) {
-                Menadzer m = new Menadzer();
-                m.setId(menadzer.getId());
-                m.setKorisnickoIme(menadzer.getKorisnickoIme());
-                m.setLozinka(menadzer.getLozinka());
-                m.setIme(menadzer.getIme());
-                m.setPrezime(menadzer.getPrezime());
-                m.setDatumRodjenja(menadzer.getDatumRodjenja());
-                m.setPol(menadzer.getPol());
-                m.setUloga(Uloga.MENADZER);
-                m.setRestoran(menadzer.getRestoran());
-
-                if (menadzer.getRestoran() != null) {
-                    m.getRestoran().setPorudzbine(menadzer.getRestoran().getPorudzbine());
-                }
-
-                ispis.add(m);
+                ispis.add(menadzer);
             }
         }
 

@@ -10,7 +10,7 @@ import java.util.Set;
 @Entity
 @DiscriminatorValue("Kupac")
 public class Kupac extends Korisnik implements Serializable {
-    @OneToMany(mappedBy = "kupac")
+    @OneToMany(mappedBy = "kupac", fetch = FetchType.EAGER)
     @JsonIgnore
     private Set<Porudzbina> svePorudzbine;
 
@@ -20,7 +20,7 @@ public class Kupac extends Korisnik implements Serializable {
     @ManyToOne
     private TipKupca tipKupca;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private Set<Komentar> komentari;
 
     public Kupac() {

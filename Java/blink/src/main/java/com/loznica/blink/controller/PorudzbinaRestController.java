@@ -90,12 +90,18 @@ public class PorudzbinaRestController {
 
         Menadzer menadzer = menadzerRepository.getById(loggedKorisnik.getId());
 
+        List<Porudzbina> porudzbinaList = new ArrayList<>();
+
+        for(Porudzbina p : porudzbinaRepository.findAll())
+            if(menadzer.getRestoran() == p.getRestoran())
+                porudzbinaList.add(p);
+
         if (menadzer.getKorisnickoIme() == null || menadzer.getKorisnickoIme().toString().isEmpty())
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         List<PorudzbinaDto> porudzbinaDtoList = new ArrayList<>();
 
-        for (Porudzbina p : menadzer.getRestoran().getPorudzbine()) {
+        for (Porudzbina p : porudzbinaList) {
 
             PorudzbinaDto porudzbinaDto = new PorudzbinaDto(p.getUuid(), p.getDatumPorudzbine());
 
@@ -370,15 +376,39 @@ public class PorudzbinaRestController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Dostavljac je doneo porudzbinu.");
         }
 
-        Kupac kupac = p.getKupac();
+        Kupac kupac = new Kupac();
+
+        for(Kupac k : kupacRepository.findAll())
+            for(Porudzbina por : k.getSvePorudzbine())
+                if(por.equals(p))
+                    kupac = k;
+
         kupac.setBrojBodova(porudzbina.getUkupnaCena() / 1000 * 133);
 
         kupacRepository.saveAndFlush(kupac);
         porudzbinaRepository.saveAndFlush(p);
 
+
         return ResponseEntity.status(HttpStatus.OK).body("Vasa porudzbina je sada u statusu: " + p.getStatus());
     }
 
+    @GetMapping("/api/porudzbine/sveDostave")
+    public ResponseEntity sveDostave(HttpSession session) {
+        if (!sessionService.validate(session))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+
+        if (!sessionService.getUloga(session).equals(Uloga.DOSTAVLJAC))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+
+        Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
+        Dostavljac dostavljac = dostavljacRepository.getById(loggedKorisnik.getId());
+
+        if(dostavljac == null)
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(dostavljac.getPorudzbine());
+
+    }
 
     @GetMapping("/api/porudzbine/dostava")
     public ResponseEntity zaDostavljanje(HttpSession session) {

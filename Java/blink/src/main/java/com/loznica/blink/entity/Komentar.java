@@ -9,10 +9,10 @@ public class Komentar implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Kupac kupac;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Restoran restoran;
 
     @Column
@@ -28,6 +28,11 @@ public class Komentar implements Serializable {
     public Komentar(Kupac kupac, Restoran restoran, String tekstKomentara, int ocena) {
         this.kupac = kupac;
         this.restoran = restoran;
+        this.tekstKomentara = tekstKomentara;
+        this.ocena = ocena;
+    }
+
+    public Komentar(String tekstKomentara, int ocena) {
         this.tekstKomentara = tekstKomentara;
         this.ocena = ocena;
     }

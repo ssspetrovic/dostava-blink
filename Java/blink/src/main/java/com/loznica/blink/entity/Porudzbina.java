@@ -30,7 +30,6 @@ public class Porudzbina implements Serializable {
     private double cena;
 
     @ManyToOne
-    @JoinColumn(name = "kupac_korisnickoIme")
     private Kupac kupac;
 
     @Column
