@@ -40,6 +40,9 @@ public class PorudzbinaRestController {
     @Autowired
     private PorudzbinaRepository porudzbinaRepository;
 
+    @Autowired
+    private KorisnikRepository korisnikRepository;
+
     @GetMapping("/api/porudzbine")
     public ResponseEntity vratiPorudzbine(HttpSession session) {
 
@@ -159,21 +162,20 @@ public class PorudzbinaRestController {
     }
 
 
-    @DeleteMapping("/api/porudzbine/{id}")
-    public ResponseEntity skiniIzKorpe(@PathVariable Long id, HttpSession session) {
+    @PostMapping("/api/porudzbine/{nazivArtikla}")
+    public ResponseEntity skiniIzKorpe(@PathVariable String nazivArtikla, HttpSession session) {
         if (!sessionService.validate(session))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         if (!sessionService.getUloga(session).equals(Uloga.KUPAC))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        try {
-            porudzbinaService.obrisiPorudzbinu(id);
-        } catch (Exception e) {
-            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-
-        return ResponseEntity.status(HttpStatus.OK).body(porudzbinaRepository.findAll());
+        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+        Kupac kupac = kupacRepository.getById(korisnik.getId());
+        Set<Porudzbina> korpa = porudzbinaService.obrisiPorudzbinu(kupac, nazivArtikla);
+        if(korpa == null)
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        return ResponseEntity.status(HttpStatus.OK).body(korpa);
     }
 
     @PostMapping("/api/porudzbine/kolicina/{id}")

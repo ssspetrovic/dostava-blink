@@ -42,6 +42,9 @@ public class RestoranRestController {
     @Autowired
     private ArtikalRepository artikalRepository;
 
+    @Autowired
+    private KorisnikRepository korisnikRepository;
+
     @GetMapping("/api/restorani/lista")
     public ResponseEntity listaRestorana() {
         List<Restoran> restoranList = restoranRepository.findAll();
@@ -259,30 +262,27 @@ public class RestoranRestController {
     }
 
     @DeleteMapping("/api/artikal/obrisi/{id}")
-    public ResponseEntity obrisiArtikal(@PathVariable(name = "id") Long id, HttpSession session) {
+    public ResponseEntity obrisiArtikal(@PathVariable Long id, HttpSession session) {
         if (!sessionService.validate(session))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         if (!sessionService.getUloga(session).equals(Uloga.MENADZER))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        Menadzer menadzer = (Menadzer) session.getAttribute("korisnik");
-        Artikal artikal = artikalRepository.getById(id);
-        PorudzbineArtikli pa = porudzbineArtikliRepository.getByArtikal(artikal);
-        Restoran restoran = menadzer.getRestoran();
-
-        if(artikal == null)
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
-
+        Korisnik korisnik = korisnikRepository.getByKorisnickoIme((String) session.getAttribute("korisnickoIme"));
+        Restoran restoran = ((Menadzer) korisnik).getRestoran();
+        Artikal artikal;
         try {
-            restoran.getArtikli().remove(artikal);
-            restoranRepository.saveAndFlush(restoran);
-            porudzbineArtikliRepository.delete(pa);
-            artikalRepository.delete(artikal);
-        } catch (Exception e) {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            artikal = artikalRepository.findById(id).get();
+        } catch(Exception e ) {
+            return new ResponseEntity("Neispravan id", HttpStatus.BAD_REQUEST);
         }
-        return ResponseEntity.status(HttpStatus.OK).body(artikalRepository.findAll());
+        if(restoran.getArtikli().contains(artikal)) {
+            restoran.getArtikli().remove(artikal);
+            restoranService.save(restoran);
+            return new ResponseEntity("Uspesno obrisan artikal", HttpStatus.OK);
+        }
+        return new ResponseEntity("Neuspesno pronalazenje artikla!", HttpStatus.FORBIDDEN);
     }
 
 }

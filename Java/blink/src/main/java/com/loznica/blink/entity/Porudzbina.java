@@ -1,5 +1,6 @@
 package com.loznica.blink.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -30,6 +31,7 @@ public class Porudzbina implements Serializable {
     private double cena;
 
     @ManyToOne
+    @JsonIgnore
     private Kupac kupac;
 
     @Column

@@ -27,6 +27,7 @@ public class PorudzbinaService {
     private PorudzbineArtikliRepository porudzbineArtikliRepository;
 
 
+
     public void sacuvajPorudzbinu(NovaPorudzbinaDto novaPorudzbinaDto, String korisncikoIme) throws Exception {
         Kupac kupac = kupacRepository.findByKorisnickoIme(korisncikoIme);
         Optional<Restoran> restoranOptional = restoranRepository.findById(novaPorudzbinaDto.getIdRestorana());
@@ -37,12 +38,42 @@ public class PorudzbinaService {
         Porudzbina porudzbina = new Porudzbina(restoranOptional.get(), kupac);
 
         porudzbina.setArtikli(nadjiPorudzbinu(porudzbina, restoranOptional, novaPorudzbinaDto));
+        postaviCenu(porudzbina);
         porudzbinaRepository.saveAndFlush(porudzbina);
     }
 
-    public void obrisiPorudzbinu(Long id) {
-        Optional<PorudzbineArtikli> porudzbineArtikli = porudzbineArtikliRepository.findById(id);
-        porudzbineArtikliRepository.deleteById(id);
+    public void postaviCenu (Porudzbina porudzbina) {
+        double cena = 0;
+        for(PorudzbineArtikli pa : porudzbina.getArtikli())
+            cena += pa.getArtikal().getCena()*pa.getKolicina();
+        porudzbina.setCena(cena);
+    }
+
+    public Set<Porudzbina> obrisiPorudzbinu(Kupac kupac, String nazivArtikla) {
+
+        if(kupac.getSvePorudzbine() == null)
+            return null;
+
+        for(Porudzbina p : kupac.getSvePorudzbine())
+            for(PorudzbineArtikli pa : p.getArtikli())
+                if(pa.getArtikal().getNaziv().equals(nazivArtikla)) {
+                    if(pa.getKolicina() != 1) {
+                        pa.setKolicina(pa.getKolicina() - 1);
+                        pa.getArtikal().setKolicina(pa.getArtikal().getKolicina() + 1);
+                        pa.setUkupnaCena(pa.getKolicina(), pa.getArtikal().getCena());
+                        p.setCena(pa.getKolicina()*pa.getArtikal().getCena());
+                    }
+                    else {
+                        pa.getArtikal().setKolicina(pa.getArtikal().getKolicina() + 1);
+                        p.setCena(0);
+                        pa.setUkupnaCena(0, pa.getArtikal().getCena());
+                        p.getArtikli().remove(pa.getArtikal());
+                    }
+                    porudzbinaRepository.save(p);
+                    return kupac.getSvePorudzbine();
+                }
+
+        return null;
     }
 
     public void izmeniPorudzbinu(Long id, int kolicina) {
@@ -72,6 +103,7 @@ public class PorudzbinaService {
             for (NovaPorudzbinaKupcaDto np : novaPorudzbinaDto.getNovePorudzbine())
                 if (np != null)
                     novaPorudzbinaKupcaDto = np;
+            pronadjen.setKolicina(pronadjen.getKolicina() - artikal.getKolicina());
             PorudzbineArtikli pa = new PorudzbineArtikli(porudzbina, pronadjen, artikal.getKolicina(), pronadjen.getCena() * novaPorudzbinaKupcaDto.getKolicina());
             porudzbineArtiklis.add(pa);
             porudzbineArtikliRepository.save(pa);

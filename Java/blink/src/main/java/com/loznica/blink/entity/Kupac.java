@@ -11,7 +11,6 @@ import java.util.Set;
 @DiscriminatorValue("Kupac")
 public class Kupac extends Korisnik implements Serializable {
     @OneToMany(mappedBy = "kupac", fetch = FetchType.EAGER)
-    @JsonIgnore
     private Set<Porudzbina> svePorudzbine;
 
     @Column
