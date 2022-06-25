@@ -1,10 +1,9 @@
 package com.loznica.blink.controller;
 
-import com.loznica.blink.entity.Komentar;
-import com.loznica.blink.entity.Korisnik;
-import com.loznica.blink.entity.Restoran;
-import com.loznica.blink.entity.Uloga;
+import com.loznica.blink.entity.*;
 import com.loznica.blink.repository.KorisnikRepository;
+import com.loznica.blink.repository.MenadzerRepository;
+import com.loznica.blink.repository.PorudzbinaRepository;
 import com.loznica.blink.repository.RestoranRepository;
 import com.loznica.blink.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +26,12 @@ public class AdministratorRestController {
 
     @Autowired
     RestoranRepository restoranRepository;
+
+    @Autowired
+    PorudzbinaRepository porudzbinaRepository;
+
+    @Autowired
+    MenadzerRepository menadzerRepository;
 
     @GetMapping("/api/admin/ispisi")
     public ResponseEntity ispisiKorisnike(HttpSession session) {
@@ -74,18 +79,31 @@ public class AdministratorRestController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(korisnikList);
     }
 
-    @DeleteMapping("/api/admin/brisiRestoran/{id}")
-    public ResponseEntity obrisiRestoran(@PathVariable(name = "id") Long id, HttpSession session) {
+    @DeleteMapping("/api/admin/brisiRestoran/{nazivRestorana}")
+    public ResponseEntity obrisiRestoran(@PathVariable String nazivRestorana, HttpSession session) {
+
         if(!sessionService.validate(session))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
         if(!sessionService.getUloga(session).equals(Uloga.ADMIN))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        try {
-            restoranRepository.deleteById(id);
-        } catch (Exception e) {
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
+        Restoran restoran = restoranRepository.getByNaziv(nazivRestorana);
+
+        if(restoran == null)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Neuspesno pronalazenje restorana.");
+
+        List<Porudzbina> plist = porudzbinaRepository.findAll();
+
+        for(Porudzbina p : plist) {
+            if(p.getRestoran().equals(restoran))
+                p.setRestoran(null);
         }
+
+        Menadzer menadzer = menadzerRepository.getByRestoran(restoran);
+        menadzer.setRestoran(null);
+
+        restoranRepository.deleteById(restoran.getId());
+
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("Uspesno obrisan restoran!");
     }
 
