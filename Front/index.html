@@ -5,7 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- CSS only -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
   <title>Blink</title>
 </head>
 <body>
@@ -24,26 +24,73 @@
           <li class="nav-item">
             <a href="#registracija-modal" class="nav-link" data-bs-toggle="modal">Registruj se</a>
           </li>
+					<li class="nav-item">
+						<a href="#" class="nav-link">Korpa</a>
+					</li>
         </ul>
       </div>
     </div>
   </nav>
 
 	<!-- Uvod -->
-	<section class="p-5 text-center text-sm-start">
+	<section class="p-5 text-left text-sm-start">
 		<div class="container">
-			<div class="d-sm-flex align-items-center justify-content-between">
-				<div>
-					<h1>Gladan si?</h1>
-					<p class="lead my-4">
-						Ne brini se! Kreirali smo <strong class="text-success">Blink</strong> da bismo na brz i efikasan način rešili problem - dok trepneš okom. Sa preko X restorana sa kojima sarađujemo, ponuda hrane i pića svuči skoro pa nerealna! Probirljiv si i nijedna ponuda iz predstavljenih restorana ti se ne dopada? Nikakav problem. Vršimo isporuku čak i iz restorana koji nisu navedeni, samo je potrebno da nas kontaktirate i ubrzo ćemo rešiti stvar.  
-					</p>
-					<button class="btn btn-success btn-lg">Pogledaj ponudu</button>
-				</div>
-				<img class="img-fluid w-50 d-none d-sm-block m-3" src="" alt="">
+			<div>
+				<h1 class="text-center">Gladan si?</h1>
+				<p class="lead my-4">
+					Ne brini se! Kreirali smo <strong class="text-success">Blink</strong> da bismo na brz i efikasan način rešili problem - dok trepneš okom. Sa preko X restorana sa kojima sarađujemo, ponuda hrane i pića svuči skoro pa nerealna! Probirljiv si i nijedna ponuda iz predstavljenih restorana ti se ne dopada? Nikakav problem. Vršimo isporuku čak i iz restorana koji nisu navedeni, samo je potrebno da nas kontaktirate i ubrzo ćemo rešiti stvar. 					
+				</p>
 			</div>
 		</div>
+		<div class="text-center">
+			<button class="btn btn-success btn-lg">Pogledaj ponudu</button>
+		</div>
+		<div class="container d-none d-md-block" style="max-width: 870px">
+			<div class="row align-items-center justify-content-between">
+				<div class="col-md my-5">
+					<img src="img/KFC_Logo_2018.svg" class="img-fluid" alt="">
+				</div>
+				<div class="col-md">
+					<img src="img/mcdonalds-png-logo-2772.svg" class="img-fluid " alt="">
+				</div>
+				<div class="col-md">
+					<img src="img/pizza-hut-logo.svg" class="img-fluid" alt="">
+				</div>
+				<div class="col-md">
+					<img src="img/starbucks-logo.svg" class="img-fluid" alt="">
+				</div>
+			</div>
+		</div>
+		<div class="div d-lg-none d-md-none d-sm-block d-xs-block">
+			<img src="img/grouped-png.svg" class="img-fluid" alt="">
+		</div>
 	</section>
+
+	<!--  -->
+	<section class="">
+		<div class="container">
+			<p class="lead">
+				<div class="input-group mb-3">
+					<input type="text" class="form-control" placeholder="Pretraga">
+					<!-- <a class="btn btn-outline-" type="button" id="search-bar"><i class="bi bi-search"></i></button> -->
+						<a href="" class="btn btn-outline-light btn-success"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search " viewBox="0 0 16 16">
+							<path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+						</svg></a>
+				</div>
+				<div class="input-group">
+					<div class="form-outline">
+						<input type="search" id="form1" class="form-control" />
+					</div>
+					<button type="button" class="btn btn-primary">
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+							<path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+						</svg>
+					</button>
+				</div>
+			</p>
+		</div>
+	</section>
+	
 
 	<!-- Modal - Prijava -->
 	<div class="modal fade" id="prijava-modal" tabindex="-1">
@@ -155,7 +202,7 @@
 		</div>
 	</div>
 	
-  <!-- JavaScript Bundle with Popper -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+	<!-- JavaScript Bundle with Popper -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
 </body>
 </html>
