@@ -60,7 +60,7 @@ public class DatabaseConfiguration {
         Menadzer sime = new Menadzer("sime", "la123", "Aleksa", "Simeunovic", "Muski", c.getTime(), Uloga.MENADZER);
         sime.setRestoran(r);
         menadzerRepository.save(sime);
-        Menadzer mm = new Menadzer("mm", "la123", "Aleksa", "Simeunovic", "Muski", c.getTime(), Uloga.MENADZER);
+        Menadzer mm = new Menadzer("mm", "lp100", "Savo", "Savic", "Muski", c.getTime(), Uloga.MENADZER);
         mm.setRestoran(rr);
         menadzerRepository.save(mm);
 
