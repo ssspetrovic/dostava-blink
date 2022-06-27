@@ -4,7 +4,6 @@ import com.loznica.blink.entity.*;
 import com.loznica.blink.repository.DostavljacRepository;
 import com.loznica.blink.repository.KorisnikRepository;
 import com.loznica.blink.repository.MenadzerRepository;
-import com.loznica.blink.repository.RestoranRepository;
 import com.loznica.blink.security.RegistrationRequest;
 import com.loznica.blink.service.KorisnikService;
 import com.loznica.blink.service.SessionService;
@@ -18,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@CrossOrigin("http://localhost:8081")
 public class KorisnikRestController {
 
     @Autowired
@@ -28,9 +28,6 @@ public class KorisnikRestController {
 
     @Autowired
     private MenadzerRepository menadzerRepository;
-
-    @Autowired
-    private RestoranRepository restoranRepository;
 
     @Autowired
     private DostavljacRepository dostavljacRepository;
@@ -53,6 +50,11 @@ public class KorisnikRestController {
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         return ResponseEntity.status(HttpStatus.OK).body(session.getAttribute("korisnik"));
+    }
+
+    @GetMapping("/api/korisnici")
+    public List<Korisnik> listaKorisnika() {
+        return korisnikRepository.findAll();
     }
 
     @PostMapping("/api/login/info/izmena")
