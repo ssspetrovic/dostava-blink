@@ -61,14 +61,14 @@ public class RestoranRestController {
     }
 
     @GetMapping("/api/restorani/info/{id}")
-    public Restoran ispisiRestoran(@PathVariable(name = "id") Long id) {
+    public ResponseEntity ispisiRestoran(@PathVariable(name = "id") Long id) {
         List<Restoran> restoranList = restoranRepository.findAll();
 
         for (Restoran r : restoranList)
             if (Objects.equals(id, r.getId()))
-                return r;
+                return ResponseEntity.status(HttpStatus.ACCEPTED).body(r);
 
-        return null;
+        return new ResponseEntity(HttpStatus.NOT_FOUND);
     }
 
     @PostMapping("/api/admin/kreiraj-restoran")
@@ -149,7 +149,7 @@ public class RestoranRestController {
         if(restoran == null)
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        return ResponseEntity.status(HttpStatus.OK).body(restoran);
+        return ResponseEntity.status(HttpStatus.OK).body(restoran.toString());
     }
 
 

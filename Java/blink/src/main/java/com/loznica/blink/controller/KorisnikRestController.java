@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@CrossOrigin("http://localhost:8081")
 public class KorisnikRestController {
 
     @Autowired

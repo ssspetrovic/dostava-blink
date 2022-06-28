@@ -48,13 +48,11 @@ public class PorudzbinaRestController {
 
         Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
 
-        if (loggedKorisnik == null) {
-            System.out.println("Nema sesije.");
-            return ResponseEntity.ok(null);
-        } else if (!loggedKorisnik.getUloga().equals(Uloga.KUPAC)) {
-            System.out.println("Pristup nije odobren.");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Pristup nije odobren.");
-        }
+        if (!sessionService.validate(session))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+
+        if (!loggedKorisnik.getUloga().equals(Uloga.KUPAC))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         Kupac kupac = kupacRepository.getById(loggedKorisnik.getId());
 
