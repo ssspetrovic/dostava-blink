@@ -1,5 +1,5 @@
 <template>
-  <Header />
+  <Header/>
   <router-view/>
 </template>
 
@@ -17,27 +17,42 @@ export default {
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #763291;
 }
 
 nav {
   padding: 30px;
 }
 
-nav a {
-  font-weight: bold;
-  color: #492699;
+
+.register input {
+    width: 300px;
+    height: 40px;
+    padding-left: 20px;
+    display: block;
+    margin-bottom: 30px;
+    margin-right: auto;
+    margin-left: auto;
+    border: 1px solid skyblue;
 }
 
-nav a.router-link-exact-active {
-  color: #9a2da8;
+.register button {
+    width: 320px;
+    height: 40px;
+    border: 1px solid skyblue;
+    background: skyblue;
+    color: #fff;
+    cursor: pointer;
 }
 
-.logo{
-  width: 100px;
+.moveRoute {
+  width: 200px;
+  height: 50px;
+  border: 1px solid skyblue;
+  background: skyblue;
+  color: #fff;
+  cursor: pointer;
 }
 </style>

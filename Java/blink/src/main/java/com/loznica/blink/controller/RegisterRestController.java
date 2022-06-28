@@ -37,7 +37,7 @@ public class RegisterRestController {
         if (!greska.isEmpty())
             return new ResponseEntity(greska, HttpStatus.BAD_REQUEST);
 
-        return new ResponseEntity("USPESNA REGISTRACIJA, HVALA VAM", HttpStatus.OK);
+        return new ResponseEntity("USPESNA REGISTRACIJA, HVALA VAM", HttpStatus.CREATED);
     }
 
     private HashMap<String, String> Validate(RegisterDto registerDto) {

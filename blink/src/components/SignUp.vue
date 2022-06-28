@@ -13,7 +13,10 @@
         <input v-model="korisnik.pol" /><br />
         <label for="datumRodjenja">Datum Rodjenja:</label>
         <input type = "date" id = "start" name = "trip-start" min = "1900-01-01" max = today v-model="korisnik.datumRodjenja" /><br />
-        <button v-on:click="submit()">Prijavite se!</button>
+        <button class = "button" v-on:click="submit()">Prijavite se!</button>
+        <div class = "moveRoute">
+        <router-link to = "/prijava" class = "btn btn-primary btn-lg">Vec imate profil?</router-link>
+        </div>
     </div>
 </template>
 
@@ -24,6 +27,7 @@ export default {
     data: function () {
         return {
             korisnik: {
+                korisnickoIme: "",
                 ime: "",
                 prezime: "",
             },
@@ -45,28 +49,12 @@ export default {
 
         },
     },
+    mounted() {
+        
+    }
 };
 </script>
 
 
 <style>
-.register input {
-    width: 300px;
-    height: 40px;
-    padding-left: 20px;
-    display: block;
-    margin-bottom: 30px;
-    margin-right: auto;
-    margin-left: auto;
-    border: 1px solid skyblue;
-}
-
-.register button {
-    width: 320px;
-    height: 40px;
-    border: 1px solid skyblue;
-    background: skyblue;
-    color: #fff;
-    cursor: pointer;
-}
 </style>

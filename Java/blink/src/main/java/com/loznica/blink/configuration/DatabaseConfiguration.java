@@ -44,7 +44,7 @@ public class DatabaseConfiguration {
     @Bean
     public boolean Instantiate() {
         Calendar c = new GregorianCalendar();
-        c.set(2001, Calendar.JULY, 5);  
+        c.set(2001, Calendar.JULY, 5);
         Korisnik srdjan = new Korisnik("spetrovic", "123", "Srdjan", "Petrovic", "Muski", c.getTime(), Uloga.ADMIN);
         c.set(2001, Calendar.DECEMBER, 27);
         Korisnik nikola = new Korisnik("pale", "456", "Nikola", "Pantic", "Muski", c.getTime(), Uloga.ADMIN);

@@ -1,25 +1,24 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import GlavnaStranaView from '../views/GlavnaStranaView.vue'
 import JedanKorisnikView from '../views/JedanKorisnikView.vue'
 import ListaKorisnikaView from '../views/ListaKorisnikaView.vue'
 import ListaPorudzbinaView from '../views/ListaPorudzbinaView.vue'
-import PrijavaView from '../views/PrijavaView.vue'
 import RestoranView from '../views/RestoranView.vue'
 import ListaSvihKorisnikaView from '../views/ListaSvihKorisnikaView.vue'
 import SignUp from '../components/SignUp'
-//import Login from './components/Login.vue'
+import Login from '../components/Login.vue'
+import FrontPage from '../components/FrontPage.vue'
 
 
 const routes = [
     {
         path: '/',
-        name: 'glavna-strana',
-        component: GlavnaStranaView
+        name: 'front-page',
+        component: FrontPage
     },
     {
         path: '/o-nama',
         name: 'o-nama',
-        component: () => import('../views/ONamaView.vue')
+        component: () => import('../components/ONama.vue')
     },
     {
         path: '/korisnici',
@@ -31,11 +30,11 @@ const routes = [
         name: 'sign-up',
         component: SignUp
     },
-    {
-        path: '/prijava',
-        name: 'prijava',
-        component: PrijavaView
-    },
+    // {
+    //     path: '/prijava',
+    //     name: 'prijava',
+    //     component: PrijavaView
+    // },
     {
         path: '/lista-porudzbina',
         name: 'lista-porudzbina',
@@ -56,11 +55,11 @@ const routes = [
         name: 'svi-korisnici',
         component: ListaSvihKorisnikaView
     },
-    // {
-    //     path: '/prijava',
-    //     name: 'prijava',
-    //     component: Login
-    // },
+    {
+        path: '/prijava',
+        name: 'prijava',
+        component: Login
+    },
 ]
 
 const router = createRouter({
