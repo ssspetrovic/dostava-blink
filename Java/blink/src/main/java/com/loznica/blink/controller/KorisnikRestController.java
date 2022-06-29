@@ -210,12 +210,12 @@ public class KorisnikRestController {
     }
 
     @GetMapping("/api/menadzer/ispis")
-    public ResponseEntity listaMenadzmenta(HttpSession session) {
-        if (!sessionService.validate(session))
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
-
-        if (!sessionService.getUloga(session).equals(Uloga.ADMIN))
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
+    public List<Menadzer> listaMenadzmenta(HttpSession session) {
+//        if (!sessionService.validate(session))
+//            return new ResponseEntity(HttpStatus.FORBIDDEN);
+//
+//        if (!sessionService.getUloga(session).equals(Uloga.ADMIN))
+//            return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         List<Menadzer> menadzerList = menadzerRepository.findAll();
         List<Menadzer> ispis = new ArrayList<>();
@@ -226,7 +226,7 @@ public class KorisnikRestController {
             }
         }
 
-        return ResponseEntity.ok(ispis);
+        return ispis;
     }
 
 

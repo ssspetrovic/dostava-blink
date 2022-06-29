@@ -28,8 +28,11 @@ export default {
         return {
             korisnik: {
                 korisnickoIme: "",
+                lozinka: "",
                 ime: "",
                 prezime: "",
+                pol: "",
+                datumRodjenja: "",  
             },
         };
     },

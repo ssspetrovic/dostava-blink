@@ -9,7 +9,9 @@ import FrontPage from '../components/FrontPage.vue'
 import IspisKorisnik from '../components/IspisKorisnik.vue'
 import RestoraniList from '../components/RestoraniList.vue'
 import SearchBar from '../components/SearchBar.vue'
-
+import CreateRestaurant from '../components/CreateRestaurant.vue'
+import SetManager from '../components/SetManager.vue'
+import RestaurantManager from '../components/RestaurantManager.vue'
 
 const routes = [
     {
@@ -66,6 +68,21 @@ const routes = [
         path: '/search-bar',
         name: 'search-bar',
         component: SearchBar
+    },
+    {
+        path: '/create-restaurant',
+        name: 'create-restaurant',
+        component: CreateRestaurant
+    },
+    {
+        path: '/set-manager',
+        name: 'set-manager',
+        component: SetManager
+    },
+    {
+        path: '/manager/:id',
+        name: 'restaurant-manager',
+        component: RestaurantManager
     },
 ]
 

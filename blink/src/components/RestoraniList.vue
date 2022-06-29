@@ -7,6 +7,7 @@
             </a>
     </table>
     </div>
+    <router-link to = "/create-restaurant" class = "btn btn-primary btn-lg">Kreiraj novi?</router-link>
 </template>
 
 <script>

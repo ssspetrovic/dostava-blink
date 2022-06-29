@@ -39,6 +39,9 @@
 					<li class="nav-item">
 						<a href="#" class="nav-link">Korpa</a> <!-- ZA OBRADU-->
 					</li>
+          <li class="log-out">
+            <a v-on:click = "logout" href = "#" class="nav-link">Logout</a>
+          </li>
         </ul>
       </div>
     </div>
