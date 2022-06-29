@@ -106,7 +106,7 @@
           </button>
         </div>
         <div class="text-center pt-2">
-          <button class="btn btn-primary btn-lg">Pogledaj ponudu</button>
+          <router-link to = "/restorani" class="btn btn-primary btn-lg">Pogledaj ponudu</router-link>
         </div>
       </div>
     </section>
@@ -118,6 +118,7 @@
 </template>
 
 <script>
+
 </script>
 
 

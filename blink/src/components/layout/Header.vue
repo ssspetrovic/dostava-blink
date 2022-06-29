@@ -27,7 +27,7 @@
       <div class="collapse navbar-collapse" id="navmenu">
         <form class="d-flex mt-4 mb-1" role="search">
 					<input class="form-control me-2" type="search" placeholder="Pretraži">
-					<button class="btn btn-outline-primary" type="submit">Pretraga</button>
+					<router-link to = "/search-bar" class="btn btn-outline-primary" type="submit">Pretraga</router-link>
 				</form>
 				<ul class="navbar-nav ms-auto">
           <li class="nav-item">

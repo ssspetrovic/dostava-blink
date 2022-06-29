@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 public class KorisnikRestController {
@@ -125,8 +126,8 @@ public class KorisnikRestController {
 
         List<Korisnik> listaKorisnika = new ArrayList<>();
 
-        for(Korisnik k : korisnikRepository.findAll())
-            if(!(k.getUloga() == Uloga.ADMIN))
+        for (Korisnik k : korisnikRepository.findAll())
+            if (!(k.getUloga() == Uloga.ADMIN))
                 listaKorisnika.add(k);
 
         return ResponseEntity.status(HttpStatus.OK).body(listaKorisnika);
@@ -240,5 +241,15 @@ public class KorisnikRestController {
         return ResponseEntity.status(HttpStatus.OK).body(menadzerRepository.findById(id));
     }
 
+    @GetMapping("/api/korisnik/{id}")
+    public ResponseEntity ispisiKorisnika(@PathVariable(name = "id") Long id, HttpSession session) {
 
+        List<Korisnik> korisnikList = korisnikRepository.findAll();
+
+        for (Korisnik k : korisnikList)
+            if (Objects.equals(id, k.getId()))
+                return ResponseEntity.status(HttpStatus.ACCEPTED).body(k);
+
+        return new ResponseEntity(HttpStatus.NOT_FOUND);
+    }
 }

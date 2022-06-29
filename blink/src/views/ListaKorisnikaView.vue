@@ -1,7 +1,7 @@
 <template>
     <div class = "container">
         <h2 style = "text-align:center">Nasi Korisnici:</h2>
-        <a v-for = "korisnik in korisnici" :href = "`/jedan-korisnik/${korisnik.id}`" :key = "korisnik.ime" class = "card">
+        <a v-for = "korisnik in korisnici" :href = "`/korisnik/${korisnik.id}`" :key = "korisnik.ime" class = "card">
             <h5>{{korisnik.ime}} {{korisnik.prezime}}</h5>
             <br>
         </a>
@@ -32,3 +32,6 @@ export default {
 }
 
 </script>
+
+<style>
+</style>

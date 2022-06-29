@@ -71,6 +71,8 @@ public class DatabaseConfiguration {
 
         Lokacija l = new Lokacija(45.5D, 43.3D, "FTN");
         lokacijaRepository.save(l);
+        Lokacija ll = new Lokacija(41D, 42D, "Most Slobode");
+        lokacijaRepository.save(ll);
 
         c.set(2022, Calendar.MAY, 12);
 
@@ -107,8 +109,9 @@ public class DatabaseConfiguration {
 
         r.setArtikli(Set.of(a, a2));
         r.setLokacija(l);
-        restoranRepository.saveAndFlush(r);
+        rr.setLokacija(ll);
 
+        restoranRepository.saveAllAndFlush(List.of(r,rr));
         return true;
     }
 }

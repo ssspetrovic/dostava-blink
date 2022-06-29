@@ -46,18 +46,8 @@ public class RestoranRestController {
     private KorisnikRepository korisnikRepository;
 
     @GetMapping("/api/restorani/lista")
-    public ResponseEntity listaRestorana() {
-        List<Restoran> restoranList = restoranRepository.findAll();
-        List<RestoranDto> restoranInfo = new ArrayList<>();
-
-        for (Restoran tmp : restoranList) {
-            RestoranDto currentInfo = new RestoranDto();
-            currentInfo.setRestoran(tmp);
-            currentInfo.setArtikli(tmp.getArtikli());
-            restoranInfo.add(currentInfo);
-        }
-
-        return new ResponseEntity(restoranInfo, HttpStatus.OK);
+    public List<Restoran> listaRestorana() {
+        return restoranRepository.findAll();
     }
 
     @GetMapping("/api/restorani/info/{id}")

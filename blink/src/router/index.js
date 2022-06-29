@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import JedanKorisnikView from '../views/JedanKorisnikView.vue'
 import ListaKorisnikaView from '../views/ListaKorisnikaView.vue'
 import ListaPorudzbinaView from '../views/ListaPorudzbinaView.vue'
 import RestoranView from '../views/RestoranView.vue'
@@ -7,6 +6,9 @@ import ListaSvihKorisnikaView from '../views/ListaSvihKorisnikaView.vue'
 import SignUp from '../components/SignUp'
 import Login from '../components/Login.vue'
 import FrontPage from '../components/FrontPage.vue'
+import IspisKorisnik from '../components/IspisKorisnik.vue'
+import RestoraniList from '../components/RestoraniList.vue'
+import SearchBar from '../components/SearchBar.vue'
 
 
 const routes = [
@@ -30,11 +32,6 @@ const routes = [
         name: 'sign-up',
         component: SignUp
     },
-    // {
-    //     path: '/prijava',
-    //     name: 'prijava',
-    //     component: PrijavaView
-    // },
     {
         path: '/lista-porudzbina',
         name: 'lista-porudzbina',
@@ -46,9 +43,9 @@ const routes = [
         component: RestoranView
     },
     {
-        path: '/jedan-korisnik/:id',
-        name: 'jedan-korisnik',
-        component: JedanKorisnikView
+        path: '/korisnik/:id',
+        name: 'korisnik',
+        component: IspisKorisnik
     },
     {
         path: '/svi-korisnici',
@@ -59,6 +56,16 @@ const routes = [
         path: '/prijava',
         name: 'prijava',
         component: Login
+    },
+    {
+        path: '/restorani',
+        name: 'restorani',
+        component: RestoraniList
+    },
+    {
+        path: '/search-bar',
+        name: 'search-bar',
+        component: SearchBar
     },
 ]
 

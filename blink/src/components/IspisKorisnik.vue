@@ -1,30 +1,32 @@
 <template>
     <div>
-        <h2 style="text-align:center">Restoran: {{ naziv }}</h2>
-        <h2 style="text-align:center">Tip: {{ tip }}</h2>
-        <h2 style="text-align:center">Lokacija: {{ lokacija }}</h2>
-
+        <h2 style = "text-align:center"> Korisnicko Ime : {{kIme}}</h2>
+        <h2 style = "text-align:center"> Ime : {{kI}}</h2>
+        <h2 style = "text-align:center"> Prezime : {{kP}}</h2>
     </div>
 </template>
+
 <script>
-import axios from 'axios';
+
+import axios from 'axios'
+
 //import axios from "axios";
 export default {
-    name: 'RestoranView',
+    name: 'IspisKorisnik',
     data: function () {
         return {
-            restoran: {},
+            korisnik: {},
         }
     },
     computed: {
-        naziv() {
-            return this.restoran.naziv;
+        kIme() {
+            return this.korisnik.korisnickoIme;
         },
-        tip() {
-            return this.restoran.tipRestorana;
+        kI() {
+            return this.korisnik.ime;
         },
-        lokacija() {
-            return this.restoran.lokacija;
+        kP() {
+            return this.korisnik.prezime;
         }
     },
     created() {
@@ -32,16 +34,16 @@ export default {
             () => this.$route.params,
             () => {
                 // react to route changes...
-                this.fetchRestoran()
+                this.fetchKorisnik()
             }
         )
     },
     methods: {
-        fetchRestoran() {
+        fetchKorisnik() {
             axios
-                .get("http://localhost:8080/api/restorani/info/" + this.$route.params.id)
+                .get("http://localhost:8080/api/korisnik/" + this.$route.params.id)
                 .then((res) => {
-                    this.restoran = res.data;
+                    this.korisnik = res.data;
                     
                 })
                 .catch((err) => {
@@ -50,7 +52,7 @@ export default {
         }
     },
     mounted: function () {
-        this.fetchRestoran()
+        this.fetchKorisnik()
         /*
                 fetch('http://localhost:8083/api/korisnici/ispis',
                     {

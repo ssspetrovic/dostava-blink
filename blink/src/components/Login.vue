@@ -1,9 +1,9 @@
 <template>
   <h2>Login</h2>
   <div class = "register">
-  <label for="username">Korisnicko Ime:</label>
+  <label for="korisnickoIme">Korisnicko Ime:</label>
   <input v-model="korisnik.korisnickoIme" /><br />
-  <label for="password">Lozinka:</label>
+  <label for="lozinka">Lozinka:</label>
   <input v-model="korisnik.lozinka" /><br />
   <button v-on:click="submit()">Prijavite se!</button>
   <p>
@@ -20,18 +20,18 @@ export default {
         return {
             korisnik: {
                 korisnickoIme: "",
-                lozinka: "",
+                lozinka: ""
             },
         };
     },
     methods: {
-        submit: function () {
+        submit: function () {  
 
             axios
                 .post("http://localhost:8080/api/login", this.korisnik)
                 .then((res) => {
                     console.log(res);
-                    this.$router.push("/jedan-korisnik/" + this.$route.params.id);
+                    this.$router.push("/korisnici");
                 })
                 .catch((err) => {
                     console.log(err);
