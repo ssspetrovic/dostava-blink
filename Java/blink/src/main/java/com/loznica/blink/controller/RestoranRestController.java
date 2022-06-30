@@ -117,11 +117,11 @@ public class RestoranRestController {
 
     @GetMapping("/api/admin/restorani/{id}/postavi-menadzera")
     public ResponseEntity postaviMenadzera(@PathVariable(name = "id") Long id, @RequestParam String korisnickoIme, HttpSession session) {
-//        if (!sessionService.validate(session))
-//            return new ResponseEntity(HttpStatus.FORBIDDEN);
-//
-//        if (!sessionService.getUloga(session).equals(Uloga.ADMIN))
-//            return new ResponseEntity(HttpStatus.FORBIDDEN);
+        if (!sessionService.validate(session))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+
+        if (!sessionService.getUloga(session).equals(Uloga.ADMIN))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         Restoran restoran = restoranRepository.getById(id);
 

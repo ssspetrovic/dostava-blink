@@ -39,7 +39,7 @@ export default {
                 .post("http://localhost:8080/api/admin/kreiraj-restoran", this.restoran)
                 .then((res) => {
                     console.log(res);
-                    this.$router.push("/postavi-menadzera");
+                    this.$router.push("/set-manager");
                 })
                 .catch((err) => {
                     console.log(err);

@@ -24,10 +24,10 @@ export default {
         submit: function () {
 
             axios
-                .post("http://localhost:8080/api/komentar", this.$query.params.id)
+                .post("http://localhost:8080/api/komentar/", window.location.href)
                 .then((res) => {
                     console.log(res);
-                    this.$router.push("/korisnik" + this.$query.params.id);
+                    this.$router.push("/korisnik" + window.location.href);
                 })
                 .catch((err) => {
                     console.log(err);

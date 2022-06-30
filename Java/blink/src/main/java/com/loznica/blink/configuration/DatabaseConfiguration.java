@@ -61,7 +61,6 @@ public class DatabaseConfiguration {
         sime.setRestoran(r);
         menadzerRepository.save(sime);
         Menadzer mm = new Menadzer("mm", "lp100", "Savo", "Savic", "Muski", c.getTime(), Uloga.MENADZER);
-        mm.setRestoran(rr);
         menadzerRepository.save(mm);
 
         Kupac kupac = new Kupac("aaa", "123", "A", "B", "Muski", c.getTime());
@@ -109,6 +108,7 @@ public class DatabaseConfiguration {
 
         r.setArtikli(Set.of(a, a2));
         r.setLokacija(l);
+        r.setMenadzer(sime);
         rr.setLokacija(ll);
 
         restoranRepository.saveAllAndFlush(List.of(r,rr));

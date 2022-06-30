@@ -1,5 +1,7 @@
 package com.loznica.blink.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -8,6 +10,7 @@ import java.util.Date;
 public class Menadzer extends Korisnik implements Serializable {
 
     @OneToOne
+    @JsonIgnore
     private Restoran restoran;
 
     public Menadzer() {

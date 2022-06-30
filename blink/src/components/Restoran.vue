@@ -1,10 +1,13 @@
 <template>
-    <div>
+    <div class = "watafak">
         <h2 style="text-align:center">Restoran: {{ naziv }}</h2>
         <h2 style="text-align:center">Tip: {{ tip }}</h2>
         <h2 style="text-align:center">Lokacija: {{ lokacija }}</h2>
-        <tr v-for = "clan in artikli" :key = "clan.id"> 
-            <td><router-link :to = "{path: '/artikal/' + clan.id}"><td><h2 style = "text-align:center">{{clan.naziv}}</h2> </td></router-link></td>
+        <h2 style="text-align:center">Menadzer: {{menadzerIme}}</h2>
+    </div>
+    <div class = "watafak2">
+        <tr v-for = "clan in artikli" :key = "clan.id" class = "watafak2"> 
+            <router-link :to = "{path: '/artikal/' + clan.id}" ><td><h2>{{clan.naziv}}</h2> </td></router-link>
         </tr>
     </div>
 </template>
@@ -18,6 +21,7 @@ export default {
             restoran: {
                 lokacija: {},
                 artikli: {},
+                menadzer: {},
             },
         }
     },
@@ -33,6 +37,9 @@ export default {
         },
         artikli() {
             return this.restoran.artikli;
+        },
+        menadzerIme() {
+            return this.restoran.menadzer.korisnickoIme;
         }
     },
     created() {
@@ -78,3 +85,17 @@ export default {
     }
 }
 </script>
+
+<style>
+.watafak {
+  margin: auto;
+  width: 50%;
+  padding: 10px;
+}
+.watafak2 {
+  display:none;
+  display:block;
+  margin: auto;
+  width: 50%;
+}
+</style>

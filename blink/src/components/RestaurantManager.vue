@@ -45,7 +45,7 @@ export default {
     methods: {
         fetchManager() {
             axios
-                .get(`http://localhost:8080/api/admin/restorani/:id/postavi-menadzera?korisnickoIme=` + this.$query.params.korisnickoIme)
+                .get(`http://localhost:8080/api/restorani/info/` + this.$route.params.id)
                 .then((res) => {
                     this.menadzer = res.data;
                     

@@ -76,7 +76,7 @@ const routes = [
         component: SetManager
     },
     {
-        path: '/manager/:id',
+        path: '/set-manager',
         name: 'restaurant-manager',
         component: RestaurantManager
     },
