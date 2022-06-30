@@ -1,21 +1,4 @@
 <template>
-    <!-- <header class = "header">
-        <nav>
-            <img class = "logoNav" src = "../../assets/logo.svg"/> 
-            <router-link to = "/">Glavna Strana</router-link>
-            <router-link to = "/o-nama">O nama</router-link>
-            <router-link to = "/korisnici">Lista Korisnika</router-link>
-            <router-link to = "/sign-up">Sign Up</router-link>
-            <router-link to = "/prijava">Login</router-link>
-            <a v-on:click = "logout" href = "#">Logout</a>
-            <router-link to = "/lista-porudzbina">Porudzbina</router-link>
-            <router-link to = "/restoran/1">Atrijum</router-link>
-            <router-link to = "/restoran/2">Machiatto</router-link>
-            <router-link to = "/svi-korisnici">Lista Svih Korisnika</router-link>
-        </nav>
-
-    </header> -->
-
     <nav class="navbar navbar-expand-lg py-3 sticky-top navbar-light shadow p-3 mb-5 bg-white rounded">
     <div class="container">
       <router-link to = "/">

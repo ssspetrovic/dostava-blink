@@ -14,7 +14,7 @@
             <tbody>
                 <tr v-for = "korisnik in korisnici" v-bind:key = "korisnik.id">
                     <td> {{korisnik.id}}</td>
-                    <td> {{korisnik.korisnickoIme}}</td>
+                    <router-link :to = "{path: '/korisnik/' + korisnik.id}"><td> {{korisnik.korisnickoIme}}</td></router-link>
                     <td> {{korisnik.ime}}</td>
                     <td> {{korisnik.prezime}}</td>
                     <td> {{korisnik.pol}}</td>
@@ -28,24 +28,25 @@
 </template>
 
 <script>
-import KorisnikService from '@/services/KorisnikService'
+import axios from "axios"
 
 export default {
     name: 'SviKorisnici',
-    data(){
+    data: function() {
         return {
-           korisnici :  []
+            korisnici: {},
         }
     },
-    methods: {
-        getKorisnici(){
-            KorisnikService.vratiKorisnike().then((response) =>{
-                this.korisnici = response.data;
-            });
-        }
-    },
-    created() {
-        this.getKorisnici()
+    mounted: function() {
+        axios
+            .get("http://localhost:8080/api/korisnici")
+            .then((res) => {
+                this.korisnici = res.data
+            })
+            .catch((err) => {
+                console.log(err)
+            })
     }
 }
 </script>
+

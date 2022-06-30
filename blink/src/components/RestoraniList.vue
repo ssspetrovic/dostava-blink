@@ -3,8 +3,18 @@
     <div class = "container">
     <table>
             <a v-for = "clan in restoran" :href = "`/restoran/${clan.id}`" :key = "clan.id" class = "btn btn-primary btn-lg"> 
-            <td> {{clan.naziv}} </td>
+            <td> 
+                {{clan.naziv}}
+            </td>
             </a>
+            <p></p>
+            <div class = "nextLine">
+            <a v-for = "clan in restoran" :href = "`/comment/${clan.id}`" :key = "clan.id" class = "btn btn-primary btn-lg"> 
+            <td>
+               No bitches?
+            </td>
+            </a>
+            </div>
     </table>
     </div>
     <router-link to = "/create-restaurant" class = "btn btn-primary btn-lg">Kreiraj novi?</router-link>
@@ -35,5 +45,9 @@ export default {
 <style>
 .container{
     margin: 100px;
+    text-align: center;
+}
+.nextLine {
+    white-space: pre-line;
 }
 </style>

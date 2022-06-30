@@ -61,6 +61,17 @@ public class RestoranRestController {
         return new ResponseEntity(HttpStatus.NOT_FOUND);
     }
 
+    @GetMapping("/api/artikal/{id}")
+    public ResponseEntity ispisiArtikal(@PathVariable(name = "id") Long id) {
+        List<Artikal> artikalList = artikalRepository.findAll();
+
+        for (Artikal a : artikalList)
+            if (Objects.equals(id, a.getId()))
+                return ResponseEntity.status(HttpStatus.ACCEPTED).body(a);
+
+        return new ResponseEntity(HttpStatus.NOT_FOUND);
+    }
+
     @PostMapping("/api/admin/kreiraj-restoran")
     public ResponseEntity<?> kreirajRestoran(@RequestBody RestoranDto restoranDto, HttpSession session) {
 //        if (!sessionService.validate(session))

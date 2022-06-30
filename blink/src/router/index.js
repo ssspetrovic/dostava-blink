@@ -1,8 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import ListaKorisnikaView from '../views/ListaKorisnikaView.vue'
-import ListaPorudzbinaView from '../views/ListaPorudzbinaView.vue'
-import RestoranView from '../views/RestoranView.vue'
-import ListaSvihKorisnikaView from '../views/ListaSvihKorisnikaView.vue'
+import ListaPorudzbina from '../components/ListaPorudzbina.vue'
+import Restoran from '../components/Restoran.vue'
 import SignUp from '../components/SignUp'
 import Login from '../components/Login.vue'
 import FrontPage from '../components/FrontPage.vue'
@@ -12,6 +10,9 @@ import SearchBar from '../components/SearchBar.vue'
 import CreateRestaurant from '../components/CreateRestaurant.vue'
 import SetManager from '../components/SetManager.vue'
 import RestaurantManager from '../components/RestaurantManager.vue'
+import Korisnik from '../components/Korisnik.vue'
+import Artikal from '../components/Artikal.vue'
+import Comment from '../components/Comment.vue'
 
 const routes = [
     {
@@ -27,7 +28,7 @@ const routes = [
     {
         path: '/korisnici',
         name: 'korisnici',
-        component: ListaKorisnikaView
+        component: Korisnik
     },
     {
         path: '/sign-up',
@@ -37,22 +38,17 @@ const routes = [
     {
         path: '/lista-porudzbina',
         name: 'lista-porudzbina',
-        component: ListaPorudzbinaView
+        component: ListaPorudzbina
     },
     {
         path: '/restoran/:id',
         name: 'restoran',
-        component: RestoranView
+        component: Restoran
     },
     {
         path: '/korisnik/:id',
         name: 'korisnik',
         component: IspisKorisnik
-    },
-    {
-        path: '/svi-korisnici',
-        name: 'svi-korisnici',
-        component: ListaSvihKorisnikaView
     },
     {
         path: '/prijava',
@@ -84,6 +80,16 @@ const routes = [
         name: 'restaurant-manager',
         component: RestaurantManager
     },
+    {
+        path: '/artikal/:id',
+        name: 'artikal',
+        component: Artikal
+    },
+    {
+        path: '/comment/:id',
+        name: 'comment',
+        component: Comment
+    }
 ]
 
 const router = createRouter({

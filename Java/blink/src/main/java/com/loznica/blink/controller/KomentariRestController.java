@@ -35,10 +35,10 @@ public class KomentariRestController {
 
     @PostMapping("/api/komentar/{id}")
     public ResponseEntity komentari(@PathVariable(name = "id") Long id, @RequestBody Komentar komentar, HttpSession session) {
-        if (!sessionService.validate(session))
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
-        if (!sessionService.getUloga(session).equals(Uloga.KUPAC))
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
+//        if (!sessionService.validate(session))
+//            return new ResponseEntity(HttpStatus.FORBIDDEN);
+//        if (!sessionService.getUloga(session).equals(Uloga.KUPAC))
+//            return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
 

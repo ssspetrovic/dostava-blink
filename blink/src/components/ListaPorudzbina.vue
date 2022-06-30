@@ -11,7 +11,7 @@
 import axios from 'axios';
 
 export default {
-    name: "ListaPorudzbinaView",
+    name: "ListaPorudzbina",
     data: function() {
         return {
             porudzbine: {},

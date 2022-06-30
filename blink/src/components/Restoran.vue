@@ -1,41 +1,38 @@
 <template>
     <div>
-        <h2 style = "text-align:center"> Korisnicko Ime : {{kIme}}</h2>
-        <h2 style = "text-align:center"> Ime : {{kI}}</h2>
-        <h2 style = "text-align:center"> Prezime : {{kP}}</h2>
-        <tr v-for = "clan in komentari" :key = "clan.id"> 
-            <td><router-link :to = "{path: '/restoran/' + clan.restoran.id}"><td><h2 style = "text-align:center">Komentari: {{clan.tekstKomentara}}</h2> </td></router-link></td>
+        <h2 style="text-align:center">Restoran: {{ naziv }}</h2>
+        <h2 style="text-align:center">Tip: {{ tip }}</h2>
+        <h2 style="text-align:center">Lokacija: {{ lokacija }}</h2>
+        <tr v-for = "clan in artikli" :key = "clan.id"> 
+            <td><router-link :to = "{path: '/artikal/' + clan.id}"><td><h2 style = "text-align:center">{{clan.naziv}}</h2> </td></router-link></td>
         </tr>
-
     </div>
 </template>
-
 <script>
-
-import axios from 'axios'
-
+import axios from 'axios';
 //import axios from "axios";
 export default {
-    name: 'IspisKorisnik',
+    name: 'RestoraN',
     data: function () {
         return {
-            korisnik: {
-                komentari: {},
+            restoran: {
+                lokacija: {},
+                artikli: {},
             },
         }
     },
     computed: {
-        kIme() {
-            return this.korisnik.korisnickoIme;
+        naziv() {
+            return this.restoran.naziv;
         },
-        kI() {
-            return this.korisnik.ime;
+        tip() {
+            return this.restoran.tipRestorana;
         },
-        kP() {
-            return this.korisnik.prezime;
+        lokacija() {
+            return this.restoran.lokacija.adresa;
         },
-        komentari() {
-            return this.korisnik.komentari;
+        artikli() {
+            return this.restoran.artikli;
         }
     },
     created() {
@@ -43,16 +40,16 @@ export default {
             () => this.$route.params,
             () => {
                 // react to route changes...
-                this.fetchKorisnik()
+                this.fetchRestoran()
             }
         )
     },
     methods: {
-        fetchKorisnik() {
+        fetchRestoran() {
             axios
-                .get("http://localhost:8080/api/korisnik/" + this.$route.params.id)
+                .get("http://localhost:8080/api/restorani/info/" + this.$route.params.id)
                 .then((res) => {
-                    this.korisnik = res.data;
+                    this.restoran = res.data;
                     
                 })
                 .catch((err) => {
@@ -61,7 +58,7 @@ export default {
         }
     },
     mounted: function () {
-        this.fetchKorisnik()
+        this.fetchRestoran()
         /*
                 fetch('http://localhost:8083/api/korisnici/ispis',
                     {

@@ -1,30 +1,38 @@
 <template>
     <div>
-        <h2 style="text-align:center">Restoran: {{ naziv }}</h2>
-        <h2 style="text-align:center">Tip: {{ tip }}</h2>
-        <h2 style="text-align:center">Lokacija: {{ lokacija }}</h2>
-
+        <h2 style="text-align:center">{{ slike }}</h2>
+        <h2 style="text-align:center">Naziv: {{ naziv }}</h2>
+        <h2 style="text-align:center">Cena: {{ cena }}</h2>
+        <h2 style="text-align:center">Kolicina: {{ kolicina }}</h2>
+        <h2 style="text-align:center">Opis: {{ opis }}</h2>
+        <router-link to = "/create-restaurant" class = "btn btn-primary btn-lg">Naruci?</router-link> <!--KORPA-->
     </div>
 </template>
 <script>
 import axios from 'axios';
 //import axios from "axios";
 export default {
-    name: 'RestoranView',
+    name: 'ArtikaL',
     data: function () {
         return {
-            restoran: {},
+            artikal: {},
         }
     },
     computed: {
         naziv() {
-            return this.restoran.naziv;
+            return this.artikal.naziv;
         },
-        tip() {
-            return this.restoran.tipRestorana;
+        cena() {
+            return this.artikal.cena;
         },
-        lokacija() {
-            return this.restoran.lokacija;
+        kolicina() {
+            return this.artikal.kolicina;
+        },
+        opis() {
+            return this.artikal.opis;
+        },
+        slike() {
+            return this.artikal.slike;
         }
     },
     created() {
@@ -32,16 +40,16 @@ export default {
             () => this.$route.params,
             () => {
                 // react to route changes...
-                this.fetchRestoran()
+                this.fetchArtikal()
             }
         )
     },
     methods: {
-        fetchRestoran() {
+        fetchArtikal() {
             axios
-                .get("http://localhost:8080/api/restorani/info/" + this.$route.params.id)
+                .get("http://localhost:8080/api/artikal/" + this.$route.params.id)
                 .then((res) => {
-                    this.restoran = res.data;
+                    this.artikal = res.data;
                     
                 })
                 .catch((err) => {
@@ -50,7 +58,7 @@ export default {
         }
     },
     mounted: function () {
-        this.fetchRestoran()
+        this.fetchArtikal()
         /*
                 fetch('http://localhost:8083/api/korisnici/ispis',
                     {
