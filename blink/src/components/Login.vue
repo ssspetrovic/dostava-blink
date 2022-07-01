@@ -31,6 +31,7 @@ export default {
                 .post("http://localhost:8080/api/login", this.korisnik)
                 .then((res) => {
                     console.log(res);
+                    this.$store.commit('addKorisnik', this.korisnik)
                     this.$router.push("/korisnici");
                 })
                 .catch((err) => {

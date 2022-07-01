@@ -2,6 +2,7 @@ package com.loznica.blink.controller;
 
 import com.loznica.blink.dto.LoginDto;
 import com.loznica.blink.entity.Korisnik;
+import com.loznica.blink.repository.KorisnikRepository;
 import com.loznica.blink.service.LoginService;
 import com.loznica.blink.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,11 +10,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.security.auth.login.AccountNotFoundException;
 import javax.servlet.http.HttpSession;
 import java.util.Hashtable;
+import java.util.List;
 
 @RestController
 public class LoginRestController {
@@ -23,6 +26,9 @@ public class LoginRestController {
 
     @Autowired
     private SessionService sessionService;
+
+    @Autowired
+    private KorisnikRepository korisnikRepository;
 
     @PostMapping("/api/login")
     public ResponseEntity<?> login(@RequestBody LoginDto loginDto, HttpSession session) {
@@ -52,13 +58,31 @@ public class LoginRestController {
         session.setAttribute("korisnickoIme", loggedKorisnik.getKorisnickoIme());
         session.setAttribute("uloga", loggedKorisnik.getUloga());
 
+        List<Korisnik> korisnikList = korisnikRepository.findAll();
+
+        for(Korisnik k : korisnikList)
+            if(k.getAuth() == true)
+                return new ResponseEntity(HttpStatus.FORBIDDEN);
+
+        loggedKorisnik.setAuth(true);
+        korisnikRepository.save(loggedKorisnik);
+
+
         return new ResponseEntity(loggedKorisnik, HttpStatus.OK);
     }
 
     @PostMapping("api/logout")
-    public ResponseEntity logout(HttpSession session) {
-        if (!sessionService.validate(session))
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
+    public ResponseEntity logout(HttpSession session, @RequestParam String korisnickoIme) {
+//        if (!sessionService.validate(session))
+//            return new ResponseEntity(HttpStatus.FORBIDDEN);
+
+        Korisnik loggedKorisnik = korisnikRepository.getByKorisnickoIme(korisnickoIme);
+        if(loggedKorisnik == null)
+            return new ResponseEntity("Nema ulogovanog korisnika", HttpStatus.NOT_FOUND);
+
+        if(loggedKorisnik.getAuth() == true)
+        loggedKorisnik.setAuth(false);
+        korisnikRepository.save(loggedKorisnik);
 
         session.invalidate();
         return new ResponseEntity("Uspesno ste napustili profil, pozdrav!", HttpStatus.OK);

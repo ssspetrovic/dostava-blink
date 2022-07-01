@@ -28,6 +28,8 @@ public class Korisnik implements Serializable {
     @Column
     private Date datumRodjenja;
 
+    private Boolean auth = false;
+
     @Column
     @Enumerated(EnumType.STRING)
     private Uloga uloga;
@@ -43,6 +45,19 @@ public class Korisnik implements Serializable {
         this.prezime = prezime;
         Pol = pol;
         this.datumRodjenja = datumRodjenja;
+        this.uloga = uloga;
+        this.auth = false;
+    }
+
+    public Korisnik(Long id, String korisnickoIme, String lozinka, String ime, String prezime, String pol, Date datumRodjenja, Boolean auth, Uloga uloga) {
+        this.id = id;
+        this.korisnickoIme = korisnickoIme;
+        this.lozinka = lozinka;
+        this.ime = ime;
+        this.prezime = prezime;
+        Pol = pol;
+        this.datumRodjenja = datumRodjenja;
+        this.auth = false;
         this.uloga = uloga;
     }
 
@@ -108,6 +123,14 @@ public class Korisnik implements Serializable {
 
     public void setUloga(Uloga uloga) {
         this.uloga = uloga;
+    }
+
+    public Boolean getAuth() {
+        return auth;
+    }
+
+    public void setAuth(Boolean auth) {
+        this.auth = auth;
     }
 
     @Override

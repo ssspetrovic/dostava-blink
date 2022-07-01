@@ -36,7 +36,7 @@ export default {
         redirectToManager: function () {
 
             axios
-                .post("http://localhost:8080/api/admin/kreiraj-restoran", this.restoran)
+                .post(`http://localhost:8080/api/admin/kreiraj-restoran?korisnickoIme=${this.$store.getters.korisnik.korisnickoIme}`, this.restoran)
                 .then((res) => {
                     console.log(res);
                     this.$router.push("/set-manager");

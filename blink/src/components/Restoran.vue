@@ -39,7 +39,10 @@ export default {
             return this.restoran.artikli;
         },
         menadzerIme() {
-            return this.restoran.menadzer.korisnickoIme;
+            if(this.restoran.menadzer != null)
+                return this.restoran.menadzer.korisnickoIme;
+            else
+                return "";
         }
     },
     created() {

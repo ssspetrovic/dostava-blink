@@ -25,6 +25,11 @@
         </table>
     </div>
 
+    <div class = "kreAD">
+        <router-link to = "/create-manager" class = "btn btn-primary btn-lg">ADMIN: Kreiraj Menadzera</router-link>
+        <router-link to = "/create-dostavljac" class = "btn btn-primary btn-lg">ADMIN: Kreiraj Dostavljaca</router-link>
+    </div>
+
 </template>
 
 <script>
@@ -49,4 +54,3 @@ export default {
     }
 }
 </script>
-

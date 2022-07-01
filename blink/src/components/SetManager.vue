@@ -1,6 +1,6 @@
 <template>
     <h1>Izaberite menadzera:</h1>
-<a v-for = "clan in menadzer" :href = "`/manager/${clan.id}`" :key = "clan.id" class = "btn btn-primary btn-lg"><td>{{clan.korisnickoIme}}</td></a>
+<a v-for = "clan in menadzer" :href = "`/korisnik/${clan.id}`" :key = "clan.id" class = "btn btn-primary btn-lg"><td>{{clan.korisnickoIme}}</td></a>
 </template>
 
 <script>

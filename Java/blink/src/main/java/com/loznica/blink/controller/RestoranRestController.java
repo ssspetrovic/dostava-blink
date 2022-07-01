@@ -73,12 +73,23 @@ public class RestoranRestController {
     }
 
     @PostMapping("/api/admin/kreiraj-restoran")
-    public ResponseEntity<?> kreirajRestoran(@RequestBody RestoranDto restoranDto, HttpSession session) {
+    public ResponseEntity<?> kreirajRestoran(@RequestBody RestoranDto restoranDto, @RequestParam String korisnickoIme) {
 //        if (!sessionService.validate(session))
 //            return new ResponseEntity(HttpStatus.FORBIDDEN);
-//
-//        if (!sessionService.getUloga(session).equals(Uloga.ADMIN))
-//            return new ResponseEntity(HttpStatus.FORBIDDEN);
+
+//          if (!sessionService.getUloga(session).equals(Uloga.ADMIN))
+//              return new ResponseEntity(HttpStatus.FORBIDDEN);
+
+        Korisnik loggedKorisnik = korisnikRepository.getByKorisnickoIme(korisnickoIme);
+
+        if(loggedKorisnik == null)
+            return new ResponseEntity("Nema korisnika!", HttpStatus.NOT_FOUND);
+
+        if(loggedKorisnik.getAuth() == false)
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+
+        if (!loggedKorisnik.getUloga().equals(Uloga.ADMIN))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         String poruka;
         ResponseEntity<String> kreirajRestoran;
@@ -91,6 +102,8 @@ public class RestoranRestController {
             if (m.getRestoran() == null) {
                 m.setRestoran(restoran);
                 menadzer = m;
+                restoran.setMenadzer(menadzer);
+                break;
             }
 
 

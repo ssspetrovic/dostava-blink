@@ -33,14 +33,23 @@
 </template>
 
 <script>
+import axios from "axios"
 
 export default 
 {
     name: "HeadeR",
     methods: {
         logout() {
-            localStorage.clear();
-            this.$router.push({name: 'prijava'})
+            axios.post(`http://localhost:8080/api/logout?korisnickoIme=${this.$store.getters.korisnik.korisnickoIme}`)
+            .then((res) => {
+                    console.log(res);
+                    this.$router.push("/prijava");
+                })
+                .catch((err) => {
+                    console.log(err);
+                    alert("Something went wrong!");
+                });
+            
     }
     }
 }

@@ -134,12 +134,17 @@ public class KorisnikRestController {
     }
 
     @PostMapping("/api/admin/kreiraj-menadzera")
-    public ResponseEntity kreirajMenadzera(@RequestBody RegistrationRequest registrationRequest, HttpSession session) {
-        if (!sessionService.validate(session))
+    public ResponseEntity kreirajMenadzera(@RequestBody RegistrationRequest registrationRequest, HttpSession session, @RequestParam String korisnickoIme) {
+//        if (!sessionService.validate(session))
+//            return new ResponseEntity(HttpStatus.FORBIDDEN);
+//
+//        if (!sessionService.getUloga(session).equals(Uloga.ADMIN))
+//            return new ResponseEntity(HttpStatus.FORBIDDEN);
+        Korisnik loggedKorisnik = korisnikRepository.getByKorisnickoIme(korisnickoIme);
+
+        if(loggedKorisnik == null)
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        if (!sessionService.getUloga(session).equals(Uloga.ADMIN))
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         String poruka;
         ResponseEntity<String> registracija;
@@ -172,11 +177,16 @@ public class KorisnikRestController {
     }
 
     @PostMapping("/api/admin/kreiraj-dostavljaca")
-    public ResponseEntity kreirajDostavljaca(@RequestBody RegistrationRequest registrationRequest, HttpSession session) {
-        if (!sessionService.validate(session))
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
+    public ResponseEntity kreirajDostavljaca(@RequestBody RegistrationRequest registrationRequest, HttpSession session, @RequestParam String korisnickoIme) {
+//        if (!sessionService.validate(session))
+//            return new ResponseEntity(HttpStatus.FORBIDDEN);
+//
+//        if (!sessionService.getUloga(session).equals(Uloga.ADMIN))
+//            return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        if (!sessionService.getUloga(session).equals(Uloga.ADMIN))
+        Korisnik loggedKorisnik = korisnikRepository.getByKorisnickoIme(korisnickoIme);
+
+        if(loggedKorisnik == null)
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         String poruka;
@@ -241,15 +251,22 @@ public class KorisnikRestController {
         return ResponseEntity.status(HttpStatus.OK).body(menadzerRepository.findById(id));
     }
 
-    @GetMapping("/api/korisnik/{id}")
-    public ResponseEntity ispisiKorisnika(@PathVariable(name = "id") Long id, HttpSession session) {
+    @GetMapping("/api/korisnik/{id}/")
+    public ResponseEntity ispisiKorisnika(@PathVariable(name = "id") Long id, @RequestParam String korisnickoIme) {
 
-        List<Korisnik> korisnikList = korisnikRepository.findAll();
+        Korisnik loggedKorisnik = korisnikRepository.getByKorisnickoIme(korisnickoIme);
 
-        for (Korisnik k : korisnikList)
-            if (Objects.equals(id, k.getId()))
+        if(loggedKorisnik == null)
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+
+        Korisnik k = korisnikRepository.getById(id);
+
+        if(k == null)
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+
+            if(loggedKorisnik.getId().equals(k.getId()))
                 return ResponseEntity.status(HttpStatus.ACCEPTED).body(k);
-
-        return new ResponseEntity(HttpStatus.NOT_FOUND);
+            else
+                return new ResponseEntity(HttpStatus.FORBIDDEN);
     }
 }

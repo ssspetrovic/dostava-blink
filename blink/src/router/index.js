@@ -13,6 +13,8 @@ import RestaurantManager from '../components/RestaurantManager.vue'
 import Korisnik from '../components/Korisnik.vue'
 import Artikal from '../components/Artikal.vue'
 import Comment from '../components/Comment.vue'
+import CreateManager from '../components/CreateManager.vue'
+import CreateDostavljac from '../components/CreateManager.vue'
 
 const routes = [
     {
@@ -89,7 +91,17 @@ const routes = [
         path: '/comment/:id',
         name: 'comment',
         component: Comment
-    }
+    },
+    {
+        path: '/create-manager',
+        name: 'create-manager',
+        component: CreateManager
+    },
+    {
+        path: '/create-dostavljac',
+        name: 'create-dostavljac',
+        component: CreateDostavljac
+    },
 ]
 
 const router = createRouter({

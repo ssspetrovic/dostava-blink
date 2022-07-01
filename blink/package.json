@@ -18,6 +18,7 @@
     "vue-router": "^4.0.16",
     "vue3-easy-data-table": "^1.2.20",
     "vueperslides": "^3.4.2",
+    "vuex": "^4.0.2",
     "vuex-persistedstate": "^4.1.0"
   },
   "devDependencies": {
