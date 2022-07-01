@@ -7,7 +7,6 @@
         <tr v-for = "clan in komentari" :key = "clan.id"> 
             <td><router-link :to = "{path: '/restoran/' + clan.restoran.id}"><td><h2 style = "text-align:center">Komentari: {{clan.tekstKomentara}}</h2> </td></router-link></td>
         </tr>
-
     </div>
 </template>
 
@@ -41,7 +40,7 @@ export default {
         },
         komentari() {
             return this.korisnik.komentari;
-        }
+        },
     },
     created() {
         this.$watch(

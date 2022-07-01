@@ -1,5 +1,5 @@
 <template>
-    <h2>KREIRAJ MENADZERA</h2>
+    <h2>KREIRAJ DOSTAVLJACA</h2>
     <div class = register>
         <label for="korisnickoIme">Username:</label>
         <input v-model="korisnik.korisnickoIme" /><br />
@@ -20,7 +20,7 @@
 <script>
 import axios from "axios"
 export default {
-    name: "CreateManager",
+    name: "CreateDostavljac",
     data: function () {
         return {
             korisnik: {
@@ -37,7 +37,7 @@ export default {
         submit: function () {
 
             axios
-                .post(`http://localhost:8080/api/admin/kreiraj-menadzera?korisnickoIme=${this.$store.getters.korisnik.korisnickoIme}`, this.korisnik)
+                .post(`http://localhost:8080/api/admin/kreiraj-dostavljaca?korisnickoIme=${this.$store.getters.korisnik.korisnickoIme}`, this.korisnik)
                 .then((res) => {
                     console.log(res);
                     this.$router.push("/");

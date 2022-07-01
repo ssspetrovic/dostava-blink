@@ -1,8 +1,11 @@
 package com.loznica.blink.controller;
 
 import com.loznica.blink.dto.LoginDto;
-import com.loznica.blink.entity.Korisnik;
+import com.loznica.blink.entity.*;
+import com.loznica.blink.repository.DostavljacRepository;
 import com.loznica.blink.repository.KorisnikRepository;
+import com.loznica.blink.repository.KupacRepository;
+import com.loznica.blink.repository.MenadzerRepository;
 import com.loznica.blink.service.LoginService;
 import com.loznica.blink.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +32,15 @@ public class LoginRestController {
 
     @Autowired
     private KorisnikRepository korisnikRepository;
+
+    @Autowired
+    private MenadzerRepository menadzerRepository;
+
+    @Autowired
+    private KupacRepository kupacRepository;
+
+    @Autowired
+    private DostavljacRepository dostavljacRepository;
 
     @PostMapping("/api/login")
     public ResponseEntity<?> login(@RequestBody LoginDto loginDto, HttpSession session) {
@@ -64,9 +76,29 @@ public class LoginRestController {
             if(k.getAuth() == true)
                 return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        loggedKorisnik.setAuth(true);
-        korisnikRepository.save(loggedKorisnik);
 
+        loggedKorisnik.setAuth(true);
+
+        if(loggedKorisnik.getUloga() == Uloga.ADMIN)
+            korisnikRepository.save(loggedKorisnik);
+
+        else if (loggedKorisnik.getUloga() == Uloga.MENADZER) {
+            Menadzer menadzer = menadzerRepository.getByKorisnickoIme(loggedKorisnik.getKorisnickoIme());
+            menadzer.setAuth(true);
+            menadzerRepository.save(menadzer);
+        }
+
+        else if (loggedKorisnik.getUloga() == Uloga.DOSTAVLJAC) {
+            Dostavljac dostavljac = dostavljacRepository.getById(loggedKorisnik.getId());
+            dostavljac.setAuth(true);
+            dostavljacRepository.save(dostavljac);
+        }
+
+        else if (loggedKorisnik.getUloga() == Uloga.KUPAC) {
+            Kupac kupac = kupacRepository.getById(loggedKorisnik.getId());
+            kupac.setAuth(true);
+            kupacRepository.save(kupac);
+        }
 
         return new ResponseEntity(loggedKorisnik, HttpStatus.OK);
     }

@@ -3,11 +3,19 @@
         <h2 style="text-align:center">Restoran: {{ naziv }}</h2>
         <h2 style="text-align:center">Tip: {{ tip }}</h2>
         <h2 style="text-align:center">Lokacija: {{ lokacija }}</h2>
-        <h2 style="text-align:center">Menadzer: {{menadzerIme}}</h2>
+        <router-link :to = "{path: '/korisnik/' + menadzerIme.id }"> <h2 class = "text-align:center">Menadzer: {{menadzerIme.korisnickoIme}}</h2></router-link>
+        <h2 style="text-align:center">Ocena Restorana: {{ocena}}</h2> 
     </div>
+    
     <div class = "watafak2">
         <tr v-for = "clan in artikli" :key = "clan.id" class = "watafak2"> 
             <router-link :to = "{path: '/artikal/' + clan.id}" ><td><h2>{{clan.naziv}}</h2> </td></router-link>
+        </tr>
+        <router-link to = "/create-article" class = "movCR"><h2>Kreiraj novi?</h2></router-link>
+    </div>
+    <div class = "watafak3">
+        <tr v-for = "clan in komentari" :key = "clan.id" class = "watafak3"> 
+            <td><h2>{{clan.tekstKomentara}}</h2> </td>
         </tr>
     </div>
 </template>
@@ -22,6 +30,7 @@ export default {
                 lokacija: {},
                 artikli: {},
                 menadzer: {},
+                komentari: {},
             },
         }
     },
@@ -36,13 +45,22 @@ export default {
             return this.restoran.lokacija.adresa;
         },
         artikli() {
-            return this.restoran.artikli;
+            if(this.restoran.artikli != null)
+                return this.restoran.artikli;
+            return null;
         },
         menadzerIme() {
             if(this.restoran.menadzer != null)
-                return this.restoran.menadzer.korisnickoIme;
-            else
-                return "";
+                return this.restoran.menadzer;
+            return "";
+        },
+        ocena() {
+                return this.restoran.prosek;
+        },
+        komentari() {
+            if(this.restoran.komentari != null)
+                return this.restoran.komentari;
+            return null;
         }
     },
     created() {
@@ -100,5 +118,14 @@ export default {
   display:block;
   margin: auto;
   width: 50%;
+}
+.watafak3 {
+  display:none;
+  display:block;
+  margin: auto;
+  width: 50%;
+}
+.movCR {
+    float: center;
 }
 </style>

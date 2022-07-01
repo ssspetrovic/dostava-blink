@@ -30,6 +30,8 @@ public class Restoran implements Serializable {
     @OneToOne
     private Menadzer menadzer;
 
+    float prosek = 0;
+
     public Restoran() {
         super();
     }
@@ -38,6 +40,7 @@ public class Restoran implements Serializable {
         this.naziv = naziv;
         this.tipRestorana = tipRestorana;
         this.lokacija = lokacija;
+        this.prosek = 0;
     }
 
     public Restoran(Long id, String naziv, String tipRestorana, Set<Artikal> artikli, Set<Komentar> komentari, Lokacija lokacija) {
@@ -47,6 +50,7 @@ public class Restoran implements Serializable {
         this.artikli = artikli;
         this.komentari = komentari;
         this.lokacija = lokacija;
+        this.prosek = 0;
     }
 
     public Restoran(Long id, String naziv, String tipRestorana, Set<Artikal> artikli, Set<Komentar> komentari, Lokacija lokacija, Menadzer menadzer) {
@@ -57,6 +61,7 @@ public class Restoran implements Serializable {
         this.komentari = komentari;
         this.lokacija = lokacija;
         this.menadzer = menadzer;
+        this.prosek = 0;
     }
 
     public Long getId() {
@@ -115,6 +120,14 @@ public class Restoran implements Serializable {
         this.menadzer = menadzer;
     }
 
+    public float getProsek() {
+        return prosek;
+    }
+
+    public void setProsek(float prosek) {
+        this.prosek = prosek;
+    }
+
     @Override
     public String toString() {
         return "Restoran{" +
@@ -125,6 +138,7 @@ public class Restoran implements Serializable {
                 ", komentari=" + komentari +
                 ", lokacija=" + lokacija +
                 ", menadzer=" + menadzer +
+                ", prosek=" + prosek +
                 '}';
     }
 }

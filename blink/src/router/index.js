@@ -15,6 +15,7 @@ import Artikal from '../components/Artikal.vue'
 import Comment from '../components/Comment.vue'
 import CreateManager from '../components/CreateManager.vue'
 import CreateDostavljac from '../components/CreateManager.vue'
+import CreateArticle from '../components/CreateArticle.vue'
 
 const routes = [
     {
@@ -102,6 +103,11 @@ const routes = [
         name: 'create-dostavljac',
         component: CreateDostavljac
     },
+    {
+        path: '/create-article',
+        name: 'create-article',
+        component: CreateArticle
+    }
 ]
 
 const router = createRouter({

@@ -10,6 +10,7 @@
                 <th>Prezime: </th>
                 <th>Pol: </th>
                 <th>Datum Rodjenja: </th>
+                <th>Uloga: </th>
             </thead>
             <tbody>
                 <tr v-for = "korisnik in korisnici" v-bind:key = "korisnik.id">
@@ -19,7 +20,7 @@
                     <td> {{korisnik.prezime}}</td>
                     <td> {{korisnik.pol}}</td>
                     <td> {{korisnik.datumRodjenja}}</td>
-
+                    <td> {{korisnik.uloga}}</td>
                 </tr>
             </tbody>
         </table>

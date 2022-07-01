@@ -145,6 +145,9 @@ public class KorisnikRestController {
         if(loggedKorisnik == null)
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
+        if(loggedKorisnik.getUloga() != Uloga.ADMIN)
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+
 
         String poruka;
         ResponseEntity<String> registracija;
@@ -187,6 +190,9 @@ public class KorisnikRestController {
         Korisnik loggedKorisnik = korisnikRepository.getByKorisnickoIme(korisnickoIme);
 
         if(loggedKorisnik == null)
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+
+        if(loggedKorisnik.getUloga() != Uloga.ADMIN)
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         String poruka;

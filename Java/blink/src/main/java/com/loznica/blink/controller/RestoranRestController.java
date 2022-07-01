@@ -54,11 +54,32 @@ public class RestoranRestController {
     public ResponseEntity ispisiRestoran(@PathVariable(name = "id") Long id) {
         List<Restoran> restoranList = restoranRepository.findAll();
 
+        Restoran restoran = new Restoran();
+
         for (Restoran r : restoranList)
             if (Objects.equals(id, r.getId()))
-                return ResponseEntity.status(HttpStatus.ACCEPTED).body(r);
+                restoran = r;
 
-        return new ResponseEntity(HttpStatus.NOT_FOUND);
+        if(restoran == null)
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+
+        float ocena = 0;
+        int brojac = 0;
+
+        if(restoran.getKomentari() != null)
+            for(Komentar komentar : restoran.getKomentari()) {
+                ocena += komentar.getOcena();
+                brojac++;
+            }
+
+        if(brojac == 0 || ocena == 0)
+            restoran.setProsek(0);
+        else
+            restoran.setProsek(ocena/brojac);
+
+
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(restoran);
     }
 
     @GetMapping("/api/artikal/{id}")
@@ -84,9 +105,6 @@ public class RestoranRestController {
 
         if(loggedKorisnik == null)
             return new ResponseEntity("Nema korisnika!", HttpStatus.NOT_FOUND);
-
-        if(loggedKorisnik.getAuth() == false)
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
 
         if (!loggedKorisnik.getUloga().equals(Uloga.ADMIN))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
@@ -192,31 +210,39 @@ public class RestoranRestController {
     }
 
     @PostMapping("/api/artikli/kreiraj-artikal")
-    public ResponseEntity kreirajArtikal(@RequestParam String korisnickoIme, Artikal artikal, @RequestParam("image") MultipartFile multipartFile, HttpSession session) throws IOException {
-        if (!sessionService.validate(session))
+    public ResponseEntity kreirajArtikal(@RequestParam String korisnickoIme, Artikal artikal, /*@RequestParam("slike") MultipartFile multipartFile,*/ HttpSession session) throws IOException {
+//        if (!sessionService.validate(session))
+//            return new ResponseEntity(HttpStatus.FORBIDDEN);
+//
+//        if (!sessionService.getUloga(session).equals(Uloga.MENADZER))
+//            return new ResponseEntity(HttpStatus.FORBIDDEN);
+        Korisnik loggedKorisnik = korisnikRepository.getByKorisnickoIme(korisnickoIme);
+
+        if(loggedKorisnik == null)
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        if (!sessionService.getUloga(session).equals(Uloga.MENADZER))
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
+        if(loggedKorisnik.getUloga() != Uloga.MENADZER)
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+
+        Menadzer menadzer = menadzerRepository.getByKorisnickoIme(korisnickoIme);
 
         HashMap<String, String> greska = Validate(artikal);
 
         if (!greska.isEmpty())
             return new ResponseEntity(greska, HttpStatus.BAD_REQUEST);
 
-        String fileName = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
-        artikal.setSlike(fileName);
+        //String fileName = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
+        //artikal.setSlike(fileName);
 
         for(Artikal a : artikalRepository.findAll())
             if(artikal.getNaziv().equals(a.getNaziv()))
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Artikal vec postoji!");
 
-        Menadzer menadzer = menadzerRepository.getByKorisnickoIme(korisnickoIme);
         menadzer.getRestoran().getArtikli().add(artikal);
         artikalRepository.save(artikal);
 
         String uploadDir = "korisnik-slike/" + artikal.getId();
-        FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
+        //FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
 
         return ResponseEntity.ok(artikal);
     }
@@ -240,14 +266,22 @@ public class RestoranRestController {
     }
 
     @PostMapping("/api/artikli/izmena/{id}")
-    public ResponseEntity<Artikal> setArtikal(@PathVariable(name = "id") Long id, Artikal artikal,@RequestParam("image") MultipartFile multipartFile, HttpSession session) throws IOException {
-        if (!sessionService.validate(session))
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
+    public ResponseEntity<Artikal> setArtikal(@PathVariable(name = "id") Long id, Artikal artikal, /*@RequestParam("image") MultipartFile multipartFile,*/ HttpSession session, @RequestParam String korisnickoIme) throws IOException {
+//        if (!sessionService.validate(session))
+//            return new ResponseEntity(HttpStatus.FORBIDDEN);
+//
+//        if (!sessionService.getUloga(session).equals(Uloga.MENADZER))
+//            return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        if (!sessionService.getUloga(session).equals(Uloga.MENADZER))
+        Korisnik loggedKorisnik = korisnikRepository.getByKorisnickoIme(korisnickoIme);
+
+        if(loggedKorisnik.getUloga() != Uloga.MENADZER)
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         Artikal a = artikalRepository.getById(id);
+
+        if(a == null)
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         a.setNaziv(artikal.getNaziv() == null ? a.getNaziv() : artikal.getNaziv());
         a.setCena(artikal.getCena() == null ? a.getCena() : artikal.getCena());
@@ -255,24 +289,24 @@ public class RestoranRestController {
         a.setKolicina(artikal.getKolicina() == 0 ? a.getKolicina() : artikal.getKolicina());
         a.setOpis(artikal.getOpis() == null ? a.getOpis() : artikal.getOpis());
 
-        if (artikal.getSlike() == null) {
-            String fileName = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
-            artikal.setSlike(fileName);
-            String uploadDir = "korisnik-slike/" + artikal.getId();
-            FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
-        } else {
-            a.setSlike(a.getSlike());
-        }
+//        if (artikal.getSlike() == null) {
+//            String fileName = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
+//            artikal.setSlike(fileName);
+//            String uploadDir = "korisnik-slike/" + artikal.getId();
+//            FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
+//        } else {
+//            a.setSlike(a.getSlike());
+//        }
 
-        artikalRepository.saveAndFlush(a);
 
         try {
+            artikalRepository.save(a);
             System.out.println("Uspesna izmena.");
         } catch (Exception e) {
             System.out.println("Neuspesna izmena.");
         }
 
-        return ResponseEntity.ok(a);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(a);
     }
 
     @DeleteMapping("/api/artikal/obrisi/{id}")
