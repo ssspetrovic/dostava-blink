@@ -9,7 +9,7 @@
             <td><router-link :to = "{path: '/restoran/' + clan.restoran.id}"><td><h2 style = "text-align:center">Komentari: {{clan.tekstKomentara}}</h2> </td></router-link></td>
         </tr>
         <router-link to = "/edit-profile" class = "btn btn-primary btn-lg">Edit Profile</router-link>
-        <a v-on:click = "logout" href = "#" class="nav-link">Logout</a>
+        <a v-on:click = "logout" href = "#" class="nav-link">Delete Profile</a>
     </div>
 </template>
 

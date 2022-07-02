@@ -20,7 +20,7 @@
             <router-link to = "/sign-up" href="#registracija-modal" class="nav-link" data-bs-toggle="modal">Registruj se</router-link>
           </li>
 					<li class="nav-item">
-						<a href="#" class="nav-link">Korpa</a> <!-- ZA OBRADU-->
+						<router-link to = "/korpa" href="#korpa-modal" class="nav-link" data-bs-toggle="modal">Korpa</router-link> <!-- ZA OBRADU-->
 					</li>
           <li class="log-out">
             <a v-on:click = "logout" href = "#" class="nav-link">Logout</a>

@@ -315,15 +315,25 @@ public class RestoranRestController {
     }
 
     @DeleteMapping("/api/artikal/obrisi/{id}")
-    public ResponseEntity obrisiArtikal(@PathVariable Long id, HttpSession session) {
-        if (!sessionService.validate(session))
+    public ResponseEntity obrisiArtikal(@PathVariable Long id, HttpSession session, @RequestParam String korisnickoIme) {
+//        if (!sessionService.validate(session))
+//            return new ResponseEntity(HttpStatus.FORBIDDEN);
+//
+//        if (!sessionService.getUloga(session).equals(Uloga.MENADZER))
+//            return new ResponseEntity(HttpStatus.FORBIDDEN);
+
+        Korisnik loggedKorisnik = korisnikRepository.getByKorisnickoIme(korisnickoIme);
+
+        if(loggedKorisnik == null)
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        if (!sessionService.getUloga(session).equals(Uloga.MENADZER))
+        if(!loggedKorisnik.getAuth())
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        Korisnik korisnik = korisnikRepository.getByKorisnickoIme((String) session.getAttribute("korisnickoIme"));
-        Restoran restoran = ((Menadzer) korisnik).getRestoran();
+        if(!Objects.equals(loggedKorisnik.getUloga(), Uloga.MENADZER))
+            return new ResponseEntity(HttpStatus.METHOD_NOT_ALLOWED);
+
+        Restoran restoran = ((Menadzer) loggedKorisnik).getRestoran();
         Artikal artikal;
         try {
             artikal = artikalRepository.findById(id).get();

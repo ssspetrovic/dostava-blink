@@ -77,7 +77,6 @@ public class PorudzbineArtikli implements Serializable {
     public String toString() {
         return "PorudzbineArtikli{" +
                 "id=" + id +
-                ", porudzbina=" + porudzbina +
                 ", artikal=" + artikal +
                 ", kolicina=" + kolicina +
                 ", ukupnaCena=" + ukupnaCena +

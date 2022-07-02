@@ -19,6 +19,7 @@ import CreateArticle from '../components/CreateArticle.vue'
 import AllManagers from '../components/AllManagers.vue'
 import EditProfile from '../components/EditProfile.vue'
 import EditArticle from '../components/EditArticle.vue'
+import Korpa from '../components/Korpa.vue'
 
 const routes = [
     {
@@ -125,6 +126,11 @@ const routes = [
         path: '/edit-article/:id',
         name: 'edit-article',
         component: EditArticle
+    },
+    {
+        path: '/korpa',
+        name: 'korpa',
+        component: Korpa
     }
 ]
 

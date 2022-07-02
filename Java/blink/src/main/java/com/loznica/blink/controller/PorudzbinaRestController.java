@@ -44,15 +44,25 @@ public class PorudzbinaRestController {
     private KorisnikRepository korisnikRepository;
 
     @GetMapping("/api/porudzbine")
-    public ResponseEntity vratiPorudzbine(HttpSession session) {
+    public ResponseEntity vratiPorudzbine(HttpSession session, @RequestParam String korisnickoIme) {
 
-        Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
+        Korisnik loggedKorisnik = korisnikRepository.getByKorisnickoIme(korisnickoIme);
 
-        if (!sessionService.validate(session))
+        if(loggedKorisnik == null)
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+
+        if(loggedKorisnik.getAuth() == false)
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        if (!loggedKorisnik.getUloga().equals(Uloga.KUPAC))
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
+        if(!Objects.equals(loggedKorisnik.getUloga(), Uloga.KUPAC))
+            return new ResponseEntity(HttpStatus.METHOD_NOT_ALLOWED);
+
+
+//        if (!sessionService.validate(session))
+//            return new ResponseEntity(HttpStatus.FORBIDDEN);
+//
+//        if (!loggedKorisnik.getUloga().equals(Uloga.KUPAC))
+//            return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         Kupac kupac = kupacRepository.getById(loggedKorisnik.getId());
 
