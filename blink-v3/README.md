@@ -1,4 +1,4 @@
-# blink
+# blink-v3
 
 ## Project setup
 ```
