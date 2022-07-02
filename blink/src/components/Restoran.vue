@@ -3,7 +3,6 @@
         <h2 style="text-align:center">Restoran: {{ naziv }}</h2>
         <h2 style="text-align:center">Tip: {{ tip }}</h2>
         <h2 style="text-align:center">Lokacija: {{ lokacija }}</h2>
-        <router-link :to = "{path: '/korisnik/' + menadzerIme.id }"> <h2 class = "text-align:center">Menadzer: {{menadzerIme.korisnickoIme}}</h2></router-link>
         <h2 style="text-align:center">Ocena Restorana: {{ocena}}</h2> 
     </div>
     

@@ -25,20 +25,13 @@
             </tbody>
         </table>
     </div>
-
-    <div class = "kreAD">
-        <router-link to = "/create-manager" class = "btn btn-primary btn-lg">ADMIN: Kreiraj Menadzera</router-link>
-        <router-link to = "/create-dostavljac" class = "btn btn-primary btn-lg">ADMIN: Kreiraj Dostavljaca</router-link>
-        <router-link to = "/all-managers" class = "btn btn-primary btn-lg">ADMIN: Svi menadzeri</router-link>
-    </div>
-
 </template>
 
 <script>
 import axios from "axios"
 
 export default {
-    name: 'SviKorisnici',
+    name: 'AllManagers',
     data: function() {
         return {
             korisnici: {},
@@ -46,7 +39,7 @@ export default {
     },
     mounted: function() {
         axios
-            .get("http://localhost:8080/api/korisnici")
+            .get(`http://localhost:8080/api/menadzer/ispis?korisnickoIme=${this.$store.getters.korisnik.korisnickoIme}`)
             .then((res) => {
                 this.korisnici = res.data
             })

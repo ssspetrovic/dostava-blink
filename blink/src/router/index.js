@@ -16,6 +16,9 @@ import Comment from '../components/Comment.vue'
 import CreateManager from '../components/CreateManager.vue'
 import CreateDostavljac from '../components/CreateManager.vue'
 import CreateArticle from '../components/CreateArticle.vue'
+import AllManagers from '../components/AllManagers.vue'
+import EditProfile from '../components/EditProfile.vue'
+import EditArticle from '../components/EditArticle.vue'
 
 const routes = [
     {
@@ -107,6 +110,21 @@ const routes = [
         path: '/create-article',
         name: 'create-article',
         component: CreateArticle
+    },
+    {
+        path: '/all-managers',
+        name: '/all-managers',
+        component: AllManagers
+    },
+    {
+        path: '/edit-profile',
+        name: 'edit-profile',
+        component: EditProfile
+    },
+    {
+        path: '/edit-article/:id',
+        name: 'edit-article',
+        component: EditArticle
     }
 ]
 

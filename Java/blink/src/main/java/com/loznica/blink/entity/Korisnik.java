@@ -49,7 +49,7 @@ public class Korisnik implements Serializable {
         this.auth = false;
     }
 
-    public Korisnik(Long id, String korisnickoIme, String lozinka, String ime, String prezime, String pol, Date datumRodjenja, Boolean auth, Uloga uloga) {
+    public Korisnik(Long id, String korisnickoIme, String lozinka, String ime, String prezime, String pol, Date datumRodjenja, Uloga uloga) {
         this.id = id;
         this.korisnickoIme = korisnickoIme;
         this.lozinka = lozinka;

@@ -7,6 +7,7 @@ import com.loznica.blink.repository.MenadzerRepository;
 import com.loznica.blink.security.RegistrationRequest;
 import com.loznica.blink.service.KorisnikService;
 import com.loznica.blink.service.SessionService;
+import net.bytebuddy.dynamic.scaffold.MethodRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -58,25 +59,32 @@ public class KorisnikRestController {
     }
 
     @PostMapping("/api/login/info/izmena")
-    public ResponseEntity<Korisnik> setKorisnik(HttpSession session, @RequestBody RegistrationRequest registrationRequest) {
+    public ResponseEntity<Korisnik> setKorisnik(HttpSession session, @RequestBody RegistrationRequest registrationRequest, @RequestParam String korisnickoIme) {
 
-        if (!sessionService.validate(session))
+        Korisnik k = korisnikRepository.getByKorisnickoIme(korisnickoIme);
+
+        if(k == null)
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+
+        if(k.getAuth() == false)
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        Korisnik k = (Korisnik) session.getAttribute("korisnik");
+        if(!k.getUloga().equals(Uloga.MENADZER))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        k.setKorisnickoIme(registrationRequest.getKorisnickoIme() == null ? k.getIme() : registrationRequest.getKorisnickoIme());
-        k.setLozinka(registrationRequest.getLozinka() == null ? k.getLozinka() : registrationRequest.getLozinka());
-        k.setIme(registrationRequest.getIme() == null ? k.getIme() : registrationRequest.getIme());
-        k.setPrezime(registrationRequest.getPrezime() == null ? k.getPrezime() : registrationRequest.getPrezime());
-        k.setPol(registrationRequest.getPol() == null ? k.getPol() : registrationRequest.getPol());
-        k.setDatumRodjenja(registrationRequest.getDatumRodjenja() == null ? k.getDatumRodjenja() : registrationRequest.getDatumRodjenja());
+        k.setKorisnickoIme(registrationRequest.getKorisnickoIme() == null || registrationRequest.getKorisnickoIme().toString().isEmpty() ? k.getKorisnickoIme() : registrationRequest.getKorisnickoIme());
+        k.setLozinka(registrationRequest.getLozinka() == null || registrationRequest.getLozinka().toString().isEmpty()  ?  k.getLozinka() : registrationRequest.getLozinka());
+        k.setIme(registrationRequest.getIme() == null || registrationRequest.getIme().toString().isEmpty() ? k.getIme() : registrationRequest.getIme());
+        k.setPrezime(registrationRequest.getPrezime() == null || registrationRequest.getPrezime().toString().isEmpty()  ? k.getPrezime() : registrationRequest.getPrezime());
+        k.setPol(registrationRequest.getPol() == null || registrationRequest.getPol().toString().isEmpty() ? k.getPol() : registrationRequest.getPol());
+        k.setDatumRodjenja(registrationRequest.getDatumRodjenja() == null || registrationRequest.getDatumRodjenja().toString().isEmpty()  ? k.getDatumRodjenja() : registrationRequest.getDatumRodjenja());
 
         try {
             System.out.println("Uspesna izmena.");
         } catch (Exception e) {
             System.out.println("Neuspesna izmena.");
         }
+        korisnikRepository.save(k);
 
         return ResponseEntity.ok(k);
     }
@@ -104,16 +112,25 @@ public class KorisnikRestController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("Korisnik je uspesno sacuvan!");
     }
 
-    @RequestMapping(value = "/api/admin/obrisi-korisnika/{id}", method = {RequestMethod.DELETE, RequestMethod.GET})
-    public ResponseEntity deleteKorisnik(@PathVariable(name = "id") Long id, HttpSession session) {
-        if (!sessionService.validate(session))
+    @DeleteMapping("/api/admin/obrisi-korisnika/{id}")
+    public ResponseEntity deleteKorisnik(@PathVariable(name = "id") Long id, @RequestParam String korisnickoIme) {
+//        if (!sessionService.validate(session))
+//            return new ResponseEntity(HttpStatus.FORBIDDEN);
+//
+//        if (!sessionService.getUloga(session).equals(Uloga.ADMIN))
+//            return new ResponseEntity(HttpStatus.FORBIDDEN);
+
+        Korisnik loggedKorisnik = korisnikRepository.getByKorisnickoIme(korisnickoIme);
+
+        if(loggedKorisnik == null)
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        if (!sessionService.getUloga(session).equals(Uloga.ADMIN))
+        if(!Objects.equals(loggedKorisnik.getId(), id))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        korisnikService.deleteById(id);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Korisnk je uspesno uklonjen!");
+        System.out.println(loggedKorisnik);
+        korisnikRepository.delete(loggedKorisnik);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Korisnik je uspesno uklonjen!");
     }
 
     @GetMapping("/api/admin/korisnici/ispis")
@@ -226,12 +243,18 @@ public class KorisnikRestController {
     }
 
     @GetMapping("/api/menadzer/ispis")
-    public List<Menadzer> listaMenadzmenta(HttpSession session) {
+    public ResponseEntity listaMenadzmenta(HttpSession session, @RequestParam String korisnickoIme) {
 //        if (!sessionService.validate(session))
 //            return new ResponseEntity(HttpStatus.FORBIDDEN);
 //
 //        if (!sessionService.getUloga(session).equals(Uloga.ADMIN))
 //            return new ResponseEntity(HttpStatus.FORBIDDEN);
+        Korisnik loggedKorisnik = korisnikRepository.getByKorisnickoIme(korisnickoIme);
+
+        if(loggedKorisnik == null)
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        if(loggedKorisnik.getUloga() != Uloga.ADMIN)
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         List<Menadzer> menadzerList = menadzerRepository.findAll();
         List<Menadzer> ispis = new ArrayList<>();
@@ -242,7 +265,7 @@ public class KorisnikRestController {
             }
         }
 
-        return ispis;
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(ispis);
     }
 
 
@@ -270,9 +293,23 @@ public class KorisnikRestController {
         if(k == null)
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
+        Korisnik temp = new Korisnik();
+
+        temp.setId(k.getId());
+        temp.setKorisnickoIme(k.getKorisnickoIme());
+        temp.setLozinka(k.getLozinka());
+        temp.setIme(k.getIme());
+        temp.setPrezime(k.getPrezime());
+        temp.setPol(k.getPol());
+        temp.setDatumRodjenja(k.getDatumRodjenja());
+        temp.setUloga(k.getUloga());
+
+        if(loggedKorisnik.getUloga() == Uloga.ADMIN)
+            return ResponseEntity.status(HttpStatus.OK).body(temp);
+        else
             if(loggedKorisnik.getId().equals(k.getId()))
-                return ResponseEntity.status(HttpStatus.ACCEPTED).body(k);
-            else
-                return new ResponseEntity(HttpStatus.FORBIDDEN);
+                return ResponseEntity.status(HttpStatus.OK).body(k);
+
+        return new ResponseEntity(HttpStatus.FORBIDDEN);
     }
 }

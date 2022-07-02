@@ -5,6 +5,7 @@
         <h2 style="text-align:center">Cena: {{ cena }}</h2>
         <h2 style="text-align:center">Kolicina: {{ kolicina }}</h2>
         <h2 style="text-align:center">Opis: {{ opis }}</h2>
+        <router-link :to = "{path: '/edit-article/' + artikal.id}" class = "btn btn-primary btn-lg">Izmeni?</router-link>
         <router-link to = "/create-restaurant" class = "btn btn-primary btn-lg">Naruci?</router-link> <!--KORPA-->
     </div>
 </template>

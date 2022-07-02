@@ -119,4 +119,14 @@ public class LoginRestController {
         session.invalidate();
         return new ResponseEntity("Uspesno ste napustili profil, pozdrav!", HttpStatus.OK);
     }
+
+    @PostMapping("api/clearout")
+    public ResponseEntity clearout() {
+        for(Korisnik k : korisnikRepository.findAll())
+            if(k.getAuth() == true) {
+                k.setAuth(false);
+                korisnikRepository.save(k);
+            }
+        return new ResponseEntity(HttpStatus.ACCEPTED);
+    }
 }

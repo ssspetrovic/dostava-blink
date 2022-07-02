@@ -10,7 +10,6 @@ import java.util.Date;
 public class Menadzer extends Korisnik implements Serializable {
 
     @OneToOne
-    @JsonIgnore
     private Restoran restoran;
 
     public Menadzer() {

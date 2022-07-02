@@ -25,6 +25,9 @@
           <li class="log-out">
             <a v-on:click = "logout" href = "#" class="nav-link">Logout</a>
           </li>
+          <li class="clearout">
+            <a v-on:click = "clearout" href = "#" class="nav-link">Clearout</a>
+          </li>
         </ul>
       </div>
     </div>
@@ -50,8 +53,19 @@ export default
                     alert("Something went wrong!");
                 });
             
+    },
+        clearout() {
+            axios.post(`http://localhost:8080/api/clearout`)
+              .then((res) => {
+                    console.log(res);
+                    this.$router.push("/prijava");
+                })
+                .catch((err) => {
+                    console.log(err);
+                    alert("Something went wrong!");
+                });
     }
-    }
+  }
 }
 </script>
 

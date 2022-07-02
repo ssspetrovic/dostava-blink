@@ -210,7 +210,7 @@ public class RestoranRestController {
     }
 
     @PostMapping("/api/artikli/kreiraj-artikal")
-    public ResponseEntity kreirajArtikal(@RequestParam String korisnickoIme, Artikal artikal, /*@RequestParam("slike") MultipartFile multipartFile,*/ HttpSession session) throws IOException {
+    public ResponseEntity kreirajArtikal(@RequestParam String korisnickoIme, @RequestBody Artikal artikal, /*@RequestParam("slike") MultipartFile multipartFile,*/ HttpSession session) throws IOException {
 //        if (!sessionService.validate(session))
 //            return new ResponseEntity(HttpStatus.FORBIDDEN);
 //
@@ -219,6 +219,9 @@ public class RestoranRestController {
         Korisnik loggedKorisnik = korisnikRepository.getByKorisnickoIme(korisnickoIme);
 
         if(loggedKorisnik == null)
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+
+        if(!loggedKorisnik.getAuth())
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         if(loggedKorisnik.getUloga() != Uloga.MENADZER)
@@ -241,7 +244,7 @@ public class RestoranRestController {
         menadzer.getRestoran().getArtikli().add(artikal);
         artikalRepository.save(artikal);
 
-        String uploadDir = "korisnik-slike/" + artikal.getId();
+        //String uploadDir = "korisnik-slike/" + artikal.getId();
         //FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
 
         return ResponseEntity.ok(artikal);
@@ -259,14 +262,14 @@ public class RestoranRestController {
         if (artikal.getTip() == null || artikal.getTip().toString().isEmpty())
             greska.put("tip", "OBAVEZNO");
 
-        if (artikal.getSlike() == null || artikal.getSlike().isEmpty())
-            greska.put("slike", "OBAVEZNO");
+//        if (artikal.getSlike() == null || artikal.getSlike().isEmpty())
+//            greska.put("slike", "OBAVEZNO");
 
         return greska;
     }
 
     @PostMapping("/api/artikli/izmena/{id}")
-    public ResponseEntity<Artikal> setArtikal(@PathVariable(name = "id") Long id, Artikal artikal, /*@RequestParam("image") MultipartFile multipartFile,*/ HttpSession session, @RequestParam String korisnickoIme) throws IOException {
+    public ResponseEntity setArtikal(@PathVariable(name = "id") Long id, @RequestBody Artikal artikal, /*@RequestParam("image") MultipartFile multipartFile,*/ @RequestParam String korisnickoIme) {
 //        if (!sessionService.validate(session))
 //            return new ResponseEntity(HttpStatus.FORBIDDEN);
 //
@@ -275,13 +278,16 @@ public class RestoranRestController {
 
         Korisnik loggedKorisnik = korisnikRepository.getByKorisnickoIme(korisnickoIme);
 
-        if(loggedKorisnik.getUloga() != Uloga.MENADZER)
+        if(loggedKorisnik == null)
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+
+        if(!loggedKorisnik.getAuth())
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+
+        if(!loggedKorisnik.getUloga().equals(Uloga.MENADZER))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         Artikal a = artikalRepository.getById(id);
-
-        if(a == null)
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         a.setNaziv(artikal.getNaziv() == null ? a.getNaziv() : artikal.getNaziv());
         a.setCena(artikal.getCena() == null ? a.getCena() : artikal.getCena());
@@ -298,7 +304,6 @@ public class RestoranRestController {
 //            a.setSlike(a.getSlike());
 //        }
 
-
         try {
             artikalRepository.save(a);
             System.out.println("Uspesna izmena.");
@@ -306,7 +311,7 @@ public class RestoranRestController {
             System.out.println("Neuspesna izmena.");
         }
 
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(a);
+        return new ResponseEntity(HttpStatus.ACCEPTED);
     }
 
     @DeleteMapping("/api/artikal/obrisi/{id}")

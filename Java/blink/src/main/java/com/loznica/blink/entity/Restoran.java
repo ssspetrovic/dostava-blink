@@ -28,6 +28,7 @@ public class Restoran implements Serializable {
     private Lokacija lokacija;
 
     @OneToOne
+    @JsonIgnore
     private Menadzer menadzer;
 
     float prosek = 0;

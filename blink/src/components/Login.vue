@@ -4,7 +4,7 @@
   <label for="korisnickoIme">Korisnicko Ime:</label>
   <input v-model="korisnik.korisnickoIme" /><br />
   <label for="lozinka">Lozinka:</label>
-  <input v-model="korisnik.lozinka" /><br />
+  <input type = "password" v-model="korisnik.lozinka" /><br />
   <button v-on:click="submit()">Prijavite se!</button>
   <p>
         <router-link to = "/sign-up" class = "btn btn-primary btn-lg">Zelite li da napravite profil?</router-link>
