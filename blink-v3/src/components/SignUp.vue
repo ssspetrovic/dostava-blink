@@ -56,6 +56,7 @@
                 id="lozinka"
               />
             </div>
+
             <div class="mb-3">
               <label class="col-form-label" for="radio-pol"> Pol: </label>
               <div id="radio-pol">
@@ -65,8 +66,9 @@
                     id="pol-m"
                     type="radio"
                     name="pol"
+                    checked
                   />
-                  <label class="form-check-label" for="pol-m"> Muško </label>
+                  <label class="form-check-label" for="pol-m"> Muški </label>
                 </div>
                 <div class="form-check">
                   <input
@@ -75,7 +77,7 @@
                     type="radio"
                     name="pol"
                   />
-                  <label class="form-check-label" for="pol-z"> Žensko </label>
+                  <label class="form-check-label" for="pol-z"> Ženski </label>
                 </div>
               </div>
             </div>
@@ -135,11 +137,17 @@ export default {
   },
   methods: {
     submit: function () {
+      if (document.getElementById("pol-m").checked) {
+        this.korisnik.pol = "Muško";
+      } else {
+        this.korisnik.pol = "Žensko";
+      }
+
       axios
         .post("http://localhost:8080/api/register", this.korisnik)
         .then((res) => {
           console.log(res);
-          this.$router.push("/korisnici");
+          this.$router.push("/");
         })
         .catch((err) => {
           console.log(err);
@@ -147,6 +155,5 @@ export default {
         });
     },
   },
-  mounted() {},
 };
 </script>

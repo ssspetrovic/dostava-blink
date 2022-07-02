@@ -1,80 +1,129 @@
 <template>
-    <div class="container vh-100">
-        <table>
-            <thead>
-
-            </thead>
-            <tbody>
-                
-            </tbody>
+  <section>
+    <div class="container w-0 vh-100">
+      <div class="d-flex justify-content-center table-responsive-sm">
+        <table class="table" id="tabela">
+          <thead class="table-dark">
+            <tr>
+              <th colspan="2" class="text-center">Informacije o korisniku</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th>Ime:</th>
+              <td>{{ kI }}</td>
+            </tr>
+            <tr>
+              <th>Prezime:</th>
+              <td>{{ kP }}</td>
+            </tr>
+            <tr>
+              <th>Korisničko ime:</th>
+              <td>{{ kIme }}</td>
+            </tr>
+            <tr>
+              <th>Uloga:</th>
+              <td>{{ kU }}</td>
+            </tr>
+            <tr>
+              <th>Restoran</th>
+              <!-- <td>{{ kR.naziv }}</td> -->
+            </tr>
+          </tbody>
         </table>
-
-        <h2 style = "text-align:center"> Korisnicko Ime : {{kIme}}</h2>
-        <h2 style = "text-align:center"> Ime : {{kI}}</h2>
-        <h2 style = "text-align:center"> Prezime : {{kP}}</h2>
-        <h2 style = "text-align:center"> Uloga : {{kU}}</h2>
-        <tr v-for = "clan in komentari" :key = "clan.id"> 
-            <td><router-link :to = "{path: '/restoran/' + clan.restoran.id}"><td><h2 style = "text-align:center">Komentari: {{clan.tekstKomentara}}</h2> </td></router-link></td>
-        </tr>
+      </div>
+      <div class="d-flex justify-content-center mt-4">
+        <router-link to="/edit-profile" class="btn btn-lg btn-dark">
+          Uredi profil
+        </router-link>
+      </div>
     </div>
+  </section>
 </template>
 
+<style>
+#tabela {
+  width: 50%;
+}
+</style>
+
 <script>
+import axios from "axios";
 
-import axios from 'axios'
-
-//import axios from "axios";
 export default {
-    name: 'IspisKorisnik',
-    data: function () {
-        return {
-            korisnik: {
-                komentari: {},
-                restoran: {},
-            },
-        }
+  name: "IspisKorisnik",
+  data: function () {
+    return {
+      korisnik: {
+        komentari: {},
+        restoran: {},
+      },
+    };
+  },
+  computed: {
+    kIme() {
+      return this.korisnik.korisnickoIme;
     },
-    computed: {
-        kIme() {
-            return this.korisnik.korisnickoIme;
-        },
-        kI() {
-            return this.korisnik.ime;
-        },
-        kP() {
-            return this.korisnik.prezime;
-        },
-        kU() {
-            return this.korisnik.uloga;
-        },
-        komentari() {
-            return this.korisnik.komentari;
-        },
+    kI() {
+      return this.korisnik.ime;
     },
-    created() {
-        this.$watch(
-            () => this.$route.params,
-            () => {
-                // react to route changes...
-                this.fetchKorisnik()
-            }
+    kP() {
+      return this.korisnik.prezime;
+    },
+    kU() {
+      return this.korisnik.uloga;
+    },
+    komentari() {
+      return this.korisnik.komentari;
+    },
+    kR() {
+      return this.korisnik.restoran;
+    },
+  },
+  created() {
+    this.$watch(
+      () => this.$route.params,
+      () => {
+        // react to route changes...
+        this.fetchKorisnik();
+      }
+    );
+  },
+  methods: {
+    fetchKorisnik() {
+      axios
+        .get(
+          `http://localhost:8080/api/korisnik/` +
+            this.$route.params.id +
+            `/?korisnickoIme=${this.$store.getters.korisnik.korisnickoIme}`
         )
+        .then((res) => {
+          this.korisnik = res.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
-    methods: {
-        fetchKorisnik() {
-            axios
-                .get(`http://localhost:8080/api/korisnik/` + this.$route.params.id + `/?korisnickoIme=${this.$store.getters.korisnik.korisnickoIme}`)
-                .then((res) => {
-                    this.korisnik = res.data;
-                })
-                .catch((err) => {
-                    console.log(err)
-                })
-        },
+    logout() {
+      axios
+        .delete(
+          `http://localhost:8080/api/admin/obrisi-korisnika/` +
+            this.$route.params.id +
+            `?korisnickoIme=${this.$store.getters.korisnik.korisnickoIme}`
+        )
+        .then((res) => {
+          console.log(res);
+          this.$router.push("/prijava");
+        })
+        .catch((err) => {
+          console.log(err);
+          alert("Something went wrong!");
+        });
     },
-    mounted: function () {
-        this.fetchKorisnik()
-        /*
+  },
+  mounted: function () {
+    this.fetchKorisnik();
+    /*
                 fetch('http://localhost:8083/api/korisnici/ispis',
                     {
                         credentials: 'include'
@@ -89,7 +138,6 @@ export default {
                     });
             }
         */
-
-    }
-}
+  },
+};
 </script>
