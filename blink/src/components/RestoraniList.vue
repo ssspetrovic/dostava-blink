@@ -11,7 +11,7 @@
             <div class = "nextLine">
             <a v-for = "clan in restoran" :href = "`/comment/${clan.id}`" :key = "clan.id" class = "btn btn-primary btn-lg"> 
             <td>
-               No bitches?
+               Postavite Komentar!
             </td>
             </a>
             </div>

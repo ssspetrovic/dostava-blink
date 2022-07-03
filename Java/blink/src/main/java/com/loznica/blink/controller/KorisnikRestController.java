@@ -246,7 +246,7 @@ public class KorisnikRestController {
 //
 //        if (!sessionService.getUloga(session).equals(Uloga.ADMIN))
 //            return new ResponseEntity(HttpStatus.FORBIDDEN);
-        
+
         Korisnik loggedKorisnik = korisnikRepository.getByKorisnickoIme(korisnickoIme);
 
         if(loggedKorisnik == null)

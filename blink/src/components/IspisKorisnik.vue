@@ -5,10 +5,13 @@
         <h2 style = "text-align:center"> Prezime : {{kP}}</h2>
         <h2 style = "text-align:center"> Uloga : {{kU}}</h2>
         <router-link :to = "{path: '/restoran/' + kRid }"> <h2 class = "text-align:center">{{kRnaziv}}</h2></router-link>
-        <a v-on:click = "uPripremi" href = "#" class="nav-link" v-if = "this.korisnik.restoran != null">STATUS: U PRIPREMI</a>
-        <a v-on:click = "cekaDostavljaca" href = "#" class="nav-link" v-if = "this.korisnik.restoran != null">STATUS: CEKA DOSTAVLJACA</a>
-        <a v-on:click = "uTransportu" href = "#" class="nav-link" v-if = "this.korisnik.porudzbine != null">STATUS: U TRANSPORTU</a>
-        <a v-on:click = "dostavljeno" href = "#" class="nav-link" v-if = "this.korisnik.porudzbine != null">STATUS: DOSTAVLJENO</a>
+        <a v-on:click = "uPripremi" href = "#" class="nav-link" v-if = "this.korisnik.restoran != null"><h2>STATUS: U PRIPREMI</h2></a>
+        <a v-on:click = "cekaDostavljaca" href = "#" class="nav-link" v-if = "this.korisnik.restoran != null"><h2>STATUS: CEKA DOSTAVLJACA</h2></a>
+        <a v-on:click = "uTransportu" href = "#" class="nav-link" v-if = "this.korisnik.porudzbine != null"><h2>STATUS: U TRANSPORTU</h2></a>
+        <a v-on:click = "dostavljeno" href = "#" class="nav-link" v-if = "this.korisnik.porudzbine != null"><h2>STATUS: DOSTAVLJENO</h2></a>
+        <router-link to = "/dostavljac-korpa" class = "movCR" v-if = "this.korisnik.porudzbine != null"><h2>Porudzbine Restorana</h2></router-link>
+        <router-link to = "/all-orders" class = "movCR" v-if = "this.korisnik.porudzbine != null"><h2>Sve Porudzbine Dostavljaca</h2></router-link>
+
 
         <tr v-for = "clan in komentari" :key = "clan.id"> 
             <td><h2 style = "text-align:center">Komentari: {{clan.tekstKomentara}} Ocena: {{clan.ocena}}</h2></td>

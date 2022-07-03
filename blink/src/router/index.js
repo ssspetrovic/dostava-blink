@@ -23,6 +23,7 @@ import Search from '../components/Search.vue'
 import RestoranKorpa from '../components/RestoranKorpa.vue'
 import CreateOrder from '../components/CreateOrder.vue'
 import DostavljacKorpa from '../components/DostavljacKorpa.vue'
+import AllOrdersForDostavljac from '../components/AllOrdersForDostavljac.vue'
 
 const routes = [
     {
@@ -149,6 +150,11 @@ const routes = [
         path: '/dostavljac-korpa',
         name: 'dostavljac-korpa',
         component: DostavljacKorpa
+    },
+    {
+        path: '/all-orders',
+        name: '/all-orders',
+        component: AllOrdersForDostavljac
     }
 ]
 
