@@ -5,9 +5,9 @@
         <label for="idRestorana">Id Restorana:</label>
         <input v-model.number="novaPorudzbinaDto.idRestorana" /><br />
         <label for="cena">Id Artikla:</label>
-        <input v-model.number="novaPorudzbinaDto.novePorudzbine.id" /><br />
+        <input v-model.number="novaPorudzbinaDto.novePorudzbine[0].id" /><br />
         <label for="tip">Kolicina:</label>
-        <input v-model="novaPorudzbinaDto.novePorudzbine.kolicina" /><br />
+        <input v-model="novaPorudzbinaDto.novePorudzbine[0].kolicina" /><br />
         <button class = "button" v-on:click="submit()">Kreiraj Porudzbinu!</button>
     </div>
 </template>
@@ -32,10 +32,10 @@ export default {
         submit: function () {
 
             axios
-                .post(`http://localhost:8080/api/artikli/kreiraj-artikal?korisnickoIme=aaa`, this.novaPorudzbinaDto)
+                .post(`http://localhost:8080/api/porudzbine?korisnickoIme=aaa`, this.novaPorudzbinaDto)
                 .then((res) => {
                     console.log(res);
-                    this.$router.push("/korpa");
+                    this.$router.push("/");
                 })
                 .catch((err) => {
                     console.log(err);

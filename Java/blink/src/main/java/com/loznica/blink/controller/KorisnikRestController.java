@@ -69,9 +69,6 @@ public class KorisnikRestController {
         if(k.getAuth() == false)
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        if(!k.getUloga().equals(Uloga.MENADZER))
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
-
         k.setKorisnickoIme(registrationRequest.getKorisnickoIme() == null || registrationRequest.getKorisnickoIme().toString().isEmpty() ? k.getKorisnickoIme() : registrationRequest.getKorisnickoIme());
         k.setLozinka(registrationRequest.getLozinka() == null || registrationRequest.getLozinka().toString().isEmpty()  ?  k.getLozinka() : registrationRequest.getLozinka());
         k.setIme(registrationRequest.getIme() == null || registrationRequest.getIme().toString().isEmpty() ? k.getIme() : registrationRequest.getIme());

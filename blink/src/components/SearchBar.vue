@@ -21,7 +21,7 @@ name: 'SearchBar',
     },
     mounted: function() {
         axios
-            .get(`http://localhost:8080/api/restoran/pretraga?string=Atr`)
+            .get(`http://localhost:8080/api/restoran/pretraga?string=A`)
             .then((res) => {
                 this.restoran = res.data
             })

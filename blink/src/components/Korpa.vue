@@ -13,7 +13,8 @@
                     <td> {{clan2.nazivPorudzbine}}</td>
                     <td> {{clan2.cenaPorudzbine}}</td>
                     <td> {{clan2.kolicina}} </td>
-                    <td> <a v-on:click = "smanjiKolicinu" href = "#" class="nav-link">Smanji kolicinu?</a></td>
+                    <td> <a v-on:click = "smanjiKolicinu" href = "#" class="nav-link">Obrisi artikal?</a></td>
+
                 </tr>
                 </div>
             </tbody>
@@ -34,14 +35,14 @@ export default {
         }
     },
     computed: {
-        findStr(str) {
-            if(str != null)
-            for(let i = 0; i < this.porudzbinaDtoList.length; i++)
-                for(let j = 0; j < this.porudzbinaDtoList[i].porudzbineKupca.length; j++)
-                    if(str === this.porudzbinaDtoList[i].porudzbineKupca[j].nazivPorudzbine)
-                        return str;
-            return null;
-        }
+        // findStr(str) {
+        //     if(str != null)
+        //     for(let i = 0; i < this.porudzbinaDtoList.length; i++)
+        //         for(let j = 0; j < this.porudzbinaDtoList[i].porudzbineKupca.length; j++)
+        //             if(str === this.porudzbinaDtoList[i].porudzbineKupca[j].nazivPorudzbine)
+        //                 return str;
+        //     return null;
+        // }
     },
     created() {
         this.$watch(
@@ -65,7 +66,7 @@ export default {
                 })
         },
         smanjiKolicinu() {
-            axios.post(`http://localhost:8080/api/porudzbine/` + this.findStr("Monster Energy") + `?korisnickoIme=${this.$store.getters.korisnik.korisnickoIme}`)
+            axios.post(`http://localhost:8080/api/porudzbine/` + `Monster Energy` + `?korisnickoIme=${this.$store.getters.korisnik.korisnickoIme}`)
             .then((res) => {
                     console.log(res);
                 })

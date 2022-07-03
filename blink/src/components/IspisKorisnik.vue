@@ -4,7 +4,7 @@
         <h2 style = "text-align:center"> Ime : {{kI}}</h2>
         <h2 style = "text-align:center"> Prezime : {{kP}}</h2>
         <h2 style = "text-align:center"> Uloga : {{kU}}</h2>
-        <router-link :to = "{path: '/restoran/' + kRid }"> <h2 class = "text-align:center">Restoran: {{kRnaziv}}</h2></router-link>
+        <router-link :to = "{path: '/restoran/' + kRid }"> <h2 class = "text-align:center">{{kRnaziv}}</h2></router-link>
         <tr v-for = "clan in komentari" :key = "clan.id"> 
             <td><router-link :to = "{path: '/restoran/' + clan.restoran.id}"><td><h2 style = "text-align:center">Komentari: {{clan.tekstKomentara}}</h2> </td></router-link></td>
         </tr>

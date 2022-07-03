@@ -81,7 +81,9 @@ public class DatabaseConfiguration {
 
         Artikal a3 = new Artikal("Coca-Cola", 65, Tip.PICE, 2000, "Gazirano piće.");
 
-        artikalRepository.saveAll(List.of(a, a2, a3));
+        Artikal a4 = new Artikal("Rosa", 55, Tip.PICE, 10000, "Voda.");
+
+        artikalRepository.saveAll(List.of(a, a2, a3, a4));
 
         Porudzbina porudzbina = new Porudzbina(r, kupac);
         Porudzbina porudzbina2 = new Porudzbina(rr, kupac);
@@ -111,6 +113,7 @@ public class DatabaseConfiguration {
         r.setLokacija(l);
         r.setMenadzer(sime);
         rr.setLokacija(ll);
+        rr.setArtikli(Set.of(a3, a4));
 
         restoranRepository.saveAllAndFlush(List.of(r,rr));
         return true;
