@@ -1,9 +1,7 @@
 package com.loznica.blink.controller;
 
 import com.loznica.blink.entity.*;
-import com.loznica.blink.repository.DostavljacRepository;
-import com.loznica.blink.repository.KorisnikRepository;
-import com.loznica.blink.repository.MenadzerRepository;
+import com.loznica.blink.repository.*;
 import com.loznica.blink.security.RegistrationRequest;
 import com.loznica.blink.service.KorisnikService;
 import com.loznica.blink.service.SessionService;
@@ -34,7 +32,19 @@ public class KorisnikRestController {
     private DostavljacRepository dostavljacRepository;
 
     @Autowired
+    private KupacRepository kupacRepository;
+
+    @Autowired
     private SessionService sessionService;
+
+    @Autowired
+    private PorudzbinaRepository porudzbinaRepository;
+
+    @Autowired
+    private KomentarRepository komentarRepository;
+
+    @Autowired
+    private RestoranRepository restoranRepository;
 
     @GetMapping("/api/")
     public String dobrodoslica() {
@@ -126,6 +136,35 @@ public class KorisnikRestController {
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         System.out.println(loggedKorisnik);
+        if(Objects.equals(loggedKorisnik.getUloga(), Uloga.KUPAC)) {
+            Kupac kupac = kupacRepository.getById(loggedKorisnik.getId());
+            if(kupac.getSvePorudzbine() != null)
+                for(Porudzbina p : porudzbinaRepository.findAll())
+                    if(p.getKupac().equals(kupac))
+                        p.setKupac(null);
+            if(kupac.getKomentari() != null)
+                for(Komentar k : komentarRepository.findAll())
+                    if(k.getKupac().equals(kupac))
+                        k.setKupac(null);
+            kupacRepository.delete(kupac);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body("Kupac je uklonjen.");
+        }
+        if(Objects.equals(loggedKorisnik.getUloga(), Uloga.MENADZER)) {
+            Menadzer menadzer = menadzerRepository.getByKorisnickoIme(korisnickoIme);
+            if(menadzer.getRestoran() != null)
+                for(Restoran r : restoranRepository.findAll())
+                    if(r.getMenadzer().equals(menadzer)) {
+                        r.setMenadzer(null);
+                        break;
+                    }
+            menadzerRepository.delete(menadzer);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body("Menadzer je uklonjen.");
+        }
+        if(Objects.equals(loggedKorisnik.getUloga(), Uloga.DOSTAVLJAC)) {
+            Dostavljac dostavljac = dostavljacRepository.getById(loggedKorisnik.getId());
+            dostavljacRepository.delete(dostavljac);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body("Dostavljac je uklonjen.");
+        }
         korisnikRepository.delete(loggedKorisnik);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("Korisnik je uspesno uklonjen!");
     }

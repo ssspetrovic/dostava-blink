@@ -23,14 +23,6 @@
                 <th>Ocena:</th>
                 <td>{{ ocena }}</td>
               </tr>
-              <tr>
-                <th>Menadžer:</th>
-                <td>
-                  <router-link :to="{ path: '/korisnik/' + menadzerIme.id }">
-                    {{ menadzerIme.korisnickoIme }}
-                  </router-link>
-                </td>
-              </tr>
             </tbody>
           </table>
         </div>

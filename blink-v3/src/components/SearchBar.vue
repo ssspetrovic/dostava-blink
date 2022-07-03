@@ -11,9 +11,9 @@
           {{ clan.naziv }}
         </td>
       </a>
-      <div class="item error" v-if="input && !restoran.naziv.length">
+      <!-- <div class="item error" v-if="input && !restoran.naziv.length">
         <p>No results found!</p>
-      </div>
+      </div> -->
     </div>
   </section>
 </template>
@@ -38,13 +38,13 @@ export default {
         console.log(err);
       });
   },
-  computed: {
-    stringRest() {
-      return this.restoran.filter((clan) => {
-        return clan.naziv.toLowerCase().includes(this.input.toLowerCase());
-      });
-    },
-  },
+  // computed: {
+  //   stringRest() {
+  //     return this.restoran.filter((clan) => {
+  //       return clan.naziv.toLowerCase().includes(this.input.toLowerCase());
+  //     });
+  //   },
+  // },
 };
 </script>
 

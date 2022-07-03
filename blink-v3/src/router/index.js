@@ -21,6 +21,8 @@ import EditArticle from "../components/EditArticle.vue";
 import Korpa from "../components/Korpa.vue";
 import RestoranKorpa from "../components/RestoranKorpa.vue";
 import CreateOrder from "../components/CreateOrder.vue";
+import DostavljacKorpa from '../components/DostavljacKorpa.vue'
+import AllOrdersForDostavljac from '../components/AllOrdersForDostavljac.vue'
 
 const routes = [
   {
@@ -138,6 +140,16 @@ const routes = [
     name: "create-order",
     component: CreateOrder,
   },
+  {
+    path: '/dostavljac-korpa',
+    name: 'dostavljac-korpa',
+    component: DostavljacKorpa
+},
+{
+    path: '/all-orders',
+    name: '/all-orders',
+    component: AllOrdersForDostavljac
+}
 ];
 
 const router = createRouter({

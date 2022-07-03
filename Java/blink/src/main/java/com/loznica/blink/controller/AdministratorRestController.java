@@ -119,7 +119,7 @@ public class AdministratorRestController {
         if(menadzer != null)
             menadzer.setRestoran(null);
 
-        restoranRepository.deleteById(restoran.getId());
+            restoranRepository.deleteById(restoran.getId());
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("Uspesno obrisan restoran!");
     }

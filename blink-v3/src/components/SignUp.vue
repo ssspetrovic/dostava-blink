@@ -137,6 +137,11 @@ export default {
   },
   methods: {
     submit: function () {
+      if (document.getElementById("pol-m").checked) {
+        this.korisnik.pol = "Muško";
+      } else {
+        this.korisnik.pol = "Žensko";
+      }
       axios
         .post("http://localhost:8080/api/register", this.korisnik)
         .then((res) => {

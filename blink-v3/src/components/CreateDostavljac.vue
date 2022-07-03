@@ -116,6 +116,11 @@ export default {
   },
   methods: {
     submit: function () {
+      if (document.getElementById("pol-m").checked) {
+        this.korisnik.pol = "Muško";
+      } else {
+        this.korisnik.pol = "Žensko";
+      }
       axios
         .post(
           `http://localhost:8080/api/admin/kreiraj-dostavljaca?korisnickoIme=${this.$store.getters.korisnik.korisnickoIme}`,

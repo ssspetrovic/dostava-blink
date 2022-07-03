@@ -116,11 +116,9 @@
               alt="..."
             />
             <div class="card-body pb-0">
-              <h5 class="card-title">Srbija</h5>
+              <h5 class="card-title">Srpski</h5>
               <p class="card-text">
-                This is a wider card with supporting text below as a natural
-                lead-in to additional content. This content is a little bit
-                longer.
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum quidem consectetur nesciunt, velit architecto cum tempore eum veritatis. Deleniti ut veniam quaerat! Magnam suscipit aliquid, dolores corporis totam consequuntur rem.
               </p>
             </div>
             <div class="card-footer text-center" id="card-foot">
@@ -138,11 +136,9 @@
               alt="..."
             />
             <div class="card-body pb-0">
-              <h5 class="card-title">Meksiko</h5>
+              <h5 class="card-title">Meksicki</h5>
               <p class="card-text">
-                This is a wider card with supporting text below as a natural
-                lead-in to additional content. This content is a little bit
-                longer.
+                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Recusandae quis est similique eum accusamus praesentium ratione error odit hic, commodi, labore animi eligendi! Dignissimos harum facere porro et amet ipsa.
               </p>
             </div>
             <div class="card-footer text-center" id="card-foot">
@@ -162,11 +158,9 @@
               alt="..."
             />
             <div class="card-body pb-0">
-              <h5 class="card-title">Tajland</h5>
+              <h5 class="card-title">Tajlandski</h5>
               <p class="card-text">
-                This is a wider card with supporting text below as a natural
-                lead-in to additional content. This content is a little bit
-                longer..
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat est ab magni, eveniet minima quia explicabo, id nisi necessitatibus exercitationem maiores sequi culpa, molestiae doloremque dolorum repellendus incidunt. Qui, ab.
               </p>
             </div>
             <div class="card-footer text-center" id="card-foot">

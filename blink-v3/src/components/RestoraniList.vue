@@ -18,6 +18,13 @@
           <tbody></tbody>
         </table>
       </div>
+      <div class = "d-flex justify-content-center">
+            <a v-for = "clan in restoran" :href = "`/comment/${clan.id}`" :key = "clan.id" class = "btn btn-primary btn-lg"> 
+            <td>
+               Postavite Komentar!
+            </td>
+            </a>
+            </div>
       <div class="d-flex justify-content-center">
         <router-link
           to="/create-restaurant"

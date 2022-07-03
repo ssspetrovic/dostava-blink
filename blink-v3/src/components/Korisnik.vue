@@ -16,20 +16,20 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="korisnik in korisnici" v-bind:key="korisnik.id">
-              <th scope="row">{{ korisnik.id }}</th>
+            <tr v-for="clan in korisnik" v-bind:key="clan.id">
+              <th scope="row">{{ clan.id }}</th>
               <td>
                 <router-link
-                  :to="{ path: '/korisnik/' + korisnik.id }"
+                  :to="{ path: '/korisnik/' + clan.id }"
                   class="link-primary"
-                  >{{ korisnik.korisnickoIme }}</router-link
+                  >{{ clan.korisnickoIme }}</router-link
                 >
               </td>
-              <td>{{ korisnik.ime }}</td>
-              <td>{{ korisnik.prezime }}</td>
-              <td>{{ korisnik.pol }}</td>
-              <td>{{ korisnik.datumRodjenja }}</td>
-              <td>{{ korisnik.uloga }}</td>
+              <td>{{ clan.ime }}</td>
+              <td>{{ clan.prezime }}</td>
+              <td>{{ clan.pol }}</td>
+              <td>{{ clan.datumRodjenja }}</td>
+              <td>{{ clan.uloga }}</td>
             </tr>
           </tbody>
         </table>
@@ -47,9 +47,6 @@
         <router-link to="/all-managers" class="btn btn-dark btn-lg m-4"
           >Svi menadžeri
         </router-link>
-        <router-link to="/restorani" class="btn btn-primary btn-lg m-4"
-          >Restorani</router-link
-        >
       </div>
     </div>
   </section>

@@ -79,13 +79,20 @@
         v-if="this.korisnik.porudzbine != null"
         ><h2>Sve Porudzbine Dostavljaca</h2></router-link
       >
-      <tr v-for="clan in komentari" :key="clan.id">
-        <td>
-          <h2 style="text-align: center">
-            Komentari: {{ clan.tekstKomentara }} Ocena: {{ clan.ocena }}
-          </h2>
-        </td>
-      </tr>
+      <div class="table-responsive-sm col-md d-flex justify-content-center mt-5">
+        <table class="table" id="tabela">
+          <thead class="table-dark">
+            <tr>
+              <th class="text-center">Komentari</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="clan in komentari" :key="clan.id">
+              <td>{{ clan.tekstKomentara }} {{ clan.ocena }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
       <div class="d-flex justify-content-center mt-4">
         <router-link to="/edit-profile" class="btn btn-lg btn-dark m-3">
           Uredi nalog

@@ -138,7 +138,6 @@ public class Restoran implements Serializable {
                 ", artikli=" + artikli +
                 ", komentari=" + komentari +
                 ", lokacija=" + lokacija +
-                ", menadzer=" + menadzer +
                 ", prosek=" + prosek +
                 '}';
     }

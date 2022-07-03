@@ -24,17 +24,18 @@ export default {
   },
   methods: {
     submit: function () {
-      axios
-        .post("http://localhost:8080/api/komentar/", window.location.href)
-        .then((res) => {
-          console.log(res);
-          this.$router.push("/korisnik" + window.location.href);
-        })
-        .catch((err) => {
-          console.log(err);
-          alert("Something went wrong!");
-        });
-    },
+            axios
+                .post(`http://localhost:8080/api/komentar/1?korisnickoIme=aaa`, this.komentar)
+                .then((res) => {
+                    console.log(res);
+                    this.$router.push("/korisnici");
+                })
+                .catch((err) => {
+                    console.log(err);
+                    alert("Something went wrong!");
+                });
+
+        },
   },
   mounted() {},
 };
