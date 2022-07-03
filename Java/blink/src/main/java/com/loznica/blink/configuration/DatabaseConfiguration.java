@@ -98,8 +98,9 @@ public class DatabaseConfiguration {
 
         Kupac kupac2 = new Kupac("laki", "111", "Lazar", "Lazarevic", "Muski", c.getTime());
         kupac2.setUloga(Uloga.KUPAC);
+        kupac.setSvePorudzbine(Set.of(porudzbina, porudzbina2));
         kupac2.setSvePorudzbine(Set.of(porudzbina, porudzbina2));
-        kupacRepository.saveAndFlush(kupac2);
+        kupacRepository.saveAll(Set.of(kupac, kupac2));
 
         c.set(1996, Calendar.MAY, 12);
         Dostavljac dostavljac = new Dostavljac("damir1", "999", "Damir", "Madzarevic", "Muski", c.getTime(), Uloga.DOSTAVLJAC);

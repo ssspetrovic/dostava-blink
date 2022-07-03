@@ -13,7 +13,7 @@ const store = createStore({
     state () {
         return {
             korisnik: 
-                { korisnickoIme: "", lozinka: "" }
+                {id: "", korisnickoIme: "", lozinka: "" }
             
         }
     },
@@ -27,6 +27,7 @@ const store = createStore({
         addKorisnik(state, dodajKorisnika) {
             if(typeof dodajKorisnika.korisnickoIme == 'string' && typeof dodajKorisnika.lozinka == 'string') {
                 state.korisnik = {
+                    id: dodajKorisnika.id,
                     korisnickoIme: dodajKorisnika.korisnickoIme,
                     lozinka: dodajKorisnika.lozinka
                 }

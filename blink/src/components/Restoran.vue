@@ -4,6 +4,7 @@
         <h2 style="text-align:center">Tip: {{ tip }}</h2>
         <h2 style="text-align:center">Lokacija: {{ lokacija }}</h2>
         <h2 style="text-align:center">Ocena Restorana: {{ocena}}</h2> 
+        <router-link to = "/restoran-korpa" class = "movCR"><h2>Porudzbine Restorana</h2></router-link>
     </div>
     
     <div class = "watafak2">

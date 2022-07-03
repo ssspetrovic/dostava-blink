@@ -20,6 +20,9 @@ import AllManagers from '../components/AllManagers.vue'
 import EditProfile from '../components/EditProfile.vue'
 import EditArticle from '../components/EditArticle.vue'
 import Korpa from '../components/Korpa.vue'
+import Search from '../components/Search.vue'
+import RestoranKorpa from '../components/RestoranKorpa.vue'
+import CreateOrder from '../components/CreateOrder.vue'
 
 const routes = [
     {
@@ -131,7 +134,22 @@ const routes = [
         path: '/korpa',
         name: 'korpa',
         component: Korpa
-    }
+    },
+    {
+        path: '/search',
+        name: 'search',
+        component: Search
+    },
+    {
+        path: '/restoran-korpa',
+        name: 'restoran-korpa',
+        component: RestoranKorpa
+    },
+    {
+        path: '/create-order',
+        name: 'create-order',
+        component: CreateOrder
+    },
 ]
 
 const router = createRouter({

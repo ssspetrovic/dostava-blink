@@ -187,8 +187,6 @@ public class RestoranRestController {
 
     @GetMapping("/api/restoran/pretraga")
     public ResponseEntity pretraziPoRestoranu(@RequestParam String string, HttpSession session) {
-        if(!sessionService.validate(session))
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         if(string == null || string.isEmpty())
             return new ResponseEntity(HttpStatus.BAD_REQUEST);

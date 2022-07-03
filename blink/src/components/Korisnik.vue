@@ -13,14 +13,14 @@
                 <th>Uloga: </th>
             </thead>
             <tbody>
-                <tr v-for = "korisnik in korisnici" v-bind:key = "korisnik.id">
-                    <td> {{korisnik.id}}</td>
-                    <router-link :to = "{path: '/korisnik/' + korisnik.id}"><td> {{korisnik.korisnickoIme}}</td></router-link>
-                    <td> {{korisnik.ime}}</td>
-                    <td> {{korisnik.prezime}}</td>
-                    <td> {{korisnik.pol}}</td>
-                    <td> {{korisnik.datumRodjenja}}</td>
-                    <td> {{korisnik.uloga}}</td>
+                <tr v-for = "clan in korisnik" v-bind:key = "clan.id">
+                    <td> {{clan.id}}</td>
+                    <router-link :to = "{path: '/korisnik/' + clan.id}"><td> {{clan.korisnickoIme}}</td></router-link>
+                    <td> {{clan.ime}}</td>
+                    <td> {{clan.prezime}}</td>
+                    <td> {{clan.pol}}</td>
+                    <td> {{clan.datumRodjenja}}</td>
+                    <td> {{clan.uloga}}</td>
                 </tr>
             </tbody>
         </table>
@@ -41,14 +41,14 @@ export default {
     name: 'SviKorisnici',
     data: function() {
         return {
-            korisnici: {},
+            korisnik: [{}],
         }
     },
     mounted: function() {
         axios
             .get("http://localhost:8080/api/korisnici")
             .then((res) => {
-                this.korisnici = res.data
+                this.korisnik = res.data
             })
             .catch((err) => {
                 console.log(err)

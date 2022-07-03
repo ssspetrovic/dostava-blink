@@ -1,8 +1,9 @@
 <template>
-   <input type="text" v-model="input" placeholder="Pretrazite..." />
-  <div class="string" v-for="string in restoran" :key="string.naziv">
-    <p>{{ string }}</p>
-  </div>
+  <a v-for = "clan in restoran" :href = "`/restoran/${clan.id}`" :key = "clan.id" class = "btn btn-primary btn-lg"> 
+            <td> 
+                {{clan.naziv}}
+            </td>
+  </a>
   <div class="item error" v-if="input&&!restoran.naziv.length">
      <p>No results found!</p>
   </div>
@@ -15,18 +16,25 @@ export default {
 name: 'SearchBar',
     data: function() {
         return {
-            restoran: {},
+            restoran: [{}],
         }
     },
     mounted: function() {
         axios
-            .get("http://localhost:8080/api/restoran/pretraga?naziv=")
+            .get(`http://localhost:8080/api/restoran/pretraga?string=Atr`)
             .then((res) => {
                 this.restoran = res.data
             })
             .catch((err) => {
                 console.log(err)
             })
+    },
+    computed: {
+          stringRest() {
+            return this.restoran.filter(clan => {
+              return clan.naziv.toLowerCase().includes(this.input.toLowerCase());
+      })
+    }
     }
 }
 </script>

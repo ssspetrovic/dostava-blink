@@ -126,10 +126,8 @@ public class Porudzbina implements Serializable {
         return "Porudzbina{" +
                 "uuid=" + uuid +
                 ", artikli=" + artikli +
-                ", restoran=" + restoran +
                 ", datumPorudzbine=" + datumPorudzbine +
                 ", cena=" + cena +
-                ", kupac='" + kupac + '\'' +
                 ", status=" + status +
                 '}';
     }

@@ -6,8 +6,8 @@
         <h2 style="text-align:center">Kolicina: {{ kolicina }}</h2>
         <h2 style="text-align:center">Opis: {{ opis }}</h2>
         <router-link :to = "{path: '/edit-article/' + artikal.id}" class = "btn btn-primary btn-lg">MENADZER: Izmeni?</router-link>
-        <router-link to = "/create-restaurant" class = "btn btn-primary btn-lg">KUPAC: Naruci?</router-link> <!--KORPA-->
-        <a v-on:click = "logout" href = "#" class="nav-link">Delete Profile</a>
+        <router-link to = "/create-order" class = "btn btn-primary btn-lg">KUPAC: Naruci?</router-link>
+        <a v-on:click = "logout" href = "#" class="btn btn-primary btn-lg">MENADZER: Obrisi Artikal</a>
     </div>
 </template>
 <script>

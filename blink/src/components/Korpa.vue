@@ -1,13 +1,24 @@
 <template>
-    <div>
-        <h2 style="text-align:center">{{ slike }}</h2>
-        <h2 style="text-align:center">Naziv: {{ naziv }}</h2>
-        <h2 style="text-align:center">Cena: {{ cena }}</h2>
-        <h2 style="text-align:center">Kolicina: {{ kolicina }}</h2>
-        <h2 style="text-align:center">Opis: {{ opis }}</h2>
-        <router-link :to = "{path: '/edit-article/' + artikal.id}" class = "btn btn-primary btn-lg">MENADZER: Izmeni?</router-link>
-        <router-link to = "/create-restaurant" class = "btn btn-primary btn-lg">KUPAC: Naruci?</router-link> <!--KORPA-->
-        <a v-on:click = "logout" href = "#" class="nav-link">Delete Profile</a>
+        <div class = "container">
+        <h1 class = "text-center"> Korpa </h1>
+        <table class = "table table-striped">
+            <thead>
+                <th>Naziv Porudzbine: </th>
+                <th>Cena: </th>
+                <th>Kolicina: </th>
+            </thead>
+            <tbody>
+                <div v-for = "clan in porudzbinaDtoList" v-bind:key = "clan.uuid">
+                <tr v-for = "clan2 in clan.porudzbineKupca" v-bind:key = "clan2.nazivPorudzbine">
+                    <td> {{clan2.nazivPorudzbine}}</td>
+                    <td> {{clan2.cenaPorudzbine}}</td>
+                    <td> {{clan2.kolicina}} </td>
+                    <td> <a v-on:click = "smanjiKolicinu" href = "#" class="nav-link">Smanji kolicinu?</a></td>
+                </tr>
+                </div>
+            </tbody>
+        </table>
+        <router-link to = "/narudzbina" class = "btn btn-primary btn-lg">Naruci?</router-link>
     </div>
 </template>
 <script>
@@ -17,24 +28,19 @@ export default {
     name: 'ArtikaL',
     data: function () {
         return {
-            artikal: {},
+            porudzbinaDtoList: [{
+                porudzbineKupca: [{}]
+            }],
         }
     },
     computed: {
-        naziv() {
-            return this.artikal.naziv;
-        },
-        cena() {
-            return this.artikal.cena;
-        },
-        kolicina() {
-            return this.artikal.kolicina;
-        },
-        opis() {
-            return this.artikal.opis;
-        },
-        slike() {
-            return this.artikal.slike;
+        findStr(str) {
+            if(str != null)
+            for(let i = 0; i < this.porudzbinaDtoList.length; i++)
+                for(let j = 0; j < this.porudzbinaDtoList[i].porudzbineKupca.length; j++)
+                    if(str === this.porudzbinaDtoList[i].porudzbineKupca[j].nazivPorudzbine)
+                        return str;
+            return null;
         }
     },
     created() {
@@ -42,27 +48,26 @@ export default {
             () => this.$route.params,
             () => {
                 // react to route changes...
-                this.fetchArtikal()
+                this.fetchPorudzbina()
             }
         )
     },
     methods: {
-        fetchArtikal() {
+        fetchPorudzbina() {
             axios
-                .get("http://localhost:8080/api/artikal/" + this.$route.params.id)
+                .get(`http://localhost:8080/api/porudzbine?korisnickoIme=${this.$store.getters.korisnik.korisnickoIme}`)
                 .then((res) => {
-                    this.artikal = res.data;
+                    this.porudzbinaDtoList = res.data;
                     
                 })
                 .catch((err) => {
                     console.log(err)
                 })
         },
-        logout() {
-            axios.delete(`http://localhost:8080/api/artikal/obrisi/` + this.$route.params.id + `?korisnickoIme=${this.$store.getters.korisnik.korisnickoIme}`)
+        smanjiKolicinu() {
+            axios.post(`http://localhost:8080/api/porudzbine/` + this.findStr("Monster Energy") + `?korisnickoIme=${this.$store.getters.korisnik.korisnickoIme}`)
             .then((res) => {
                     console.log(res);
-                    this.$router.push("/restorani");
                 })
                 .catch((err) => {
                     console.log(err);
@@ -71,7 +76,7 @@ export default {
         }
     },
     mounted: function () {
-        this.fetchArtikal()
+        this.fetchPorudzbina()
         /*
                 fetch('http://localhost:8083/api/korisnici/ispis',
                     {
