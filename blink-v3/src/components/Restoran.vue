@@ -76,6 +76,8 @@
         <router-link to="/create-article" class="btn btn-lg btn-dark m-3">
           Kreiraj artikal
         </router-link>
+        <router-link to = "/restoran-korpa" class = "btn btn-lg btn-dark m-3">Porudžbine restorana</router-link>
+        <a v-on:click = "deleteRes" href = "#" class="btn btn-dark btn-lg m-3">Obriši restoran</a>
       </div>
     </div>
   </section>
@@ -83,7 +85,7 @@
 
 <script>
 import axios from "axios";
-//import axios from "axios";
+
 export default {
   name: "RestoraN",
   data: function () {
@@ -142,6 +144,22 @@ export default {
         })
         .catch((err) => {
           console.log(err);
+        });
+    },
+    deleteRes() {
+      axios
+        .delete(
+          `http://localhost:8080/api/admin/brisiRestoran/` +
+            `${this.restoran.naziv}` +
+            `?korisnickoIme=pale`
+        )
+        .then((res) => {
+          console.log(res);
+          this.$router.push("/restorani");
+        })
+        .catch((err) => {
+          console.log(err);
+          alert("Something went wrong!");
         });
     },
   },

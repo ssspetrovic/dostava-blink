@@ -47,6 +47,9 @@
         <router-link to="/all-managers" class="btn btn-dark btn-lg m-4"
           >Svi menadžeri
         </router-link>
+        <router-link to="/restorani" class="btn btn-primary btn-lg m-4"
+          >Restorani</router-link
+        >
       </div>
     </div>
   </section>
