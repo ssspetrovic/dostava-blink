@@ -1,5 +1,7 @@
 package com.loznica.blink.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -10,9 +12,11 @@ public class Komentar implements Serializable {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     private Kupac kupac;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     private Restoran restoran;
 
     @Column

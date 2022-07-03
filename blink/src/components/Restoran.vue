@@ -14,6 +14,7 @@
         <router-link to = "/create-article" class = "movCR"><h2>Kreiraj novi?</h2></router-link>
     </div>
     <div class = "watafak3">
+        <h2>Komentari:</h2>
         <tr v-for = "clan in komentari" :key = "clan.id" class = "watafak3"> 
             <td><h2>{{clan.tekstKomentara}}</h2> </td>
         </tr>

@@ -104,10 +104,10 @@ public class LoginRestController {
     }
 
     @PostMapping("api/logout")
-    public ResponseEntity logout(HttpSession session, @RequestParam String korisnickoIme) {
+    public ResponseEntity logout(HttpSession session) {
 //        if (!sessionService.validate(session))
 //            return new ResponseEntity(HttpStatus.FORBIDDEN);
-        
+
         for(Korisnik k : korisnikRepository.findAll())
             if(k.getAuth() == true) {
                 k.setAuth(false);

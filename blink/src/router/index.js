@@ -13,7 +13,7 @@ import Korisnik from '../components/Korisnik.vue'
 import Artikal from '../components/Artikal.vue'
 import Comment from '../components/Comment.vue'
 import CreateManager from '../components/CreateManager.vue'
-import CreateDostavljac from '../components/CreateManager.vue'
+import CreateDostavljac from '../components/CreateDostavljac.vue'
 import CreateArticle from '../components/CreateArticle.vue'
 import AllManagers from '../components/AllManagers.vue'
 import EditProfile from '../components/EditProfile.vue'
@@ -22,6 +22,7 @@ import Korpa from '../components/Korpa.vue'
 import Search from '../components/Search.vue'
 import RestoranKorpa from '../components/RestoranKorpa.vue'
 import CreateOrder from '../components/CreateOrder.vue'
+import DostavljacKorpa from '../components/DostavljacKorpa.vue'
 
 const routes = [
     {
@@ -144,6 +145,11 @@ const routes = [
         name: 'create-order',
         component: CreateOrder
     },
+    {
+        path: '/dostavljac-korpa',
+        name: 'dostavljac-korpa',
+        component: DostavljacKorpa
+    }
 ]
 
 const router = createRouter({

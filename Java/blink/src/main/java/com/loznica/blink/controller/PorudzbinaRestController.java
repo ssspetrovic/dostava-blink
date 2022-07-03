@@ -294,6 +294,9 @@ public class PorudzbinaRestController {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
 
         Porudzbina narudzbina = pa.getPorudzbina();
+        if(narudzbina.getStatus() == Status.OBRADA)
+            return ResponseEntity.status(HttpStatus.OK).body("Vec ste narucili.");
+
         narudzbina.setStatus(Status.OBRADA);
         porudzbinaRepository.saveAndFlush(narudzbina);
 
@@ -379,12 +382,22 @@ public class PorudzbinaRestController {
     }
 
     @GetMapping("/api/porudzbine/transport/{id}")
-    public ResponseEntity uTransportu(@PathVariable(name = "id") Long id, HttpSession session) {
-        if (!sessionService.validate(session))
+    public ResponseEntity uTransportu(@PathVariable(name = "id") Long id, HttpSession session, @RequestParam String korisnickoIme) {
+//        if (!sessionService.validate(session))
+//            return new ResponseEntity(HttpStatus.FORBIDDEN);
+//
+//        if (!sessionService.getUloga(session).equals(Uloga.DOSTAVLJAC))
+//            return new ResponseEntity(HttpStatus.FORBIDDEN);
+
+        Korisnik loggedKorisnik = korisnikRepository.getByKorisnickoIme(korisnickoIme);
+
+        if(loggedKorisnik == null)
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        if(!loggedKorisnik.getAuth())
+            return new ResponseEntity(HttpStatus.METHOD_NOT_ALLOWED);
+        if(!Objects.equals(loggedKorisnik.getUloga(), Uloga.DOSTAVLJAC))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        if (!sessionService.getUloga(session).equals(Uloga.DOSTAVLJAC))
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         PorudzbineArtikli porudzbina = null;
 
@@ -409,11 +422,20 @@ public class PorudzbinaRestController {
     }
 
     @GetMapping("/api/porudzbine/dostavljeno/{id}")
-    public ResponseEntity dostavljeno(@PathVariable(name = "id") Long id, HttpSession session) {
-        if (!sessionService.validate(session))
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
+    public ResponseEntity dostavljeno(@PathVariable(name = "id") Long id, HttpSession session, @RequestParam String korisnickoIme) {
+//        if (!sessionService.validate(session))
+//            return new ResponseEntity(HttpStatus.FORBIDDEN);
+//
+//        if (!sessionService.getUloga(session).equals(Uloga.DOSTAVLJAC))
+//            return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        if (!sessionService.getUloga(session).equals(Uloga.DOSTAVLJAC))
+        Korisnik loggedKorisnik = korisnikRepository.getByKorisnickoIme(korisnickoIme);
+
+        if(loggedKorisnik == null)
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        if(!loggedKorisnik.getAuth())
+            return new ResponseEntity(HttpStatus.METHOD_NOT_ALLOWED);
+        if(!Objects.equals(loggedKorisnik.getUloga(), Uloga.DOSTAVLJAC))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         PorudzbineArtikli porudzbina = null;
@@ -430,7 +452,7 @@ public class PorudzbinaRestController {
         if (p.getStatus() == Status.U_TRANSPORTU) {
             p.setStatus(Status.DOSTAVLJENA);
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Dostavljac je doneo porudzbinu.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Ne postoji porudzbina koja je u transportu.");
         }
 
         Kupac kupac = new Kupac();
@@ -450,14 +472,22 @@ public class PorudzbinaRestController {
     }
 
     @GetMapping("/api/porudzbine/sveDostave")
-    public ResponseEntity sveDostave(HttpSession session) {
-        if (!sessionService.validate(session))
+    public ResponseEntity sveDostave(HttpSession session, @RequestParam String korisnickoIme) {
+//        if (!sessionService.validate(session))
+//            return new ResponseEntity(HttpStatus.FORBIDDEN);
+//
+//        if (!sessionService.getUloga(session).equals(Uloga.DOSTAVLJAC))
+//            return new ResponseEntity(HttpStatus.FORBIDDEN);
+
+        Korisnik loggedKorisnik = korisnikRepository.getByKorisnickoIme(korisnickoIme);
+
+        if(loggedKorisnik == null)
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        if(!loggedKorisnik.getAuth())
+            return new ResponseEntity(HttpStatus.METHOD_NOT_ALLOWED);
+        if(!Objects.equals(loggedKorisnik.getUloga(), Uloga.DOSTAVLJAC))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        if (!sessionService.getUloga(session).equals(Uloga.DOSTAVLJAC))
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
-
-        Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
         Dostavljac dostavljac = dostavljacRepository.getById(loggedKorisnik.getId());
 
         if(dostavljac == null)
@@ -468,20 +498,19 @@ public class PorudzbinaRestController {
     }
 
     @GetMapping("/api/porudzbine/dostava")
-    public ResponseEntity zaDostavljanje(HttpSession session) {
+    public ResponseEntity zaDostavljanje(HttpSession session, @RequestParam String korisnickoIme) {
 
-        Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
+        Korisnik loggedKorisnik = korisnikRepository.getByKorisnickoIme(korisnickoIme);
 
-        if (loggedKorisnik == null) {
-            System.out.println("Nema sesije.");
-            return ResponseEntity.ok(null);
-        } else if (!loggedKorisnik.getUloga().equals(Uloga.DOSTAVLJAC)) {
-            System.out.println("Pristup nije odobren.");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Pristup nije odobren.");
-        }
+        if(loggedKorisnik == null)
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        if(!loggedKorisnik.getAuth())
+            return new ResponseEntity(HttpStatus.METHOD_NOT_ALLOWED);
+        if(!Objects.equals(loggedKorisnik.getUloga(), Uloga.DOSTAVLJAC))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         Dostavljac dostavljac = dostavljacRepository.getById(loggedKorisnik.getId());
-        if (dostavljac.getKorisnickoIme() == null || dostavljac.getKorisnickoIme().toString().isEmpty())
+        if (dostavljac.getKorisnickoIme() == null || dostavljac.getKorisnickoIme().isEmpty())
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         List<PorudzbinaDto> porudzbinaDtoList = new ArrayList<>();

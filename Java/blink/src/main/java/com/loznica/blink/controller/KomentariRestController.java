@@ -1,6 +1,7 @@
 package com.loznica.blink.controller;
 
 import com.loznica.blink.entity.*;
+import com.loznica.blink.repository.KorisnikRepository;
 import com.loznica.blink.repository.KupacRepository;
 import com.loznica.blink.repository.PorudzbineArtikliRepository;
 import com.loznica.blink.repository.RestoranRepository;
@@ -33,17 +34,24 @@ public class KomentariRestController {
     @Autowired
     PorudzbineArtikliRepository porudzbineArtikliRepository;
 
+    @Autowired
+    KorisnikRepository korisnikRepository;
+
     @PostMapping("/api/komentar/{id}")
-    public ResponseEntity komentari(@PathVariable(name = "id") Long id, @RequestBody Komentar komentar, HttpSession session) {
+    public ResponseEntity komentari(@PathVariable(name = "id") Long id, @RequestBody Komentar komentar, HttpSession session, @RequestParam String korisnickoIme) {
 //        if (!sessionService.validate(session))
 //            return new ResponseEntity(HttpStatus.FORBIDDEN);
 //        if (!sessionService.getUloga(session).equals(Uloga.KUPAC))
 //            return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
+        Korisnik loggedKorisnik = korisnikRepository.getByKorisnickoIme(korisnickoIme);
 
         if(loggedKorisnik == null)
-            return ResponseEntity.ok("Nema sesije...");
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        if(!loggedKorisnik.getAuth())
+            return new ResponseEntity(HttpStatus.METHOD_NOT_ALLOWED);
+        if(!Objects.equals(loggedKorisnik.getUloga(), Uloga.KUPAC))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         Kupac kupac = kupacRepository.getById(loggedKorisnik.getId());
 
@@ -68,10 +76,10 @@ public class KomentariRestController {
             komentar.setRestoran(restoran);
             komentarService.sacuvajKomentar(komentar);
 
-            restoran.setKomentari(Set.of(komentar));
+            restoran.getKomentari().add(komentar);
             restoranRepository.save(restoran);
 
-            kupac.setKomentari(Set.of(komentar));
+            kupac.getKomentari().add(komentar);
             kupacRepository.save(kupac);
 
             return ResponseEntity.status(HttpStatus.OK).body(komentar);

@@ -13,7 +13,6 @@ import java.util.Set;
 @DiscriminatorValue("Dostavljac")
 public class Dostavljac extends Korisnik implements Serializable {
     @OneToMany
-    @JsonIgnore
     private Set<Porudzbina> porudzbine;
 
     public Dostavljac() {

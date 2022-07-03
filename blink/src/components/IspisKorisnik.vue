@@ -5,10 +5,13 @@
         <h2 style = "text-align:center"> Prezime : {{kP}}</h2>
         <h2 style = "text-align:center"> Uloga : {{kU}}</h2>
         <router-link :to = "{path: '/restoran/' + kRid }"> <h2 class = "text-align:center">{{kRnaziv}}</h2></router-link>
-        <a v-on:click = "uPripremi" href = "#" class="nav-link">STATUS: U PRIPREMI</a>
-        <a v-on:click = "cekaDostavljaca" href = "#" class="nav-link">STATUS: CEKA DOSTAVLJACA</a>
+        <a v-on:click = "uPripremi" href = "#" class="nav-link" v-if = "this.korisnik.restoran != null">STATUS: U PRIPREMI</a>
+        <a v-on:click = "cekaDostavljaca" href = "#" class="nav-link" v-if = "this.korisnik.restoran != null">STATUS: CEKA DOSTAVLJACA</a>
+        <a v-on:click = "uTransportu" href = "#" class="nav-link" v-if = "this.korisnik.porudzbine != null">STATUS: U TRANSPORTU</a>
+        <a v-on:click = "dostavljeno" href = "#" class="nav-link" v-if = "this.korisnik.porudzbine != null">STATUS: DOSTAVLJENO</a>
+
         <tr v-for = "clan in komentari" :key = "clan.id"> 
-            <td><router-link :to = "{path: '/restoran/' + clan.restoran.id}"><td><h2 style = "text-align:center">Komentari: {{clan.tekstKomentara}}</h2> </td></router-link></td>
+            <td><h2 style = "text-align:center">Komentari: {{clan.tekstKomentara}} Ocena: {{clan.ocena}}</h2></td>
         </tr>
         <router-link to = "/edit-profile" class = "btn btn-primary btn-lg">Edit Profile</router-link>
         <a v-on:click = "logout" href = "#" class="nav-link">Delete Profile</a>
@@ -27,6 +30,7 @@ export default {
             korisnik: {
                 komentari: {},
                 restoran: {},
+                porudzbine: [{}],
             },
         }
     },
@@ -86,7 +90,6 @@ export default {
             axios.delete(`http://localhost:8080/api/admin/obrisi-korisnika/` + this.$route.params.id + `?korisnickoIme=${this.$store.getters.korisnik.korisnickoIme}`)
             .then((res) => {
                     console.log(res);
-                    this.$router.push("/prijava");
                 })
                 .catch((err) => {
                     console.log(err);
@@ -94,12 +97,44 @@ export default {
                 });
         },
         uPripremi() {
-            if(this.korisnik.uloga == 1)
             axios.get(`http://localhost:8080/api/porudzbine/priprema/1?korisnickoIme=${this.$store.getters.korisnik.korisnickoIme}`)
+            .then((res) => {
+                    console.log(res);
+                })
+                .catch((err) => {
+                    console.log(err);
+                    alert("Something went wrong!");
+                });
         },
         cekaDostavljaca() {
-            if(this.korisnik.uloga == 1)
             axios.get(`http://localhost:8080/api/porudzbine/ceka/1?korisnickoIme=${this.$store.getters.korisnik.korisnickoIme}`)
+            .then((res) => {
+                    console.log(res);
+                })
+                .catch((err) => {
+                    console.log(err);
+                    alert("Something went wrong!");
+                });
+        },
+        uTransportu() {
+            axios.get(`http://localhost:8080/api/porudzbine/transport/1?korisnickoIme=${this.$store.getters.korisnik.korisnickoIme}`)
+            .then((res) => {
+                    console.log(res);
+                })
+                .catch((err) => {
+                    console.log(err);
+                    alert("Something went wrong!");
+                });
+        },
+        dostavljeno() {
+            axios.get(`http://localhost:8080/api/porudzbine/dostavljeno/1?korisnickoIme=${this.$store.getters.korisnik.korisnickoIme}`)
+            .then((res) => {
+                    console.log(res);
+                })
+                .catch((err) => {
+                    console.log(err);
+                    alert("Something went wrong!");
+                });
         }
     },
     mounted: function () {
