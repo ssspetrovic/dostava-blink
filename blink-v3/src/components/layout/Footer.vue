@@ -1,8 +1,8 @@
 <template>
-  <footer class="position-static bottom-0 w-100 p-5 bg-primary text-white text-center position-relative" id="kopirajt">
+  <footer class="position-static mt-4 bottom-0 w-100 p-3 bg-primary text-white text-center position-relative">
     <div class="container">
-      <p class="lead mb-0">Copyright &copy; 2022. Sva prava zadržana</p>
-      <a id="back-to-top" href="#" class="back-to-top text-secondary h1" role="button"><i class="bi bi-arrow-up-square-fill"></i></a>
+      <p class="lead-3 mb-0">Copyright &copy; 2022. Sva prava zadržana</p>
+      <a id="back-to-top" href="#" class="back-to-top text-dark h1" role="button"><i class="bi bi-arrow-up-square-fill"></i></a>
     </div>
   </footer>
 </template>
@@ -31,7 +31,7 @@ $(document).ready(function(){
 		$('#back-to-top').click(function () {
 			$('body,html').animate({
 				scrollTop: 0
-			}, 300);
+			}, 50);
 			return false;
 		});
 });

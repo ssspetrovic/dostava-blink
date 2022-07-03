@@ -14,33 +14,29 @@
             <div class="d-inline row text-center my-2 mt-0">
               <img id="logo-prijava" src="../assets/blink-logo.svg" alt="" />
             </div>
-
-            <!-- Email input -->
             <div class="form-outline my-4">
               <label class="form-label" for="form3Example3"
                 >Korisničko ime</label
               >
               <input
+                v-model="korisnik.korisnickoIme"
                 type="email"
-                id="form3Example3"
                 class="form-control form-control-lg"
                 placeholder="Uneti korisničko ime"
               />
             </div>
-
-            <!-- Password input -->
             <div class="form-outline mb-3">
               <label class="form-label" for="form3Example4">Lozinka</label>
               <input
+                v-model="korisnik.lozinka"
                 type="password"
-                id="form3Example4"
                 class="form-control form-control-lg"
                 placeholder="Uneti lozinku"
               />
             </div>
-
             <div class="text-center mb-3 mt-4">
               <button
+                v-on:click="submit()"
                 type="button"
                 class="btn btn-lg btn-primary px-5"
                 id="prijava-potvrdi"
@@ -48,7 +44,7 @@
                 Potvrdi
               </button>
               <div>
-                <p class="small fw-bold mt-2 pt-1 mb-0">
+                <p class="small mt-2 pt-0 mb-0">
                   Nemaš nalog?
                   <router-link
                     to="/sign-up"
@@ -111,7 +107,7 @@ export default {
         })
         .catch((err) => {
           console.log(err);
-          alert("Greska! Pokusajte ponovo!");
+          alert("Greška! Pokušajte ponovo!");
         });
     },
   },
