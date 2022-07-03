@@ -15,7 +15,7 @@
               <img id="logo-prijava" src="../assets/blink-logo.svg" alt="" />
             </div>
             <div class="mb-3">
-              <label for="ime" class="col-form-label"> Ime: </label>
+              <label for="ime" class="col-form-label">Ime:</label>
               <input
                 v-model="korisnik.ime"
                 type="text"
@@ -25,7 +25,7 @@
               />
             </div>
             <div class="mb-3">
-              <label for="prezime" class="col-form-label"> Prezime: </label>
+              <label for="prezime" class="col-form-label">Prezime:</label>
               <input
                 v-model="korisnik.prezime"
                 type="text"
@@ -47,7 +47,7 @@
               />
             </div>
             <div class="mb-3">
-              <label for="lozinka" class="col-form-label"> Lozinka: </label>
+              <label for="lozinka" class="col-form-label">Lozinka:</label>
               <input
                 v-model="korisnik.lozinka"
                 type="password"
@@ -56,9 +56,8 @@
                 id="lozinka"
               />
             </div>
-
             <div class="mb-3">
-              <label class="col-form-label" for="radio-pol"> Pol: </label>
+              <label class="col-form-label" for="radio-pol">Pol:</label>
               <div id="radio-pol">
                 <div class="form-check">
                   <input
@@ -68,7 +67,7 @@
                     name="pol"
                     checked
                   />
-                  <label class="form-check-label" for="pol-m"> Muški </label>
+                  <label class="form-check-label" for="pol-m">Muški</label>
                 </div>
                 <div class="form-check">
                   <input
@@ -77,7 +76,7 @@
                     type="radio"
                     name="pol"
                   />
-                  <label class="form-check-label" for="pol-z"> Ženski </label>
+                  <label class="form-check-label" for="pol-z">Ženski</label>
                 </div>
               </div>
             </div>
@@ -105,7 +104,7 @@
                 <p class="small mt-2 pt-0 mb-0">
                   Već imaš nalog?
                   <router-link
-                    to="/sign-up"
+                    to="/sign-in"
                     id="registruj-se-link"
                     class="primary-link"
                     >Prijavi se</router-link
@@ -121,6 +120,7 @@
 </template>
 <script>
 import axios from "axios";
+
 export default {
   name: "SignUp",
   data: function () {
@@ -137,17 +137,11 @@ export default {
   },
   methods: {
     submit: function () {
-      if (document.getElementById("pol-m").checked) {
-        this.korisnik.pol = "Muško";
-      } else {
-        this.korisnik.pol = "Žensko";
-      }
-
       axios
         .post("http://localhost:8080/api/register", this.korisnik)
         .then((res) => {
           console.log(res);
-          this.$router.push("/");
+          this.$router.push("/korisnici");
         })
         .catch((err) => {
           console.log(err);
@@ -155,5 +149,6 @@ export default {
         });
     },
   },
+  mounted() {},
 };
 </script>

@@ -86,6 +86,7 @@
 
 <script>
 import axios from "axios";
+
 export default {
   name: "LogiN",
   data: function () {
@@ -107,7 +108,7 @@ export default {
         })
         .catch((err) => {
           console.log(err);
-          alert("Greška! Pokušajte ponovo!");
+          alert("Greska! Pokusajte ponovo!");
         });
     },
   },
