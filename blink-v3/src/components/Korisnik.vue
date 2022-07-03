@@ -19,9 +19,11 @@
             <tr v-for="korisnik in korisnici" v-bind:key="korisnik.id">
               <th scope="row">{{ korisnik.id }}</th>
               <td>
-                <router-link :to="{ path: '/korisnik/' + korisnik.id }">{{
-                  korisnik.korisnickoIme
-                }}</router-link>
+                <router-link
+                  :to="{ path: '/korisnik/' + korisnik.id }"
+                  class="link-primary"
+                  >{{ korisnik.korisnickoIme }}</router-link
+                >
               </td>
               <td>{{ korisnik.ime }}</td>
               <td>{{ korisnik.prezime }}</td>
@@ -33,7 +35,7 @@
         </table>
       </div>
       <div class="d-flex justify-content-center m-5 mb-0">
-        <div class="display-6">Administratorske opcije:</div>
+        <div class="display-6">Administratorske opcije</div>
       </div>
       <div class="d-flex justify-content-center mt-0">
         <router-link to="/create-manager" class="btn btn-dark btn-lg m-4"
@@ -42,6 +44,9 @@
         <router-link to="/create-dostavljac" class="btn btn-dark btn-lg m-4"
           >Kreiraj dostavljača</router-link
         >
+        <router-link to="/all-managers" class="btn btn-dark btn-lg m-4"
+          >Svi menadžeri
+        </router-link>
       </div>
     </div>
   </section>
@@ -54,14 +59,14 @@ export default {
   name: "SviKorisnici",
   data: function () {
     return {
-      korisnici: {},
+      korisnik: [{}],
     };
   },
   mounted: function () {
     axios
       .get("http://localhost:8080/api/korisnici")
       .then((res) => {
-        this.korisnici = res.data;
+        this.korisnik = res.data;
       })
       .catch((err) => {
         console.log(err);

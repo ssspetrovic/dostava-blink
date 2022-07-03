@@ -99,7 +99,14 @@
   </section>
   <section class="p-5 text-left text-sm-start">
     <div class="container">
-      <p class="lead mb-5">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil at ipsam aspernatur nam recusandae, quibusdam facere assumenda eveniet, aperiam labore est? Eligendi dignissimos alias et adipisci incidunt aspernatur soluta inventore facilis atque eum facere commodi itaque odit explicabo, nam aperiam? Exercitationem ipsum delectus quod minima saepe est suscipit soluta quidem?</p>
+      <p class="lead mb-5">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil at ipsam
+        aspernatur nam recusandae, quibusdam facere assumenda eveniet, aperiam
+        labore est? Eligendi dignissimos alias et adipisci incidunt aspernatur
+        soluta inventore facilis atque eum facere commodi itaque odit explicabo,
+        nam aperiam? Exercitationem ipsum delectus quod minima saepe est
+        suscipit soluta quidem?
+      </p>
       <div class="row row-cols-1 row-cols-md-3 g-4">
         <div class="col">
           <div class="card h-100 bg-light shadow p-3 mb-5 bg-white rounded">
@@ -117,7 +124,9 @@
               </p>
             </div>
             <div class="card-footer text-center" id="card-foot">
-                <router-link class="btn btn-primary btn-lg px-5 " to="/restorani">Istraži</router-link>
+              <router-link class="btn btn-primary btn-lg px-5" to="/restorani"
+                >Istraži</router-link
+              >
             </div>
           </div>
         </div>
@@ -137,7 +146,11 @@
               </p>
             </div>
             <div class="card-footer text-center" id="card-foot">
-                <router-link class="btn btn-primary btn-lg istrazi px-5" to="/restorani">Istraži</router-link>
+              <router-link
+                class="btn btn-primary btn-lg istrazi px-5"
+                to="/restorani"
+                >Istraži</router-link
+              >
             </div>
           </div>
         </div>
@@ -157,7 +170,11 @@
               </p>
             </div>
             <div class="card-footer text-center" id="card-foot">
-                <router-link class="btn btn-primary btn-lg istrazi px-5" to="/restorani">Istraži</router-link>
+              <router-link
+                class="btn btn-primary btn-lg istrazi px-5"
+                to="/restorani"
+                >Istraži</router-link
+              >
             </div>
           </div>
         </div>
@@ -167,9 +184,6 @@
 </template>
 
 <script>
-export default {
-  name: "FrontPage",
-};
 </script>
 
 <style>
@@ -178,7 +192,7 @@ export default {
 }
 
 .istrazi {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 #card-foot {

@@ -41,11 +41,7 @@
         </form>
         <ul class="navbar-nav ms-auto" id="navbar-lista">
           <li class="nav-item">
-            <router-link
-              to="/prijava"
-              class="nav-link"
-              >Prijavi se</router-link
-            >
+            <router-link to="/sign-in" class="nav-link">Prijavi se</router-link>
           </li>
           <li class="nav-item">
             <router-link to="/sign-up" class="nav-link"
@@ -56,7 +52,7 @@
             <router-link to="/korpa" class="nav-link">Korpa</router-link>
           </li>
           <li class="nav-item" id="logout">
-            <router-link to="/logout" class="nav-link">Odjavi se</router-link>
+            <a v-on:click="logout" href="#" class="nav-link">Odjavi se</a>
           </li>
         </ul>
       </div>
@@ -69,6 +65,26 @@ import axios from "axios";
 
 export default {
   name: "HeadeR",
+  data: function () {
+    return {
+      korisnik: {},
+    };
+  },
+
+  mounted: function () {
+    axios
+      .get(
+        `http://localhost:8080/api/korisnik/` +
+          this.$route.params.id +
+          `/?korisnickoIme=${this.$store.getters.korisnik.korisnickoIme}`
+      )
+      .then((res) => {
+        this.korisnik = res.data;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
   methods: {
     logout() {
       axios
@@ -77,7 +93,8 @@ export default {
         )
         .then((res) => {
           console.log(res);
-          this.$router.push("/prijava");
+          alert("Uspešno odjavljivanje!");
+          this.$router.push("/");
         })
         .catch((err) => {
           console.log(err);
@@ -86,10 +103,16 @@ export default {
     },
   },
 };
+// window.onload = function () {
+//   if (this.korisnik.auth == false) {
+//     document.getElementById("logout").setAttribute("style=display: block;")
+//   }
+
+// }
 </script>
 
 <style>
-#logout {
+/* #logout {
   display: none;
-}
+} */
 </style>

@@ -2,41 +2,20 @@
   <section>
     <div class="container vh-100">
       <div class="table-responsive-sm">
-        <table class="table table-borderless text-center">
+        <table class="table table-borderless text-center mb-5">
           <thead>
             <tr>
-              <th
+              <a
                 v-for="clan in restoran"
                 :href="`/restoran/${clan.id}`"
                 :key="clan.id"
+                class="link-primary display-3 p-5"
               >
-                <router-link
-                  :to="{ path: '/restoran/' + restoran.id }"
-                  class="link-primary lead m-5 display-5"
-                >
-                  {{ clan.naziv }}
-                </router-link>
-              </th>
+                {{ clan.naziv }}
+              </a>
             </tr>
           </thead>
-          <tbody>
-            <td
-              v-for="clan in restoran"
-              :href="`/comment/${clan.id}`"
-              :key="clan.id"
-              class=""
-            >
-              <p>
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                Nesciunt quisquam suscipit repellat alias laudantium quas,
-                corrupti ad iusto quo nam cum blanditiis quae voluptates illo
-                hic magni pariatur id dolorum? Ab quasi officiis, quo reiciendis
-                esse autem itaque voluptatibus est non veritatis omnis ratione,
-                aliquid, fugiat illum praesentium sit voluptates.
-              </p>
-              {{ clan.komentar }}
-            </td>
-          </tbody>
+          <tbody></tbody>
         </table>
       </div>
       <div class="d-flex justify-content-center">
@@ -52,6 +31,7 @@
 
 <script>
 import axios from "axios";
+
 export default {
   name: "RestoraniList",
   data: function () {
@@ -68,11 +48,6 @@ export default {
       .catch((err) => {
         console.log(err);
       });
-  },
-  methods: {
-    redirect: function () {
-      this.$router.push("/restoran/" + this.restoran.id);
-    },
   },
 };
 </script>

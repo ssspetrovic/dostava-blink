@@ -1,36 +1,81 @@
 <template>
   <section>
-    <div class="container-fluid vh-100">
-      <div class="">
-        <h2 style="text-align: center">Restoran: {{ naziv }}</h2>
-        <h2 style="text-align: center">Tip: {{ tip }}</h2>
-        <h2 style="text-align: center">Lokacija: {{ lokacija }}</h2>
-        <router-link :to="{ path: '/korisnik/' + menadzerIme.id }">
-          <h2 class="text-align:center">
-            Menadzer: {{ menadzerIme.korisnickoIme }}
-          </h2></router-link
-        >
-        <h2 style="text-align: center">Ocena Restorana: {{ ocena }}</h2>
+    <div class="container vh-100">
+      <div class="display-4 text-center mb-5">{{ naziv }}</div>
+      <div class="row">
+        <div class="table-responsive-sm col-md">
+          <table class="table" id="tabela">
+            <thead class="table-dark">
+              <tr>
+                <th colspan="2" class="text-center">Informacije o restoranu</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>Tip:</th>
+                <td>{{ tip }}</td>
+              </tr>
+              <tr>
+                <th>Lokacija:</th>
+                <td>{{ lokacija }}</td>
+              </tr>
+              <tr>
+                <th>Ocena:</th>
+                <td>{{ ocena }}</td>
+              </tr>
+              <tr>
+                <th>Menadžer:</th>
+                <td>
+                  <router-link :to="{ path: '/korisnik/' + menadzerIme.id }">
+                    {{ menadzerIme.korisnickoIme }}
+                  </router-link>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="table-responsive-sm col-md">
+          <table class="table" id="tabela">
+            <thead class="table-dark">
+              <tr>
+                <th class="text-center">Artikli</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="clan in artikli" :key="clan.id">
+                <td>
+                  <router-link
+                    :to="{ path: '/artikal/' + clan.id }"
+                    class="link-primary"
+                  >
+                    {{ clan.naziv }}
+                  </router-link>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="table-responsive-sm col-md">
+          <table class="table" id="tabela">
+            <thead class="table-dark">
+              <tr>
+                <th class="text-center">Komentari</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="clan in komentari" :key="clan.id">
+                <td>
+                  {{ clan.tekstKomentara }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
-
-      <div class="">
-        <tr v-for="clan in artikli" :key="clan.id">
-          <router-link :to="{ path: '/artikal/' + clan.id }"
-            ><td>
-              <h2>{{ clan.naziv }}</h2>
-            </td></router-link
-          >
-        </tr>
-        <router-link to="/create-article" class="movCR"
-          ><h2>Kreiraj novi?</h2></router-link
-        >
-      </div>
-      <div class="">
-        <tr v-for="clan in komentari" :key="clan.id">
-          <td>
-            <h2>{{ clan.tekstKomentara }}</h2>
-          </td>
-        </tr>
+      <div class="d-flex justify-content-center mt-4">
+        <router-link to="/create-article" class="btn btn-lg btn-dark m-3">
+          Kreiraj artikal
+        </router-link>
       </div>
     </div>
   </section>
@@ -38,6 +83,7 @@
 
 <script>
 import axios from "axios";
+//import axios from "axios";
 export default {
   name: "RestoraN",
   data: function () {
@@ -106,4 +152,17 @@ export default {
 </script>
 
 <style>
+#w40 {
+  width: 40%;
+}
+
+#w50 {
+  width: 50%;
+}
+#w60 {
+  width: 60%;
+}
+#w70 {
+  width: 70%;
+}
 </style>

@@ -1,6 +1,6 @@
 <template>
   <section>
-    <div class="container w-0 vh-100">
+    <div class="container vh-100">
       <div class="d-flex justify-content-center table-responsive-sm">
         <table class="table" id="tabela">
           <thead class="table-dark">
@@ -26,22 +26,79 @@
               <td>{{ kU }}</td>
             </tr>
             <tr>
-              <th>Restoran</th>
-              <!-- <td>{{ kR.naziv }}</td> -->
+              <th>Restoran:</th>
+              <td>
+                <router-link
+                  :to="{ path: '/restoran/' + kRid }"
+                  class="link-primary"
+                >
+                  {{ kRnaziv }}</router-link
+                >
+              </td>
             </tr>
           </tbody>
         </table>
       </div>
+      <a
+        v-on:click="uPripremi"
+        href="#"
+        class="nav-link"
+        v-if="this.korisnik.restoran != null"
+        ><h2>STATUS: U PRIPREMI</h2></a
+      >
+      <a
+        v-on:click="cekaDostavljaca"
+        href="#"
+        class="nav-link"
+        v-if="this.korisnik.restoran != null"
+        ><h2>STATUS: CEKA DOSTAVLJACA</h2></a
+      >
+      <a
+        v-on:click="uTransportu"
+        href="#"
+        class="nav-link"
+        v-if="this.korisnik.porudzbine != null"
+        ><h2>STATUS: U TRANSPORTU</h2></a
+      >
+      <a
+        v-on:click="dostavljeno"
+        href="#"
+        class="nav-link"
+        v-if="this.korisnik.porudzbine != null"
+        ><h2>STATUS: DOSTAVLJENO</h2></a
+      >
+      <router-link
+        to="/dostavljac-korpa"
+        class="movCR"
+        v-if="this.korisnik.porudzbine != null"
+        ><h2>Porudzbine Restorana</h2></router-link
+      >
+      <router-link
+        to="/all-orders"
+        class="movCR"
+        v-if="this.korisnik.porudzbine != null"
+        ><h2>Sve Porudzbine Dostavljaca</h2></router-link
+      >
+      <tr v-for="clan in komentari" :key="clan.id">
+        <td>
+          <h2 style="text-align: center">
+            Komentari: {{ clan.tekstKomentara }} Ocena: {{ clan.ocena }}
+          </h2>
+        </td>
+      </tr>
       <div class="d-flex justify-content-center mt-4">
-        <router-link to="/edit-profile" class="btn btn-lg btn-dark">
-          Uredi profil
+        <router-link to="/edit-profile" class="btn btn-lg btn-dark m-3">
+          Uredi nalog
         </router-link>
+        <a v-on:click="logout" href="#" class="btn btn-warning btn-lg m-3"
+          >Ukloni nalog</a
+        >
       </div>
     </div>
   </section>
 </template>
 
-<style>
+<style scoped>
 #tabela {
   width: 50%;
 }
@@ -57,6 +114,7 @@ export default {
       korisnik: {
         komentari: {},
         restoran: {},
+        porudzbine: [{}],
       },
     };
   },
@@ -77,7 +135,16 @@ export default {
       return this.korisnik.komentari;
     },
     kR() {
-      return this.korisnik.restoran;
+      if (this.korisnik.restoran != null) return this.korisnik.restoran;
+      return null;
+    },
+    kRid() {
+      if (this.korisnik.restoran != null) return this.korisnik.restoran.id;
+      return null;
+    },
+    kRnaziv() {
+      if (this.korisnik.restoran != null) return this.korisnik.restoran.naziv;
+      return null;
     },
   },
   created() {
@@ -113,7 +180,60 @@ export default {
         )
         .then((res) => {
           console.log(res);
-          this.$router.push("/prijava");
+          console.log("Nalog uspešno obrisan.");
+          this.$router.push("/");
+        })
+        .catch((err) => {
+          console.log(err);
+          alert("Something went wrong!");
+        });
+    },
+    uPripremi() {
+      axios
+        .get(
+          `http://localhost:8080/api/porudzbine/priprema/1?korisnickoIme=${this.$store.getters.korisnik.korisnickoIme}`
+        )
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+          alert("Something went wrong!");
+        });
+    },
+    cekaDostavljaca() {
+      axios
+        .get(
+          `http://localhost:8080/api/porudzbine/ceka/1?korisnickoIme=${this.$store.getters.korisnik.korisnickoIme}`
+        )
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+          alert("Something went wrong!");
+        });
+    },
+    uTransportu() {
+      axios
+        .get(
+          `http://localhost:8080/api/porudzbine/transport/1?korisnickoIme=${this.$store.getters.korisnik.korisnickoIme}`
+        )
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+          alert("Something went wrong!");
+        });
+    },
+    dostavljeno() {
+      axios
+        .get(
+          `http://localhost:8080/api/porudzbine/dostavljeno/1?korisnickoIme=${this.$store.getters.korisnik.korisnickoIme}`
+        )
+        .then((res) => {
+          console.log(res);
         })
         .catch((err) => {
           console.log(err);
@@ -123,21 +243,6 @@ export default {
   },
   mounted: function () {
     this.fetchKorisnik();
-    /*
-                fetch('http://localhost:8083/api/korisnici/ispis',
-                    {
-                        credentials: 'include'
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log("Success:", data);
-                        this.korisnik = data
-                    })
-                    .catch((error) => {
-                        console.error("Error:", error)
-                    });
-            }
-        */
   },
 };
 </script>
