@@ -5,6 +5,7 @@
         <h2 style="text-align:center">Lokacija: {{ lokacija }}</h2>
         <h2 style="text-align:center">Ocena Restorana: {{ocena}}</h2> 
         <router-link to = "/restoran-korpa" class = "movCR"><h2>Porudzbine Restorana</h2></router-link>
+        <a v-on:click = "deleteRes" href = "#" class="nav-link">Delete Restoran</a>
     </div>
     
     <div class = "watafak2">
@@ -84,7 +85,18 @@ export default {
                 .catch((err) => {
                     console.log(err)
                 })
-        }
+        },
+        deleteRes() {
+            axios.delete(`http://localhost:8080/api/admin/brisiRestoran/` + `${this.restoran.naziv}` + `?korisnickoIme=pale`)
+            .then((res) => {
+                    console.log(res);
+                    this.$router.push("/restorani")
+                })
+                .catch((err) => {
+                    console.log(err);
+                    alert("Something went wrong!");
+                });
+        },
     },
     mounted: function () {
         this.fetchRestoran()

@@ -80,12 +80,23 @@ public class AdministratorRestController {
     }
 
     @DeleteMapping("/api/admin/brisiRestoran/{nazivRestorana}")
-    public ResponseEntity obrisiRestoran(@PathVariable String nazivRestorana, HttpSession session) {
+    public ResponseEntity obrisiRestoran(@PathVariable String nazivRestorana, HttpSession session, @RequestParam String korisnickoIme) {
 
-        if(!sessionService.validate(session))
+//        if(!sessionService.validate(session))
+//            return new ResponseEntity(HttpStatus.FORBIDDEN);
+//        if(!sessionService.getUloga(session).equals(Uloga.ADMIN))
+//            return new ResponseEntity(HttpStatus.FORBIDDEN);
+
+        Korisnik loggedKorisnik = korisnikRepository.getByKorisnickoIme(korisnickoIme);
+
+        if(loggedKorisnik == null)
             return new ResponseEntity(HttpStatus.FORBIDDEN);
-        if(!sessionService.getUloga(session).equals(Uloga.ADMIN))
+
+        if(!loggedKorisnik.getAuth())
             return new ResponseEntity(HttpStatus.FORBIDDEN);
+
+        if(loggedKorisnik.getUloga() != Uloga.ADMIN)
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
 
         Restoran restoran = restoranRepository.getByNaziv(nazivRestorana);
 
@@ -94,13 +105,19 @@ public class AdministratorRestController {
 
         List<Porudzbina> plist = porudzbinaRepository.findAll();
 
+
+
+        if(plist != null)
         for(Porudzbina p : plist) {
-            if(p.getRestoran().equals(restoran))
-                p.setRestoran(null);
+            if(p.getRestoran() != null)
+                if(p.getRestoran().equals(restoran))
+                    p.setRestoran(null);
         }
 
         Menadzer menadzer = menadzerRepository.getByRestoran(restoran);
-        menadzer.setRestoran(null);
+
+        if(menadzer != null)
+            menadzer.setRestoran(null);
 
         restoranRepository.deleteById(restoran.getId());
 

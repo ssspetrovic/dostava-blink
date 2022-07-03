@@ -30,6 +30,7 @@
         <router-link to = "/create-manager" class = "btn btn-primary btn-lg">ADMIN: Kreiraj Menadzera</router-link>
         <router-link to = "/create-dostavljac" class = "btn btn-primary btn-lg">ADMIN: Kreiraj Dostavljaca</router-link>
         <router-link to = "/all-managers" class = "btn btn-primary btn-lg">ADMIN: Svi menadzeri</router-link>
+        <router-link to = "/restorani" class = "btn btn-primary btn-lg">Restorani</router-link>
     </div>
 
 </template>
