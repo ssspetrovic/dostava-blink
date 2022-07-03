@@ -19,7 +19,7 @@
                 </div>
             </tbody>
         </table>
-        <router-link to = "/narudzbina" class = "btn btn-primary btn-lg">Naruci?</router-link>
+        <td> <a v-on:click = "naruciPor" href = "#" class="nav-link">Naruci</a></td>
     </div>
 </template>
 <script>
@@ -69,6 +69,17 @@ export default {
             axios.post(`http://localhost:8080/api/porudzbine/` + `Monster Energy` + `?korisnickoIme=${this.$store.getters.korisnik.korisnickoIme}`)
             .then((res) => {
                     console.log(res);
+                })
+                .catch((err) => {
+                    console.log(err);
+                    alert("Something went wrong!");
+                });
+        },
+        naruciPor() {
+            axios.get(`http://localhost:8080/api/porudzbine/naruci/1?korisnickoIme=${this.$store.getters.korisnik.korisnickoIme}`)
+            .then((res) => {
+                    console.log(res);
+                    this.$router.push("/");
                 })
                 .catch((err) => {
                     console.log(err);

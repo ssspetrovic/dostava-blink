@@ -107,14 +107,12 @@ public class LoginRestController {
     public ResponseEntity logout(HttpSession session, @RequestParam String korisnickoIme) {
 //        if (!sessionService.validate(session))
 //            return new ResponseEntity(HttpStatus.FORBIDDEN);
-
-        Korisnik loggedKorisnik = korisnikRepository.getByKorisnickoIme(korisnickoIme);
-        if(loggedKorisnik == null)
-            return new ResponseEntity("Nema ulogovanog korisnika", HttpStatus.NOT_FOUND);
-
-        if(loggedKorisnik.getAuth() == true)
-        loggedKorisnik.setAuth(false);
-        korisnikRepository.save(loggedKorisnik);
+        
+        for(Korisnik k : korisnikRepository.findAll())
+            if(k.getAuth() == true) {
+                k.setAuth(false);
+                korisnikRepository.save(k);
+            }
 
         session.invalidate();
         return new ResponseEntity("Uspesno ste napustili profil, pozdrav!", HttpStatus.OK);

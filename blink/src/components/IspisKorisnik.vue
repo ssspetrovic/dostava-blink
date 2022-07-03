@@ -5,6 +5,8 @@
         <h2 style = "text-align:center"> Prezime : {{kP}}</h2>
         <h2 style = "text-align:center"> Uloga : {{kU}}</h2>
         <router-link :to = "{path: '/restoran/' + kRid }"> <h2 class = "text-align:center">{{kRnaziv}}</h2></router-link>
+        <a v-on:click = "uPripremi" href = "#" class="nav-link">STATUS: U PRIPREMI</a>
+        <a v-on:click = "cekaDostavljaca" href = "#" class="nav-link">STATUS: CEKA DOSTAVLJACA</a>
         <tr v-for = "clan in komentari" :key = "clan.id"> 
             <td><router-link :to = "{path: '/restoran/' + clan.restoran.id}"><td><h2 style = "text-align:center">Komentari: {{clan.tekstKomentara}}</h2> </td></router-link></td>
         </tr>
@@ -90,6 +92,14 @@ export default {
                     console.log(err);
                     alert("Something went wrong!");
                 });
+        },
+        uPripremi() {
+            if(this.korisnik.uloga == 1)
+            axios.get(`http://localhost:8080/api/porudzbine/priprema/1?korisnickoIme=${this.$store.getters.korisnik.korisnickoIme}`)
+        },
+        cekaDostavljaca() {
+            if(this.korisnik.uloga == 1)
+            axios.get(`http://localhost:8080/api/porudzbine/ceka/1?korisnickoIme=${this.$store.getters.korisnik.korisnickoIme}`)
         }
     },
     mounted: function () {

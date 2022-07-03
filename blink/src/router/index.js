@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import ListaPorudzbina from '../components/ListaPorudzbina.vue'
 import Restoran from '../components/Restoran.vue'
 import SignUp from '../components/SignUp'
 import Login from '../components/Login.vue'
@@ -44,11 +43,6 @@ const routes = [
         path: '/sign-up',
         name: 'sign-up',
         component: SignUp
-    },
-    {
-        path: '/lista-porudzbina',
-        name: 'lista-porudzbina',
-        component: ListaPorudzbina
     },
     {
         path: '/restoran/:id',

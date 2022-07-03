@@ -262,14 +262,21 @@ public class PorudzbinaRestController {
     }
 
     @GetMapping("/api/porudzbine/naruci/{id}")
-    public ResponseEntity poruci(HttpSession session, @PathVariable(name = "id") Long id) {
-        if (!sessionService.validate(session))
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
+    public ResponseEntity poruci(HttpSession session, @PathVariable(name = "id") Long id, @RequestParam String korisnickoIme) {
+//        if (!sessionService.validate(session))
+//            return new ResponseEntity(HttpStatus.FORBIDDEN);
+//
+//        if (!sessionService.getUloga(session).equals(Uloga.KUPAC))
+//            return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        if (!sessionService.getUloga(session).equals(Uloga.KUPAC))
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
+        Korisnik loggedKorisnik = korisnikRepository.getByKorisnickoIme(korisnickoIme);
 
-        Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
+        if(loggedKorisnik == null)
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        if(!loggedKorisnik.getAuth())
+            return new ResponseEntity(HttpStatus.METHOD_NOT_ALLOWED);
+        if(!Objects.equals(loggedKorisnik.getUloga(), Uloga.KUPAC))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         Kupac kupac = null;
 
@@ -295,11 +302,20 @@ public class PorudzbinaRestController {
     }
 
     @GetMapping("/api/porudzbine/priprema/{id}")
-    public ResponseEntity uPripremi(@PathVariable(name = "id") Long id, HttpSession session) {
-        if (!sessionService.validate(session))
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
+    public ResponseEntity uPripremi(@PathVariable(name = "id") Long id, HttpSession session, @RequestParam String korisnickoIme) {
+//        if (!sessionService.validate(session))
+//            return new ResponseEntity(HttpStatus.FORBIDDEN);
+//
+//        if (!sessionService.getUloga(session).equals(Uloga.MENADZER))
+//            return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        if (!sessionService.getUloga(session).equals(Uloga.MENADZER))
+        Korisnik loggedKorisnik = korisnikRepository.getByKorisnickoIme(korisnickoIme);
+
+        if(loggedKorisnik == null)
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        if(!loggedKorisnik.getAuth())
+            return new ResponseEntity(HttpStatus.METHOD_NOT_ALLOWED);
+        if(!Objects.equals(loggedKorisnik.getUloga(), Uloga.MENADZER))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         PorudzbineArtikli porudzbina = null;
@@ -325,11 +341,20 @@ public class PorudzbinaRestController {
     }
 
     @GetMapping("/api/porudzbine/ceka/{id}")
-    public ResponseEntity cekaDostavljaca(@PathVariable(name = "id") Long id, HttpSession session) {
-        if (!sessionService.validate(session))
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
+    public ResponseEntity cekaDostavljaca(@PathVariable(name = "id") Long id, HttpSession session, @RequestParam String korisnickoIme) {
+//        if (!sessionService.validate(session))
+//            return new ResponseEntity(HttpStatus.FORBIDDEN);
+//
+//        if (!sessionService.getUloga(session).equals(Uloga.MENADZER))
+//            return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        if (!sessionService.getUloga(session).equals(Uloga.MENADZER))
+        Korisnik loggedKorisnik = korisnikRepository.getByKorisnickoIme(korisnickoIme);
+
+        if(loggedKorisnik == null)
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        if(!loggedKorisnik.getAuth())
+            return new ResponseEntity(HttpStatus.METHOD_NOT_ALLOWED);
+        if(!Objects.equals(loggedKorisnik.getUloga(), Uloga.MENADZER))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         PorudzbineArtikli porudzbina = null;
