@@ -1,19 +1,55 @@
 <template>
   <section>
-    <div class="container vh-100">
-      <div class="display-5 text-center">KREIRAJ ARTIKAL</div>
-      <div class="register">
-        <!--<input v-model="artikal.slike" /><br /> -->
-        <label for="idRestorana">Id Restorana:</label>
-        <input v-model.number="novaPorudzbinaDto.idRestorana" /><br />
-        <label for="cena">Id Artikla:</label>
-        <input v-model.number="novaPorudzbinaDto.novePorudzbine[0].id" /><br />
-        <label for="tip">Kolicina:</label>
-        <input v-model="novaPorudzbinaDto.novePorudzbine[0].kolicina" /><br />
-        <button class="button" v-on:click="submit()">
-          Kreiraj Porudzbinu!
-        </button>
-      </div>
+    <div class="container vh-100" id="w30">
+        <form>
+          <!-- <div class="d-inline row text-center my-2 mt-0">
+          <img id="logo-prijava" src="../assets/blink-logo.svg" alt="" />
+        </div> -->
+          <div class="display-5 text-center m-4">Kreiranje artikla</div>
+          <div class="mb-3">
+            <label for="id-restorana" class="col-form-label"
+              >ID restorana:</label
+            >
+            <input
+              v-model.number="novaPorudzbinaDto.idRestorana"
+              type="text"
+              class="form-control form-control-lg"
+              id="id-restorana"
+              placeholder="Uneti ID restorana"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="id-artikla" class="col-form-label">ID artikla:</label>
+            <input
+              v-model.number="novaPorudzbinaDto.novePorudzbine[0].id"
+              type="text"
+              class="form-control form-control-lg"
+              id="id-artikla"
+              placeholder="Uneti ID artikla"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="kolicina" class="col-form-label">Količina:</label>
+            <input
+              v-model="novaPorudzbinaDto.novePorudzbine[0].kolicina"
+              type="text"
+              class="form-control form-control-lg"
+              id="kolicina"
+              placeholder="Uneti količinu"
+            />
+          </div>
+
+          <div class="text-center mb-3">
+            <button
+              v-on:click="submit()"
+              type="button"
+              class="btn btn-lg btn-primary mt-4 px-5"
+              id="prijava-potvrdi"
+            >
+              Potvrdi
+            </button>
+          </div>
+        </form>
     </div>
   </section>
 </template>

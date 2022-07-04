@@ -1,15 +1,30 @@
 <template>
   <section>
     <div class="container vh-100">
-      <div v-for="clan in porudzbine" v-bind:key="clan.uuid">
-        <tr v-for="clan2 in clan.artikli" v-bind:key="clan2.artikal.id">
-          <td>{{ clan2.artikal.naziv }}</td>
-          <td>{{ clan2.artikal.cena }}</td>
-          <td>{{ clan2.artikal.opis }}</td>
-          <td>{{ clan.kolicina }}</td>
-          <td>{{ clan.ukupnaCena }}</td>
-        </tr>
-        <h2 style="text-align: center">Restoran: {{ clan.restoran.naziv }}</h2>
+      <div class="table-responsive-sm">
+        <table class="table text-center">
+          <thead v-for="clan in porudzbine" v-bind:key="clan.uuid">
+            <tr>
+              <th colspan="5" class="text-center lead">
+                Restoran: {{ clan.restoran.naziv }}
+              </th>
+            </tr>
+            <tr>
+              <th class="p-3">Naziv artikla</th>
+              <th class="p-3">Cena jednog artikla</th>
+              <th class="p-3">Opis artikla</th>
+              <th class="p-3">Naručena količina</th>
+              <th class="p-3">Ukupna cena</th>
+            </tr>
+            <tr v-for="clan2 in clan.artikli" v-bind:key="clan2.artikal.id">
+              <td class="p-1">{{ clan2.artikal.naziv }}</td>
+              <td class="p-1">{{ clan2.artikal.cena }}</td>
+              <td class="p-1">{{ clan2.artikal.opis }}</td>
+              <td class="p-1">{{ clan2.kolicina }}</td>
+              <td class="p-1">{{ clan2.ukupnaCena }}</td>
+            </tr>
+          </thead>
+        </table>
       </div>
     </div>
   </section>
@@ -26,6 +41,8 @@ export default {
           artikli: [
             {
               artikal: {},
+              kolicina: "",
+              ukupnaCena: "",
             },
           ],
           restoran: {},

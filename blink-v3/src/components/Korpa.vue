@@ -1,34 +1,36 @@
 <template>
   <section>
     <div class="container vh-100">
-      <div class="container">
-        <h1 class="text-center">Korpa</h1>
-        <table class="table table-striped">
+      <div class="display-4 text-center m-4">Korpa</div>
+      <div class="table-responsive-sm">
+        <table class="table table-borderless mx-auto" id="w60">
           <thead>
-            <th>Naziv Porudzbine:</th>
+            <th>Naziv porudžbine:</th>
             <th>Cena:</th>
-            <th>Kolicina:</th>
+            <th>Kolicčna:</th>
+            <th>Opcija:</th>
           </thead>
-          <tbody>
-            <div v-for="clan in porudzbinaDtoList" v-bind:key="clan.uuid">
-              <tr
-                v-for="clan2 in clan.porudzbineKupca"
-                v-bind:key="clan2.nazivPorudzbine"
-              >
-                <td>{{ clan2.nazivPorudzbine }}</td>
-                <td>{{ clan2.cenaPorudzbine }}</td>
-                <td>{{ clan2.kolicina }}</td>
-                <td>
-                  <a v-on:click="smanjiKolicinu" href="#" class="nav-link"
-                    >Obrisi artikal?</a
-                  >
-                </td>
-              </tr>
-            </div>
+          <!-- <tbody> -->
+          <tbody v-for="clan in porudzbinaDtoList" v-bind:key="clan.uuid">
+            <tr
+              v-for="clan2 in clan.porudzbineKupca"
+              v-bind:key="clan2.nazivPorudzbine"
+            >
+              <th>{{ clan2.nazivPorudzbine }}</th>
+              <td>{{ clan2.cenaPorudzbine }}</td>
+              <td>{{ clan2.kolicina }}</td>
+              <td>
+                <a v-on:click="smanjiKolicinu" href="#" class="link-primary"
+                  >Obriši artikal</a
+                >
+              </td>
+            </tr>
           </tbody>
+          <!-- </tbody> -->
         </table>
-        <td><a v-on:click="naruciPor" href="#" class="nav-link">Naruci</a></td>
       </div>
+
+      <div class="d-flex justify-content-center"><a v-on:click="naruciPor" href="#" class="btn btn-dark btn-lg m-4">Naruči</a></div>
     </div>
   </section>
 </template>

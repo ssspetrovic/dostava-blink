@@ -39,68 +39,81 @@
           </tbody>
         </table>
       </div>
-      <a
-        v-on:click="uPripremi"
-        href="#"
-        class="nav-link"
-        v-if="this.korisnik.restoran != null"
-        ><h2>STATUS: U PRIPREMI</h2></a
-      >
-      <a
-        v-on:click="cekaDostavljaca"
-        href="#"
-        class="nav-link"
-        v-if="this.korisnik.restoran != null"
-        ><h2>STATUS: CEKA DOSTAVLJACA</h2></a
-      >
-      <a
-        v-on:click="uTransportu"
-        href="#"
-        class="nav-link"
-        v-if="this.korisnik.porudzbine != null"
-        ><h2>STATUS: U TRANSPORTU</h2></a
-      >
-      <a
-        v-on:click="dostavljeno"
-        href="#"
-        class="nav-link"
-        v-if="this.korisnik.porudzbine != null"
-        ><h2>STATUS: DOSTAVLJENO</h2></a
-      >
-      <router-link
-        to="/dostavljac-korpa"
-        class="movCR"
-        v-if="this.korisnik.porudzbine != null"
-        ><h2>Porudzbine Restorana</h2></router-link
-      >
-      <router-link
-        to="/all-orders"
-        class="movCR"
-        v-if="this.korisnik.porudzbine != null"
-        ><h2>Sve Porudzbine Dostavljaca</h2></router-link
-      >
-      <div class="table-responsive-sm col-md d-flex justify-content-center mt-5">
-        <table class="table" id="tabela">
-          <thead class="table-dark">
-            <tr>
-              <th class="text-center">Komentari</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="clan in komentari" :key="clan.id">
-              <td>{{ clan.tekstKomentara }} {{ clan.ocena }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="d-flex justify-content-center mt-4">
-        <router-link to="/edit-profile" class="btn btn-lg btn-dark m-3">
-          Uredi nalog
-        </router-link>
-        <a v-on:click="logout" href="#" class="btn btn-warning btn-lg m-3"
-          >Ukloni nalog</a
+      <div class="d-flex justify-content-center">
+        <a
+          v-on:click="uPripremi"
+          href="#"
+          class="link-primary display-6"
+          v-if="this.korisnik.restoran != null"
+          >STATUS: U PRIPREMI</a
         >
       </div>
+      <div class="d-flex justify-content-center">
+        <a
+          v-on:click="cekaDostavljaca"
+          href="#"
+          class="link-primary display-6"
+          v-if="this.korisnik.restoran != null"
+          >STATUS: ČEKA DOSTAVLJAČA</a
+        >
+      </div>
+      <div class="d-flex justify-content-center">
+        <a
+          v-on:click="uTransportu"
+          href="#"
+          class="link-primary display-6"
+          v-if="this.korisnik.porudzbine != null"
+          >STATUS: U TRANSPORTU</a
+        >
+      </div>
+      <div class="d-flex justify-content-center">
+        <a
+          v-on:click="dostavljeno"
+          href="#"
+          class="link-primary display-6"
+          v-if="this.korisnik.porudzbine != null"
+          >STATUS: DOSTAVLJENO</a
+        >
+      </div>
+      <div class="d-flex justify-content-center mt-5">
+        <router-link
+          to="/dostavljac-korpa"
+          class="link-primary display-6"
+          v-if="this.korisnik.porudzbine != null"
+          >Porudžbine restorana</router-link
+        >
+      </div>
+      <div class="d-flex justify-content-center">
+        <router-link
+          to="/all-orders"
+          class="link-primary display-6"
+          v-if="this.korisnik.porudzbine != null"
+          >Sve porudžbine dostavljača</router-link
+        >
+      </div>
+    </div>
+
+    <div class="table-responsive-sm col-md d-flex justify-content-center mt-5">
+      <table class="table" id="tabela">
+        <thead class="table-dark">
+          <tr>
+            <th class="text-center">Komentari</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="clan in komentari" :key="clan.id">
+            <td>{{ clan.tekstKomentara }} {{ clan.ocena }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="d-flex justify-content-center mt-4">
+      <router-link to="/edit-profile" class="btn btn-lg btn-dark m-3">
+        Uredi nalog
+      </router-link>
+      <a v-on:click="logout" href="#" class="btn btn-warning btn-lg m-3"
+        >Ukloni nalog</a
+      >
     </div>
   </section>
 </template>
